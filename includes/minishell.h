@@ -46,5 +46,6 @@ void 			init_prompt(t_shell *shell);
 
 // Syntax
 int				ft_op_checksyntax(char *str);
+int				check_quotes(char *str);
 
 # endif

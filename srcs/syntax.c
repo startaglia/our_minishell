@@ -1,4 +1,4 @@
-# include "minishell.h"
+#include "../includes/minishell.h"
 
 int ft_quotes_checksyntax(char *str)
 {

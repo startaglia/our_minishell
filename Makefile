@@ -1,37 +1,66 @@
-NAME		= minishell
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: startagl <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
+#    Updated: 2023/05/08 14:03:48 by startagl         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CC			= cc
+NAME        	= minishell
 
-CFLAGS		= -Wall -Wextra -Werror -g
+CC          	= cc
 
-INCLUDE		= includes/
+CFLAGS      	= -Wall -Wextra -Werror -g
 
-SRCS		= $(wildcard $(SRC_DIR)/*.c)
+INCLUDE     	= includes/
 
-SRC_DIR		= srcs
+SRC_DIR     	= srcs
+SYNTAX_DIR  	= srcs/syntax
+MLIBFT_DIR  	= includes/mini_libft
+OBJ_DIR     	= objs
 
-OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRCS        	= $(wildcard $(SRC_DIR)/*.c)
+OBJS        	= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-OBJ_DIR		= objs
+SYNTAX_SRCS 	= $(wildcard $(SYNTAX_DIR)/*.c)
+OBJS_SYNTAX 	= $(SYNTAX_SRCS:$(SYNTAX_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-READLINE	= -L/usr/include/readline -I/usr/include/readline -lreadline
+MLIBFT_SRCS 	= $(wildcard $(MLIBFT_DIR)/*.c)
+OBJS_MLIBFT 	= $(MLIBFT_SRCS:$(MLIBFT_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-RM			= rm -rf
+READLINE        = -L/usr/include/readline -I/usr/include/readline -lreadline
+READLINE_MAC    = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include
+
+RM          	= rm -rf
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
-$(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) -o $@ $(READLINE)
+$(OBJ_DIR)/%.o : $(SYNTAX_DIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+
+$(OBJ_DIR)/%.o : $(MLIBFT_DIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+
+$(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_MLIBFT)
+	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_MLIBFT) -o $(NAME) $(READLINE_MAC)
 	@echo "[+] $(NAME) compiled"
+
+all: $(NAME)
 
 clean:
 	@$(RM) $(OBJ_DIR)
 	@echo "[+] $(NAME) cleaned"
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(OBJ_DIR)/$(NAME)
 	@echo "[+] $(NAME) fcleaned"
 
 re: fclean all
