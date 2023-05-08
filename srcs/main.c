@@ -16,5 +16,7 @@ int	main(int argc, char **argv, char **envp)
     //     i++;
     // }
     init_prompt(&shell);
+    printf("dio albano\n");
+    printf("dio romina power\n");
     return (0);
 }
