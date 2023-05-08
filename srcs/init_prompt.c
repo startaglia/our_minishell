@@ -26,7 +26,7 @@ static void main_loop(t_shell *shell)
         shell->pipeline = readline(shell->prompt);
         if (!shell->pipeline)
             break ;
-        printf("string-->%s\n", shell->pipeline);
+        // printf("string-->%s\n", shell->pipeline);
         ft_op_checksyntax(shell->pipeline);
         if (ft_strncmp(shell->pipeline, "", 1))
         {

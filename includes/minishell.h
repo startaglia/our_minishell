@@ -28,24 +28,27 @@ typedef struct s_node
 	t_shell *shell;
 }	t_node;
 
-// Errori
+// Errors
 void			print_error(int error);
 
-// Libft
+// mini_libft
 int				ft_strlen(const char *str);
 char			**ft_split(const char *s, char c);
 char			*ft_strdup(char *src);
 char			*ft_strjoin(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
 
-// Readline
+// readline
 extern	void	rl_replace_line(const char *text, int clear_undo);
 
-// Reader
+// reader
 void 			init_prompt(t_shell *shell);
 
-// Syntax
+// syntax
+int				check_syntax(char *str);
 int				ft_op_checksyntax(char *str);
 int				check_quotes(char *str);
+int				check_in(char *str);
+int				check_out(char *str);
 
 # endif

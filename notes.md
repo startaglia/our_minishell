@@ -18,10 +18,10 @@
    1. devono essere un numero pari
    2. al loro interno accettano ogni carattere speciale
    3. tra di loro NON si puo stampare un altra '
-3. IN 				<
-   1. devono esserer minimo uno massimo due
-4. OUT				>
-   1. minimo uno massimo due
+3. IN 				<                                                        OK
+   1. devono esserer minimo uno massimo due                                OK
+4. OUT				>                                                        OK
+   1. minimo uno massimo due                                               OK
 5. APPEND			>>
    1. minimo uno massimo due
 6. HEREDOC			<<

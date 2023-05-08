@@ -1,32 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_syntax.c                                     :+:      :+:    :+:   */
+/*   in_out.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/08 11:58:36 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/08 17:09:54 by startagl         ###   ########.fr       */
+/*   Created: 2023/05/08 16:01:18 by startagl          #+#    #+#             */
+/*   Updated: 2023/05/08 17:11:47 by startagl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int check_syntax(char *str)
+int	check_in(char *str)
 {
-    // if (check_quotes(str))
-    //     return (1);
-    if (check_in(str))
-        return (1);
-    if (check_out(str))
-        return (1);
-    // if (check_out(str))
-        // return (1);
-    // if (check_pipes(str))
-        // return (1);
-    // if (check_and(str))
-        // return (1);
-    // if (check_redirs(str))
-        // return (1);
-    return (0);
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == 60)
+		{
+			i++;
+			if (str[i] == 60)
+			{
+				i++;
+				if (str[i] == 60)
+					break ;
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	check_out(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == 62)
+		{
+			i++;
+			if (str[i] == 62)
+			{
+				i++;
+				if (str[i] == 62)
+					break ;
+			}
+		}
+		i++;
+	}
+	return (0);
 }

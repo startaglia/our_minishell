@@ -1,0 +1,10 @@
+Makefile
+ciao
+ciao.txt
+en.subject.pdf
+file.txt
+includes
+minishell
+notes.md
+objs
+srcs
