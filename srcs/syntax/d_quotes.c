@@ -6,7 +6,7 @@
 /*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:59:54 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/10 11:37:11 by startagl         ###   ########.fr       */
+/*   Updated: 2023/05/10 12:59:49 by startagl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int  check_quotes(char *str)
     }
     if (j % 2 == 0 && k % 2 == 0)
         return (0);
+    else if(j % 2 != 0)
+        return(std_error(DUB_QUOT));
     else
-        return (1);
+        return(std_error(SIN_QUOT));
 }

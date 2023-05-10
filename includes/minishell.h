@@ -27,7 +27,8 @@ typedef struct s_node
 }	t_node;
 
 // Errors
-void			print_error(int error);
+int				std_error(char *error);
+// void			print_error(int error);
 
 // mini_libft
 int				ft_strlen(const char *str);

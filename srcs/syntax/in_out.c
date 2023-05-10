@@ -6,7 +6,7 @@
 /*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 16:01:18 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/10 10:24:07 by startagl         ###   ########.fr       */
+/*   Updated: 2023/05/10 13:01:58 by startagl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_in(char *str)
 			{
 				i++;
 				if (str[i] == 60)
-					return (1);
+					return (std_error(IN));
 			}
 		}
 		i++;
@@ -48,7 +48,7 @@ int	check_out(char *str)
 			{
 				i++;
 				if (str[i] == 62)
-					return (1);
+					return (std_error(OUT));
 			}
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 11:35:59 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/10 11:44:00 by startagl         ###   ########.fr       */
+/*   Updated: 2023/05/10 13:02:48 by startagl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_pipes(char *str)
 			{
 				i++;
 				if (str[i] == 124)
-					return (1);
+					return (std_error(PIP));
 			}
 		}
 		i++;
