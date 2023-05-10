@@ -10,14 +10,10 @@
 
 * SYNTAX STEP
 
-1. DOPPI APICI 		"	
-   1. devono essere un numero pari
-   2. al loro interno accettano ogni carattere speciale
-   3. tra di loro si puo stampare un altra " solo se seguita da \
-2. SINGOLO APICE 	'
-   1. devono essere un numero pari
-   2. al loro interno accettano ogni carattere speciale
-   3. tra di loro NON si puo stampare un altra '
+1. DOPPI APICI 			
+   1. devono essere un numero pari                                         OK
+2. SINGOLO APICE 	'                                                        OK
+   1. devono essere un numero pari                                         OK
 3. IN 				<                                                        OK
    1. devono esserer minimo uno massimo due                                OK
 4. OUT				>                                                        OK
@@ -26,8 +22,8 @@
    1. minimo uno massimo due                                               OK
 6. HEREDOC			<<                                                       OK
    1. minimo uno massimo due                                               OK
-7. PIPE				|
-   1. minimo uno massimo due
+7. PIPE				|                                                        OK
+   1. minimo uno massimo due                                               OK
 
 # BONUS PART
 1.  OR				||
