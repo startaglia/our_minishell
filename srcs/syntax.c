@@ -25,7 +25,7 @@ int ft_quotes_checksyntax(char *str)
 
 int ft_op_checksyntax(char *str)
 {
-    // int i;
+    // int i
 
     // i = 0;
 
