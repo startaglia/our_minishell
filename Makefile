@@ -6,7 +6,7 @@
 #    By: startagl <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
-#    Updated: 2023/05/08 14:03:48 by startagl         ###   ########.fr        #
+#    Updated: 2023/05/10 14:03:32 by startagl         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ clean:
 	@echo "[+] $(NAME) cleaned"
 
 fclean: clean
-	@$(RM) $(OBJ_DIR)/$(NAME)
+	@$(RM) $(NAME)
 	@echo "[+] $(NAME) fcleaned"
 
 re: fclean all
