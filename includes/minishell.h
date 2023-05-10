@@ -10,6 +10,7 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <sys/ioctl.h>
+# include "macros.h"
 
 
 
