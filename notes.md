@@ -22,10 +22,10 @@
    1. devono esserer minimo uno massimo due                                OK
 4. OUT				>                                                        OK
    1. minimo uno massimo due                                               OK
-5. APPEND			>>
-   1. minimo uno massimo due
-6. HEREDOC			<<
-   1. minimo uno massimo due
+5. APPEND			>>                                                       OK
+   1. minimo uno massimo due                                               OK
+6. HEREDOC			<<                                                       OK
+   1. minimo uno massimo due                                               OK
 7. PIPE				|
    1. minimo uno massimo due
 
