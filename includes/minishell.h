@@ -18,13 +18,10 @@ typedef struct s_shell
 	char	*prompt;
 	char	*pipeline;
 	char	**pipe_words;
-	// t_node	*node;
 }	t_shell;
 
 typedef struct s_node
 {
-	// bool
-	// t_node	*next;
 	t_shell *shell;
 }	t_node;
 
@@ -46,9 +43,10 @@ void 			init_prompt(t_shell *shell);
 
 // syntax
 int				check_syntax(char *str);
-int				ft_op_checksyntax(char *str);
 int				check_quotes(char *str);
 int				check_in(char *str);
 int				check_out(char *str);
+int				check_pipes(char *str);
+
 
 # endif

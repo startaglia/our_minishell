@@ -26,8 +26,7 @@ static void main_loop(t_shell *shell)
         shell->pipeline = readline(shell->prompt);
         if (!shell->pipeline)
             break ;
-        // printf("string-->%s\n", shell->pipeline);
-        ft_op_checksyntax(shell->pipeline);
+        check_syntax(shell->pipeline);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
@@ -38,27 +37,32 @@ static void main_loop(t_shell *shell)
     }
 }
 
-static void  get_pwd(t_shell *shell)
-{
-    char    *home;
-    char    *temp;
+// void  get_pwd(t_shell *shell)
+// {
+//     char    *home;
+//     char    *temp;
 
-    shell->prompt = "\n$";
-    home = getenv("PWD");
-    if (!home)
-        print_error(1);
-    temp = getenv("USER");
-    if (!temp)
-        temp = "guest";
-    temp = ft_strjoin(temp, "@minishell-");
-    temp = ft_strjoin(temp, home);
-    shell->prompt = ft_strjoin(temp, shell->prompt);
-    free(temp);
-}
+//     shell->prompt = "\n$";
+//     home = getenv("PWD");
+//     if (!home)
+//         print_error(1);
+//     temp = getenv("USER");
+//     if (!temp)
+//         temp = "guest";
+//     temp = ft_strjoin(temp, "@minishell-");
+//     temp = ft_strjoin(temp, home);
+//     shell->prompt = ft_strjoin(temp, shell->prompt);
+//     free(temp);
+// }
 
 void init_prompt(t_shell *shell)
 {
-    get_pwd(shell);
+    char    *user;
+
+    user = getenv("USER");
+    if (!user)
+        user = "guest";
+    shell->prompt = ft_strjoin(user, "@minishell$ ");
     main_loop(shell);
     free(shell->prompt);
 }
