@@ -22,6 +22,9 @@ typedef struct s_shell
 	struct t_token	*tokens;
 }	t_shell;
 
+// Free
+void	ft_free_matrix(char **matrix);
+
 // Errori
 void			print_error(int error);
 
@@ -32,6 +35,8 @@ extern	void	rl_replace_line(const char *text, int clear_undo);
 void 			init_prompt(t_shell *shell);
 int 			check_syntax(char *str);
 int				check_redirs(char *str);
-// void    split_readline(t_shell *shell);
+
+// Executor
+char    *get_path(char *cmd);
 
 # endif

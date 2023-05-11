@@ -22,22 +22,18 @@ function.
         array contains env vars that will be passed to
         the new process image.
 
-execve returns -1 on failure. Here is a program example.
+execve returns -1 on failure.
 
-  #include <sys/types.h>
-  #include <unistd.h>
-  #include <stdio.h>
+EXAMPLE:
 
-  main()
-  {
-     pid_t pid;
-     char *const parmList[] = {"/bin/ls", "-l", "/u/userid/dirname", NULL};
-     char *const envParms[2] = {"STEPLIB=SASC.V6.LINKLIB", NULL}; // the STEPLIB env var is set for the new process
+#include <unistd.h>
+#include <stdio.h>
 
-     if ((pid = fork()) ==-1)
-        perror("fork error");
-     else if (pid == 0) {
-        execve("/u/userid/bin/newShell", parmList, envParms);
-        printf("Return not expected. Must be an execve error.n");
-     }
-  }
+int main(int argc, char **argv, char **envp)
+{
+    (void)argc;
+    char *path = argv[1]; // must be the correct path
+    argv++;
+    if (execve(path, argv, envp) == -1)
+        printf("Oh no\n");
+}

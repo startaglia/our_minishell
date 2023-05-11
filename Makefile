@@ -28,11 +28,11 @@ $(OBJ_DIR)/%.o : $(LIBFT_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
+all: $(NAME)
+
 $(NAME): $(OBJS) $(OBJS_LIBFT)
 	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
 	@echo "[+] $(NAME) compiled"
-
-all: $(NAME)
 
 clean:
 	@$(RM) $(OBJ_DIR)
@@ -40,6 +40,7 @@ clean:
 
 fclean: clean
 	@$(RM) $(OBJ_DIR)/$(NAME)
+	@$(RM) $(NAME)
 	@echo "[+] $(NAME) fcleaned"
 
 re: fclean all

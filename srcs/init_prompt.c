@@ -15,9 +15,10 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
-static void main_loop(t_shell *shell)
+static void main_loop(t_shell *shell, char **envp)
 {
     // char *echo_cmd[] = {"echo", "ciao", NULL};
+    char    *right_path;
 
     while (1)
     {
@@ -41,7 +42,13 @@ static void main_loop(t_shell *shell)
             add_history(shell->pipeline);
             if (!check_syntax(shell->pipeline))
             {
-                // split_readline(shell);
+                shell->splitted_pipe = ft_split(shell->pipeline, ' ');
+                right_path = get_path(shell->splitted_pipe[0])
+                if (right_path)
+                {
+                    // if (execve())
+                    printf("dio ultra porco\n");
+                }
             }
         } 
         free(shell->pipeline);
@@ -66,7 +73,7 @@ static void  get_pwd(t_shell *shell)
     free(temp);
 }
 
-void init_prompt(t_shell *shell)
+void init_prompt(t_shell *shell, char **envp)
 {
     get_pwd(shell);
     main_loop(shell);
