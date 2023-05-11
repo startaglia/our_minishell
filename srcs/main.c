@@ -1,4 +1,4 @@
-# include "../includes/minishell.h"
+#include "minishell.h"
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -8,7 +8,6 @@ int	main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
     (void)envp;
-    
     // i = 0;
     // while (envp[i])
     // {
@@ -16,7 +15,5 @@ int	main(int argc, char **argv, char **envp)
     //     i++;
     // }
     init_prompt(&shell);
-    printf("dio albano\n");
-    printf("dio romina power\n");
     return (0);
 }

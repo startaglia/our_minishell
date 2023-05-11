@@ -1,0 +1,43 @@
+                          EXECVE
+#include <unistd.h>
+int execve(const char *file, char *const argv[], char *const envp[]);
+Like all of the exec functions, execve replaces the calling
+process image with a new process image. This has the effect 
+of running a new program with the process ID of the calling 
+process. Note that a new process is not started; the new 
+process image simply overlays the original process image. 
+The execve function is most commonly used to overlay a 
+process image that has been created by a call to the fork 
+function.
+
+*file   the filename of the file that contains
+        the executable image of the new process
+*argv[] pointer to an array of null-terminated strings. Also
+        a NULL pointer is added at the end of the array. This
+        pointer contains the arguments that will be passed
+        to the new process image. argv[0] contains the name
+        of the executable file for the new process.
+*envp[] pointer to an array of null-terminated strings which
+        also has a NULL pointer that marks its end. This
+        array contains env vars that will be passed to
+        the new process image.
+
+execve returns -1 on failure. Here is a program example.
+
+  #include <sys/types.h>
+  #include <unistd.h>
+  #include <stdio.h>
+
+  main()
+  {
+     pid_t pid;
+     char *const parmList[] = {"/bin/ls", "-l", "/u/userid/dirname", NULL};
+     char *const envParms[2] = {"STEPLIB=SASC.V6.LINKLIB", NULL}; // the STEPLIB env var is set for the new process
+
+     if ((pid = fork()) ==-1)
+        perror("fork error");
+     else if (pid == 0) {
+        execve("/u/userid/bin/newShell", parmList, envParms);
+        printf("Return not expected. Must be an execve error.n");
+     }
+  }
