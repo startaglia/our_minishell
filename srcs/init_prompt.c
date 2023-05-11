@@ -24,16 +24,15 @@ int main_loop(t_shell *shell)
         signal(SIGINT, handle_siginit);
         signal(SIGQUIT, handle_sigquit);
         shell->pipeline = readline(shell->prompt);
-        if (!shell->pipeline)
-            break ;
+        if (shell->pipeline == NULL)
+            exit (1);
         check_syntax(shell->pipeline);
-        shell = (t_shell *) malloc(sizeof(t_shell));
-        if (!shell)
-            return (1);
+        init_values(shell);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
-            parsing(shell);
+            if (parsing(shell))
+                return (1);
             // shell->pipe_words = ft_split(shell->pipeline, ' ');
             // free(shell->pipe_words);
         }
@@ -60,7 +59,7 @@ int main_loop(t_shell *shell)
 //     free(temp);
 // }
 
-int init_prompt(t_shell *shell)
+int     init_prompt(t_shell *shell)
 {
     char    *user;
 
@@ -68,8 +67,7 @@ int init_prompt(t_shell *shell)
     if (!user)
         user = "guest";
     shell->prompt = ft_strjoin(user, "@minishell$ ");
-    if (main_loop(shell))
-        return (1);
+    main_loop(shell);
     free(shell->prompt);
     return (0);
 }

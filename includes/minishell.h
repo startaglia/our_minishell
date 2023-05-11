@@ -60,6 +60,9 @@ int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
 // readline
 extern	void	rl_replace_line(const char *text, int clear_undo);
 
+//init_functs
+int				init_values(t_shell *shell);
+
 // reader
 int				init_prompt(t_shell *shell);
 
@@ -71,7 +74,7 @@ int				check_out(char *str);
 int				check_pipes(char *str);
 
 //parser
-void			parsing(t_shell *shell);
+int				parsing(t_shell *shell);
 
 
 # endif
