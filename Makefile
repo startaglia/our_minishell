@@ -6,7 +6,7 @@
 #    By: startagl <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
-#    Updated: 2023/05/10 14:03:32 by startagl         ###   ########.fr        #
+#    Updated: 2023/05/11 11:15:43 by startagl         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ INCLUDE     	= includes/
 
 SRC_DIR     	= srcs
 SYNTAX_DIR  	= srcs/syntax
+PARSING_DIR  	= srcs/parsing
 MLIBFT_DIR  	= includes/mini_libft
 OBJ_DIR     	= objs
 
@@ -28,6 +29,9 @@ OBJS        	= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 SYNTAX_SRCS 	= $(wildcard $(SYNTAX_DIR)/*.c)
 OBJS_SYNTAX 	= $(SYNTAX_SRCS:$(SYNTAX_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+PARSING_SRCS 	= $(wildcard $(PARSING_DIR)/*.c)
+OBJS_PARSING 	= $(PARSING_SRCS:$(PARSING_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 MLIBFT_SRCS 	= $(wildcard $(MLIBFT_DIR)/*.c)
 OBJS_MLIBFT 	= $(MLIBFT_SRCS:$(MLIBFT_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -45,12 +49,16 @@ $(OBJ_DIR)/%.o : $(SYNTAX_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
+$(OBJ_DIR)/%.o : $(PARSING_DIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+
 $(OBJ_DIR)/%.o : $(MLIBFT_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
-$(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_MLIBFT)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_MLIBFT) -o $(NAME) $(READLINE_MAC)
+$(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_MLIBFT)
+	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_MLIBFT) -o $(NAME) $(READLINE_MAC)
 	@echo "[+] $(NAME) compiled"
 
 all: $(NAME)

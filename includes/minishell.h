@@ -12,19 +12,39 @@
 # include <sys/ioctl.h>
 # include "macros.h"
 
+typedef struct s_shell	t_shell;
+typedef struct s_node	t_node;
 
 
-typedef struct s_shell
+typedef	struct operators
 {
-	char	*prompt;
-	char	*pipeline;
-	char	**pipe_words;
-}	t_shell;
+	bool	or;
+	bool	and;
+	bool	pipe;
+	bool	in;
+	bool	out;
+	bool	append;
+	bool	heredoc;
 
-typedef struct s_node
+} t_operators;
+
+struct s_node
 {
-	t_shell *shell;
-}	t_node;
+	t_operators		*operators;
+	t_shell 		*shell;
+	t_node			*next;
+	t_node			*prev;
+
+};
+
+struct s_shell
+{
+	char			*prompt;
+	char			*test;
+	char			*pipeline;
+	char			**pipe_words;
+	t_node			*node;
+};
 
 // Errors
 int				std_error(char *error);
@@ -41,7 +61,7 @@ int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
 extern	void	rl_replace_line(const char *text, int clear_undo);
 
 // reader
-void 			init_prompt(t_shell *shell);
+int				init_prompt(t_shell *shell);
 
 // syntax
 int				check_syntax(char *str);
@@ -49,6 +69,9 @@ int				check_quotes(char *str);
 int				check_in(char *str);
 int				check_out(char *str);
 int				check_pipes(char *str);
+
+//parser
+void			parsing(t_shell *shell);
 
 
 # endif

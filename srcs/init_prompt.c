@@ -17,7 +17,7 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
-static void main_loop(t_shell *shell)
+int main_loop(t_shell *shell)
 {
     while (1)
     {
@@ -27,14 +27,19 @@ static void main_loop(t_shell *shell)
         if (!shell->pipeline)
             break ;
         check_syntax(shell->pipeline);
+        shell = (t_shell *) malloc(sizeof(t_shell));
+        if (!shell)
+            return (1);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
-            shell->pipe_words = ft_split(shell->pipeline, ' ');
-            free(shell->pipe_words);
+            parsing(shell);
+            // shell->pipe_words = ft_split(shell->pipeline, ' ');
+            // free(shell->pipe_words);
         }
-        free(shell->pipeline);
+        // free(shell->pipeline);
     }
+    return (0);
 }
 
 // void  get_pwd(t_shell *shell)
@@ -55,7 +60,7 @@ static void main_loop(t_shell *shell)
 //     free(temp);
 // }
 
-void init_prompt(t_shell *shell)
+int init_prompt(t_shell *shell)
 {
     char    *user;
 
@@ -63,6 +68,8 @@ void init_prompt(t_shell *shell)
     if (!user)
         user = "guest";
     shell->prompt = ft_strjoin(user, "@minishell$ ");
-    main_loop(shell);
+    if (main_loop(shell))
+        return (1);
     free(shell->prompt);
+    return (0);
 }
