@@ -17,7 +17,6 @@ static void	handle_sigquit(int sig)
 
 static void main_loop(t_shell *shell, char **envp)
 {
-    // char *echo_cmd[] = {"echo", "ciao", NULL};
     char    *right_path;
     int     pid;
     (void)envp;
@@ -29,16 +28,6 @@ static void main_loop(t_shell *shell, char **envp)
         shell->pipeline = readline(shell->prompt);
         if (!shell->pipeline)
             break ;
-        // if (ft_strncmp(shell->pipeline, "echo", 4))
-        // {
-        //     int pid;
-        //     if ((pid = fork()) < 0)
-        //         return ;
-        //     else if (!pid)
-        //         execvp("/bin/echo", echo_cmd);
-        //     close(pid);
-        //     waitpid(pid, NULL, 0);
-        // }
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
@@ -48,7 +37,6 @@ static void main_loop(t_shell *shell, char **envp)
                 right_path = get_path(shell->splitted_pipe[0]);
                 if (right_path)
                 {
-                    // shell->curr_istruction = create_execve_argv(shell->splitted_pipe);
                     if ((pid = fork()) < 0)
                         return ;
                     else if (!pid)
@@ -61,22 +49,6 @@ static void main_loop(t_shell *shell, char **envp)
                     free (right_path);
                 }
                 free(shell->splitted_pipe);
-                // printf ("%s\n", right_path);
-                // shell->curr_istruction = create_execve_argv(shell->splitted_pipe);
-                // if (right_path)
-                // {
-                //     int pid;
-                //     if ((pid = fork()) < 0)
-                //         return ;
-                //     else if (!pid)
-                //     {
-                //         if (execve(right_path, shell->curr_istruction, envp) != -1)
-                //             printf("Beri vad\n");
-                //     }
-                //     close (pid);
-                //     waitpid(pid, NULL, 0);
-                // }
-                // free (shell->curr_istruction);
             }
         } 
         free(shell->pipeline);

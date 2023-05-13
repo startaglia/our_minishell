@@ -20,6 +20,8 @@ READLINE_MAC    = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$
 
 RM          	= rm -rf
 
+CLEAR			= clear
+
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
@@ -32,15 +34,18 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(OBJS_LIBFT)
 	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
-	@echo "[+] $(NAME) compiled"
+	@$(CLEAR)
+	@echo "$(NAME) compiled"
 
 clean:
 	@$(RM) $(OBJ_DIR)
-	@echo "[+] $(NAME) cleaned"
+	@$(CLEAR)
+	@echo "$(NAME) cleaned"
 
 fclean: clean
 	@$(RM) $(OBJ_DIR)/$(NAME)
 	@$(RM) $(NAME)
-	@echo "[+] $(NAME) fcleaned"
+	@$(CLEAR)
+	@echo "$(NAME) fcleaned"
 
 re: fclean all
