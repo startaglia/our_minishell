@@ -74,7 +74,7 @@ int				check_out(char *str);
 int				check_pipes(char *str);
 
 //parser
-int				parsing(t_shell *shell);
+char			*parsing(t_shell *shell);
 
 
 # endif

@@ -31,8 +31,11 @@ int main_loop(t_shell *shell)
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
-            if (parsing(shell))
-                return (1);
+            // if (parsing(shell))
+            // {
+                // return (1);
+            // }
+            printf("PARSING %s\n", parsing(shell));
             // shell->pipe_words = ft_split(shell->pipeline, ' ');
             // free(shell->pipe_words);
         }
@@ -40,24 +43,6 @@ int main_loop(t_shell *shell)
     }
     return (0);
 }
-
-// void  get_pwd(t_shell *shell)
-// {
-//     char    *home;
-//     char    *temp;
-
-//     shell->prompt = "\n$";
-//     home = getenv("PWD");
-//     if (!home)
-//         print_error(1);
-//     temp = getenv("USER");
-//     if (!temp)
-//         temp = "guest";
-//     temp = ft_strjoin(temp, "@minishell-");
-//     temp = ft_strjoin(temp, home);
-//     shell->prompt = ft_strjoin(temp, shell->prompt);
-//     free(temp);
-// }
 
 int     init_prompt(t_shell *shell)
 {
