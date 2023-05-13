@@ -12,27 +12,32 @@
 
 #include "../../includes/minishell.h"
 
-int	check_pipes(char *str)
+int	check_pipes(t_shell *shell)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (shell->pipeline[i])
 	{
-	if (str[i] == 34)
-	{
-		i++;
-		while (str[i] != 34 && str[i + 1])
-			i++;
-	}
-		if (str[i] == 124)
+		if (shell->pipeline[i] == 34)
 		{
 			i++;
-			if (str[i] == 124)
+			while (shell->pipeline[i] != 34 && shell->pipeline[i + 1])
+				i++;
+		}
+		if (shell->pipeline[i] == 124)
+		{
+			i++;
+			if (shell->pipeline[i] == 124)
 			{
 				i++;
-				if (str[i] == 124)
+				if (shell->pipeline[i] == 124)
 					return (std_error(PIP));
+			}
+			else
+			{
+				//shell->node->operators->pipe = true; //non funge non so perchè segmentation fault.
+				shell->pipe = true;
 			}
 		}
 		i++;

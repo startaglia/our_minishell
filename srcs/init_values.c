@@ -33,12 +33,22 @@ int	init_mem(t_shell *shell)
     shell->node = (t_node *)malloc(sizeof(t_node));
        if (!shell->node)
             return (1);
+    shell->node->operators = (t_operators *)malloc(sizeof(t_operators));
+        if (!shell->node->operators)
+            return (1);
+    //shell->node->operators->pipe = false;
     return (0);  
 }
 
-int	init_values(t_shell *shell)
+int	init_values(t_shell *shell, char **envp)
 {
     if (init_mem(shell))
+    {
+        shell->pipe = false;
+        shell->copy_env = envp;
         return (1);
+    }
+    shell->pipe = false;
+    shell->copy_env = envp;
     return (0);
 }

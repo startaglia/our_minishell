@@ -10,6 +10,7 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <sys/ioctl.h>
+# include <sys/wait.h>
 # include "macros.h"
 
 typedef struct s_shell	t_shell;
@@ -43,6 +44,8 @@ struct s_shell
 	char			*test;
 	char			*pipeline;
 	char			**pipe_words;
+	char			**copy_env;
+	bool			pipe;
 	t_node			*node;
 };
 
@@ -61,20 +64,26 @@ int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
 extern	void	rl_replace_line(const char *text, int clear_undo);
 
 //init_functs
-int				init_values(t_shell *shell);
+int				init_values(t_shell *shell, char **envp);
 
 // reader
-int				init_prompt(t_shell *shell);
+int				init_prompt(t_shell *shell, char **envp);
 
 // syntax
-int				check_syntax(char *str);
+int				check_syntax(t_shell *shell);
 int				check_quotes(char *str);
 int				check_in(char *str);
 int				check_out(char *str);
-int				check_pipes(char *str);
+int				check_pipes(t_shell *shell);
 
 //parser
 int				parsing(t_shell *shell);
+
+//executor
+int				exec_single_cmd(t_shell *shell);
+
+//free
+int				free_matrix(char **matrix);
 
 
 # endif

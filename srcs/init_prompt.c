@@ -17,7 +17,7 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
-int main_loop(t_shell *shell)
+int main_loop(t_shell *shell, char **envp)
 {
     while (1)
     {
@@ -26,8 +26,10 @@ int main_loop(t_shell *shell)
         shell->pipeline = readline(shell->prompt);
         if (shell->pipeline == NULL)
             exit (1);
-        check_syntax(shell->pipeline);
-        init_values(shell);
+        init_values(shell, envp);
+        check_syntax(shell);
+        if (!shell->pipe)
+            exec_single_cmd(shell);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
@@ -41,25 +43,7 @@ int main_loop(t_shell *shell)
     return (0);
 }
 
-// void  get_pwd(t_shell *shell)
-// {
-//     char    *home;
-//     char    *temp;
-
-//     shell->prompt = "\n$";
-//     home = getenv("PWD");
-//     if (!home)
-//         print_error(1);
-//     temp = getenv("USER");
-//     if (!temp)
-//         temp = "guest";
-//     temp = ft_strjoin(temp, "@minishell-");
-//     temp = ft_strjoin(temp, home);
-//     shell->prompt = ft_strjoin(temp, shell->prompt);
-//     free(temp);
-// }
-
-int     init_prompt(t_shell *shell)
+int     init_prompt(t_shell *shell, char **envp)
 {
     char    *user;
 
@@ -67,7 +51,7 @@ int     init_prompt(t_shell *shell)
     if (!user)
         user = "guest";
     shell->prompt = ft_strjoin(user, "@minishell$ ");
-    main_loop(shell);
+    main_loop(shell, envp);
     free(shell->prompt);
     return (0);
 }
