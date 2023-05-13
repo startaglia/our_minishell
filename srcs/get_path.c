@@ -1,5 +1,17 @@
 #include "minishell.h"
 
+static int  mat_len(char **mat)
+{
+    int i;
+
+    i = 0;
+    if (!mat)
+        return (0);
+    while (mat[i])
+        i++;
+    return (i);
+}
+
 static char *create_path(char *cmd, char *paths)
 {
     char    *ret;
@@ -27,9 +39,10 @@ char    *get_path(char *cmd)
         if (access(r_path, F_OK) == 0)
         {
             ft_free_matrix(paths);
-            printf("%s\n", r_path);
             return (r_path);
         }
+        if (i == mat_len(paths))
+            break ;
         free(r_path);
     }
     ft_free_matrix(paths);
