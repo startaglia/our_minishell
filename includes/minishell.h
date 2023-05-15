@@ -34,7 +34,6 @@ struct s_node
 	t_shell 		*shell;
 	t_node			*next;
 	t_node			*prev;
-
 };
 
 struct s_shell
@@ -42,6 +41,7 @@ struct s_shell
 	char			*prompt;
 	char			*test;
 	char			*pipeline;
+	char			*line_to_split;
 	char			**pipe_words;
 	t_node			*node;
 };

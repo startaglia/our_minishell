@@ -31,13 +31,17 @@ int main_loop(t_shell *shell)
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
-            // if (parsing(shell))
-            // {
-                // return (1);
-            // }
-            printf("PARSING %s\n", parsing(shell));
-            // shell->pipe_words = ft_split(shell->pipeline, ' ');
-            // free(shell->pipe_words);
+            shell->line_to_split = parsing(shell);
+            if (shell->line_to_split == NULL)
+                return (1);
+            shell->pipe_words = ft_split(shell->line_to_split, 32);
+            printf("PARSING %s\n", shell->line_to_split);
+            int i = -1;
+            while (shell->pipe_words[++i])
+                printf("SPLIT: %s\n", shell->pipe_words[i]);
+            
+            free(shell->pipe_words);
+            free(shell->line_to_split);
         }
         // free(shell->pipeline);
     }
