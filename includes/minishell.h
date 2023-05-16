@@ -25,7 +25,7 @@ typedef struct s_shell
 	char			*pipeline;
 	char			*line_to_split;
 	char			**splitted_pipe;
-	char			**instruction_matrix;
+	char			**execve_arg;
 	struct s_node	*token;
 }	t_shell;
 
@@ -35,8 +35,9 @@ int  			mat_len(char **mat);
 // Free
 void			ft_free_matrix(char **matrix);
 
-// Errori
+// Errors
 void			print_error(int error);
+void 			write_std_error(char *error);
 
 // Readline
 extern	void	rl_replace_line(const char *text, int clear_undo);
@@ -49,6 +50,7 @@ int				check_redirs(char *str);
 // Parser
 char			*parsing(t_shell *shell);
 void		    create_instruction_list(t_shell *shell);
+char		    **create_execve_arg(t_shell *shell);
 
 // Executor
 char    		*get_path(char *cmd);

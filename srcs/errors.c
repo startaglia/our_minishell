@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void write_std_error(char *error)
+void write_std_error(char *error)
 {
     int i;
 

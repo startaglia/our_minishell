@@ -36,25 +36,35 @@ static void main_loop(t_shell *shell, char **envp)
                 shell->line_to_split = parsing(shell);
                 printf("Parsed: %s\n", shell->line_to_split);
                 shell->splitted_pipe = ft_split(shell->line_to_split, ' ');
-                create_instruction_list(shell);
                 // ciclare la lista finche non trova un operatore logico e vedere poi cosa fare di lui dopo che avremmo fatto pace con loro
-                right_path = get_path(shell->splitted_pipe[0]);
-                if (right_path)
+                create_instruction_list(shell);
+                right_path = get_path(shell->token->command);
+                if (!right_path)
+                    write_std_error("Command not found\n");
+                else
                 {
+                    // printf("ok\n");
+                    shell->execve_arg = create_execve_arg(shell);
+                    int i = 0;
+                    while (shell->execve_arg[i])
+                    {
+                        printf("%s\n", shell->execve_arg[i]);
+                        i++;
+                    }
                     if ((pid = fork()) < 0)
                         return ;
                     else if (!pid)
                     {
-                        if (execve(right_path, shell->splitted_pipe, envp) == -1)
+                        if (execve(right_path, shell->execve_arg, envp) == -1)
                             return ;
                     }
                     close (pid);
                     waitpid(pid, NULL, 0);
+                    free(shell->execve_arg);
                     free (right_path);
                 }
                 free(shell->line_to_split);
                 free(shell->splitted_pipe);
-                free(shell->instruction_matrix);
             }
         } 
         free(shell->pipeline);
