@@ -12,19 +12,28 @@
 # include <sys/wait.h>
 # include "../libft/libft.h"
 
-// struct t_token;
+typedef struct s_node
+{
+	char			*command;
+	struct s_node	*next;
+	struct s_node	*prev;
+}	t_node;
 
 typedef struct s_shell
 {
-	char	*prompt;
-	char	*pipeline;
-	char	**splitted_pipe;
-	char	*curr_istruction;
-	struct t_token	*tokens;
+	char			*prompt;
+	char			*pipeline;
+	char			*line_to_split;
+	char			**splitted_pipe;
+	char			**instruction_matrix;
+	struct s_node	*token;
 }	t_shell;
 
+// Utils
+int  			mat_len(char **mat);
+
 // Free
-void	ft_free_matrix(char **matrix);
+void			ft_free_matrix(char **matrix);
 
 // Errori
 void			print_error(int error);
@@ -38,9 +47,10 @@ int 			check_syntax(char *str);
 int				check_redirs(char *str);
 
 // Parser
-// char		    *create_execve_argv(char **str);
+char			*parsing(t_shell *shell);
+void		    create_instruction_list(t_shell *shell);
 
 // Executor
-char    *get_path(char *cmd);
+char    		*get_path(char *cmd);
 
 # endif

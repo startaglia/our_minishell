@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@42.fr>                  +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 10:51:30 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/01/22 11:21:02 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:47:40 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstnew(void *content)
+t_node	*ft_lstnew(void *content)
 {
-	t_list	*new;
+	t_node	*new;
 
-	new = (t_list *) malloc (sizeof(t_list));
+	new = (t_node *) malloc (sizeof(t_node));
 	if (!new)
 		return (NULL);
-	new->command = content;
-	new->next = NULL;
+	new->command = ft_strdup(content);
 	return (new);
 }

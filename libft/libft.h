@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@42.fr>                  +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 10:13:36 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/01/22 22:36:06 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:47:32 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include "../includes/minishell.h"
+
+typedef struct s_shell	t_shell;
+typedef struct s_node	t_node;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -53,26 +56,13 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int nb, int fd);
 
-typedef struct s_list
-{
-	char			*command;
-	int				or;
-	int				and;
-	int				pipe;
-	int				input;
-	int				output;
-	int				append;
-	int				heredoc;
-	struct s_list	*next;
-}	t_list;
-
-t_list	*ft_lstnew(void *content);
-void	ft_lstadd_front(t_list **lst, t_list *new);
-int		ft_lstsize(t_list *lst);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
+t_node	*ft_lstnew(void *content);
+// void	ft_lstadd_front(t_list **lst, t_list *new);
+// int		ft_lstsize(t_list *lst);
+// t_node	*ft_lstlast(t_list *lst);
+void	ft_lstadd_back(t_node **lst, t_node *new);
 // void	ft_lstdelone(t_list *lst, void (*del)(void *));
-void	ft_lstclear(t_list **lst, void (*del)(void *));
+// void	ft_lstclear(t_list **lst, void (*del)(void *));
 // void	ft_lstiter(t_list *lst, void (*f)(void *));
 // t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 

@@ -33,7 +33,11 @@ static void main_loop(t_shell *shell, char **envp)
             add_history(shell->pipeline);
             if (!check_syntax(shell->pipeline))
             {
-                shell->splitted_pipe = ft_split(shell->pipeline, ' ');
+                shell->line_to_split = parsing(shell);
+                printf("Parsed: %s\n", shell->line_to_split);
+                shell->splitted_pipe = ft_split(shell->line_to_split, ' ');
+                create_instruction_list(shell);
+                // ciclare la lista finche non trova un operatore logico e vedere poi cosa fare di lui dopo che avremmo fatto pace con loro
                 right_path = get_path(shell->splitted_pipe[0]);
                 if (right_path)
                 {
@@ -41,14 +45,16 @@ static void main_loop(t_shell *shell, char **envp)
                         return ;
                     else if (!pid)
                     {
-                        if (execve(right_path, shell->splitted_pipe, envp) != -1)
-                            printf ("Tee-hee-hee!\n");
+                        if (execve(right_path, shell->splitted_pipe, envp) == -1)
+                            return ;
                     }
                     close (pid);
                     waitpid(pid, NULL, 0);
                     free (right_path);
                 }
+                free(shell->line_to_split);
                 free(shell->splitted_pipe);
+                free(shell->instruction_matrix);
             }
         } 
         free(shell->pipeline);

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int  mat_len(char **mat)
+int  mat_len(char **mat)
 {
     int i;
 

@@ -7,7 +7,7 @@ int	main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
-    (void)envp;
+    // (void)envp;
     // i = 0;
     // while (envp[i])
     // {
