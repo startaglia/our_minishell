@@ -4,7 +4,6 @@ void    create_instruction_list(t_shell *shell)
 {
     int     i;
 
-    shell->token = (t_node *)malloc(sizeof(t_node));
     shell->token = ft_lstnew((char*)shell->splitted_pipe[0]);
     i = 1;
     while (shell->splitted_pipe[i])
@@ -20,30 +19,32 @@ void    create_instruction_list(t_shell *shell)
 static int  get_execve_arg_len(t_shell *shell)
 {
     int     i;
+    t_node  *temp;
 
+    temp = shell->token;
     i = 0;
-    while (shell->token->next)
+    while (temp->next)
     {
-        if (!ft_strncmp(shell->token->command, "<", 1) || !ft_strncmp(shell->token->command, ">", 1)
-            || !ft_strncmp(shell->token->command, "|", 1))
+        if (!ft_strncmp(temp->command, "<", 1) || !ft_strncmp(temp->command, ">", 1)
+            || !ft_strncmp(temp->command, "|", 1))
         {
-            shell->token = shell->token->prev;
+            temp = temp->prev;
+            i--;
             break ;
         }
-        else if (!ft_strncmp(shell->token->command, ">>", 2) ||
-            !ft_strncmp(shell->token->command, "<<", 2))
+        else if (!ft_strncmp(temp->command, ">>", 2) ||
+            !ft_strncmp(temp->command, "<<", 2))
         {
-            shell->token = shell->token->prev;
+            temp = temp->prev;
+            i--;
             break ;
         }
         else
         {
             i++;
-            shell->token = shell->token->next;
+            temp = temp->next;
         }
     }
-    while (shell->token->prev)
-        shell->token = shell->token->prev;
     return (i);
 }
 
@@ -52,19 +53,27 @@ char    **create_execve_arg(t_shell *shell)
     char    **ret;
     int     ret_len;
     int     i;
+    t_node  *temp;
 
     i = 0;
+    temp = shell->token;
     ret_len = get_execve_arg_len(shell) + 1;
     ret = (char**)malloc(sizeof(char*) * ret_len);
-    while (i < ret_len)
+    if (ret_len == 1)
     {
-        ret[i] = shell->token->command;
-        printf("%s\n");
-        i++;
-        shell->token = shell->token->next;
+        ret[0] = temp->command;
+        ret[1] = NULL;
+        return (ret);
     }
-    while (shell->token->prev)
-        shell->token = shell->token->prev;
+    else
+    {
+        while (i < ret_len)
+        {
+            ret[i] = temp->command;
+            i++;
+            temp = temp->next;
+        }
+    }
     ret[i] = NULL;
     return (ret);
 }

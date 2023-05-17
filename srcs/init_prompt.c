@@ -15,6 +15,18 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
+static void free_nodes(t_shell *shell)
+{
+    t_node  *temp;
+
+    temp = shell->token;
+    while (temp->next)
+    {
+        free(shell->token);
+        shell->token = temp->next;
+    }
+}
+
 static void main_loop(t_shell *shell, char **envp)
 {
     char    *right_path;
@@ -39,18 +51,14 @@ static void main_loop(t_shell *shell, char **envp)
                 // ciclare la lista finche non trova un operatore logico e vedere poi cosa fare di lui dopo che avremmo fatto pace con loro
                 create_instruction_list(shell);
                 right_path = get_path(shell->token->command);
+                printf("Path: %s\n", right_path);
                 if (!right_path)
                     write_std_error("Command not found\n");
                 else
                 {
-                    // printf("ok\n");
+                    printf("ok1\n");
                     shell->execve_arg = create_execve_arg(shell);
-                    int i = 0;
-                    while (shell->execve_arg[i])
-                    {
-                        printf("%s\n", shell->execve_arg[i]);
-                        i++;
-                    }
+                    printf("ok2\n");
                     if ((pid = fork()) < 0)
                         return ;
                     else if (!pid)
@@ -61,7 +69,8 @@ static void main_loop(t_shell *shell, char **envp)
                     close (pid);
                     waitpid(pid, NULL, 0);
                     free(shell->execve_arg);
-                    free (right_path);
+                    free(right_path);
+                    free_nodes(shell);
                 }
                 free(shell->line_to_split);
                 free(shell->splitted_pipe);
