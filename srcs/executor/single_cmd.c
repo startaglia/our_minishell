@@ -6,14 +6,18 @@ int execute_cmd(char *path, char **cmd, t_shell *shell)
 
     pid = fork();
     if (pid < 0)
-        return (1);
-    else if (!pid)
+        perror("Pid error");
+    if (pid == 0)
     {
         if (execve(path, cmd, shell->copy_env) == -1)
-            return (printf("Error\n"));
+            perror("Error");
+        close(pid);
     }
-    close(pid);
-    waitpid(pid, NULL, 0);
+    else
+    {
+        close(pid);
+        waitpid(pid, NULL, 0);
+    }
     return (0);
 }
 
@@ -53,21 +57,35 @@ int exec_single_cmd(t_shell *shell)
 
     i = 0;
     cmd = ft_split(shell->pipeline, ' ');
-
-    if (ft_strncmp(cmd[0], "exit", 4) == 0)
+    // while(cmd[i])
+    // {
+    //     cmd[i] = ft_strtrim2(cmd[i], 34);
+    //     cmd[i] = ft_strtrim2(cmd[i], 39);
+    //     i++;
+    // }
+    // sta robba leakka da correggere.
+    if (ft_strncmp(shell->pipeline, "exit", 4) == 0)
     {
-        while(cmd[i++])
-            free(cmd[i]);
-        free(cmd);
+        // while(cmd[i--])
+        //     free(cmd[i]);
+        // free(cmd);
+        // //free(shell->pipeline);
+        free_matrix(cmd);
         exit(0);
     }
     else
     {
-        path = ft_findpath(cmd[0]);
-        //printf("La path giusta è : %s\n", path);
-        execute_cmd(path, cmd, shell);
+        if (ft_checkbuiltin(cmd[0]))
+            ft_exec_builtin(cmd);
+        else
+        {
+            path = ft_findpath(cmd[0]);
+            if (path != NULL)
+                execute_cmd(path, cmd, shell);
+            else
+                printf("Command not found: %s\n", cmd[0]);
+        }
         free_matrix(cmd);
-        // free(path);
     }
     return (0);
 }

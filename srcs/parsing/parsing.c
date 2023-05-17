@@ -36,17 +36,19 @@ int		check_in_out_space(char *str)
 
 int	parsing(t_shell *shell)
 {
-	char	*str;
-	// int		i;
-	// int		j;
-	int		space;
+	// char	*str;
+	// // int		i;
+	// // int		j;
+	// int		space;
 
-	// i = 0;
-	// j = 0;
-	space = check_in_out_space(shell->pipeline);
-	//!DA CAPIRE BENE IL PERCHE *2 E +1;
-	str = (char *)malloc(sizeof(char *) + ft_strlen(shell->pipeline) + (space * 2) + 1);
-	if (!str)
-		return (1);
+	// // i = 0;
+	// // j = 0;
+	// space = check_in_out_space(shell->pipeline);
+	// //!DA CAPIRE BENE IL PERCHE *2 E +1;
+	// str = (char *)malloc(sizeof(char *) + ft_strlen(shell->pipeline) + (space * 2) + 1);
+	// if (!str)
+	// 	return (1);
+	// free(str);
+	(void)shell;
 	return (0);
 }

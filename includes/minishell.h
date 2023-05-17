@@ -59,6 +59,7 @@ char			**ft_split(const char *s, char c);
 char			*ft_strdup(char *src);
 char			*ft_strjoin(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
+char			*ft_strtrim2(char *str, char del);
 
 // readline
 extern	void	rl_replace_line(const char *text, int clear_undo);
@@ -81,6 +82,11 @@ int				parsing(t_shell *shell);
 
 //executor
 int				exec_single_cmd(t_shell *shell);
+int				ft_checkbuiltin(char *command);
+int				ft_exec_builtin(char **cmd);
+int				ft_cd(char **command);
+int				ft_echo(char **command);
+int				ft_pwd(void);
 
 //free
 int				free_matrix(char **matrix);

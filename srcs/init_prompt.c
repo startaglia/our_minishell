@@ -38,7 +38,7 @@ int main_loop(t_shell *shell, char **envp)
             // shell->pipe_words = ft_split(shell->pipeline, ' ');
             // free(shell->pipe_words);
         }
-        // free(shell->pipeline);
+        //free(shell->pipeline);
     }
     return (0);
 }
