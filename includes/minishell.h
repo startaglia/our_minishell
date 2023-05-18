@@ -11,6 +11,7 @@
 # include <limits.h>
 # include <sys/ioctl.h>
 # include "macros.h"
+# include "libft/libft.h"
 
 typedef struct s_shell	t_shell;
 typedef struct s_node	t_node;
@@ -34,6 +35,7 @@ struct s_node
 	t_shell 		*shell;
 	t_node			*next;
 	t_node			*prev;
+	char			*command;
 };
 
 struct s_shell
@@ -50,12 +52,12 @@ struct s_shell
 int				std_error(char *error);
 // void			print_error(int error);
 
-// mini_libft
-int				ft_strlen(const char *str);
-char			**ft_split(const char *s, char c);
-char			*ft_strdup(char *src);
-char			*ft_strjoin(const char *s1, const char *s2);
-int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
+// // mini_libft
+// int				ft_strlen(const char *str);
+// char			**ft_split(const char *s, char c);
+// char			*ft_strdup(char *src);
+// char			*ft_strjoin(const char *s1, const char *s2);
+// int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
 
 // readline
 extern	void	rl_replace_line(const char *text, int clear_undo);

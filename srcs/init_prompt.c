@@ -26,7 +26,8 @@ int main_loop(t_shell *shell)
         shell->pipeline = readline(shell->prompt);
         if (shell->pipeline == NULL)
             exit (1);
-        check_syntax(shell->pipeline);
+        if (check_syntax(shell->pipeline))
+            continue ;
         init_values(shell);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
