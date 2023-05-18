@@ -41,10 +41,10 @@ char    *get_path(char *cmd)
             ft_free_matrix(paths);
             return (r_path);
         }
-        if (i == mat_len(paths))
-            break ;
-        free(r_path);
+        else
+            free (r_path);
     }
-    ft_free_matrix(paths);
+    if (!r_path)
+        ft_free_matrix(paths);
     return (NULL);
 }

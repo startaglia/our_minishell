@@ -50,13 +50,13 @@ static void main_loop(t_shell *shell, char **envp)
                 shell->splitted_pipe = ft_split(shell->line_to_split, ' ');
                 // ciclare la lista finche non trova un operatore logico e vedere poi cosa fare di lui dopo che avremmo fatto pace con loro
                 create_instruction_list(shell);
+                printf("Current command: %s\n", shell->token->command);
                 right_path = get_path(shell->token->command);
-                printf("Path: %s\n", right_path);
                 if (!right_path)
-                    write_std_error("Command not found\n");
-                
+                    write_std_error("command not found\n");
                 else
                 {
+                    printf("Path: %s\n", right_path);
                     if ((pid = fork()) < 0)
                         return ;
                     else if (!pid)
@@ -74,6 +74,8 @@ static void main_loop(t_shell *shell, char **envp)
                 free(shell->line_to_split);
                 free(shell->splitted_pipe);
             }
+            else
+                write_std_error("wrong syntax\n");
         }
         // free(shell->pipeline);
     }

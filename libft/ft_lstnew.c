@@ -21,5 +21,6 @@ t_node	*ft_lstnew(void *content)
 		return (NULL);
 	new->command = ft_strdup(content);
 	new->prev = NULL;
+	new->next = NULL;
 	return (new);
 }
