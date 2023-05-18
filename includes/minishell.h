@@ -50,7 +50,6 @@ int				check_redirs(char *str);
 // Parser
 char			*parsing(t_shell *shell);
 void		    create_instruction_list(t_shell *shell);
-char		    **create_execve_arg(t_shell *shell);
 
 // Executor
 char    		*get_path(char *cmd);

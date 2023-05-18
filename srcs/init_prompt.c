@@ -15,15 +15,15 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
-static void free_nodes(t_shell *shell)
+static void free_nodes(t_node *node)
 {
     t_node  *temp;
 
-    temp = shell->token;
-    while (temp->next)
+    while (node->next)
     {
-        free(shell->token);
-        shell->token = temp->next;
+            temp = node;
+            node = node->next;
+            free(temp);
     }
 }
 
@@ -54,11 +54,9 @@ static void main_loop(t_shell *shell, char **envp)
                 printf("Path: %s\n", right_path);
                 if (!right_path)
                     write_std_error("Command not found\n");
+                
                 else
                 {
-                    printf("ok1\n");
-                    shell->execve_arg = create_execve_arg(shell);
-                    printf("ok2\n");
                     if ((pid = fork()) < 0)
                         return ;
                     else if (!pid)
@@ -68,15 +66,16 @@ static void main_loop(t_shell *shell, char **envp)
                     }
                     close (pid);
                     waitpid(pid, NULL, 0);
+                    printf("Executed\n");
                     free(shell->execve_arg);
                     free(right_path);
-                    free_nodes(shell);
+                    free_nodes(shell->token);
                 }
                 free(shell->line_to_split);
                 free(shell->splitted_pipe);
             }
-        } 
-        free(shell->pipeline);
+        }
+        // free(shell->pipeline);
     }
 }
 
