@@ -58,6 +58,27 @@ int		count_in_out(char *str)
 	return (k * 2);
 }
 
+void    create_instruction_list(t_shell *shell)
+{
+    int     i;
+
+    shell->node = ft_lstnew((char*)shell->pipe_words[0]);
+    i = 1;
+    while (shell->pipe_words[i])
+    {
+        ft_lstadd_back(&shell->node, ft_lstnew((char *)shell->pipe_words[i]));
+		printf("LIST: %s\n", shell->node->command);
+        shell->node = shell->node->next;
+        i++;
+    }
+    // if (shell->node->prev)
+    // {
+    //     while (shell->node->prev)
+    //         shell->node = shell->node->prev;
+    // }
+    // shell->execve_arg = create_execve_arg(shell);
+}
+
 char	*parsing(t_shell *shell)
 {
 	char	*str;

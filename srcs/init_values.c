@@ -36,9 +36,11 @@ int	init_mem(t_shell *shell)
     return (0);  
 }
 
-int	init_values(t_shell *shell)
+int	init_values(t_shell *shell, char **env)
 {
     if (init_mem(shell))
         return (1);
+    shell->pipe = false;
+    shell->copy_env = env;
     return (0);
 }

@@ -12,15 +12,15 @@
 
 #include "../../includes/minishell.h"
 
-int check_syntax(char *str)
+int check_syntax(t_shell *shell)
 {
-    if (check_quotes(str))
+    if (check_quotes(shell->pipeline))
         return (1);
-    if (check_in(str))
+    if (check_in(shell->pipeline))
         return (1);
-    if (check_out(str))
+    if (check_out(shell->pipeline))
         return (1);
-    if (check_pipes(str))
+    if (check_pipes(shell))
         return (1);
     // if (check_out(str))
         // return (1);

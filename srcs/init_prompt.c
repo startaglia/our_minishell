@@ -17,7 +17,7 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
-int main_loop(t_shell *shell)
+int main_loop(t_shell *shell, char **env)
 {
     while (1)
     {
@@ -26,9 +26,11 @@ int main_loop(t_shell *shell)
         shell->pipeline = readline(shell->prompt);
         if (shell->pipeline == NULL)
             exit (1);
-        if (check_syntax(shell->pipeline))
+        if (check_syntax(shell))
             continue ;
-        init_values(shell);
+        init_values(shell, env);
+        if (!shell->pipe)
+            exec_single_cmd(shell);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
@@ -36,11 +38,11 @@ int main_loop(t_shell *shell)
             if (shell->line_to_split == NULL)
                 return (1);
             shell->pipe_words = ft_split(shell->line_to_split, 32);
-            printf("PARSING %s\n", shell->line_to_split);
-            int i = -1;
-            while (shell->pipe_words[++i])
-                printf("SPLIT: %s\n", shell->pipe_words[i]);
-            
+            //printf("PARSING %s\n", shell->line_to_split);
+            // int i = -1;
+            // while (shell->pipe_words[++i])
+            //     printf("SPLIT: %s\n", shell->pipe_words[i]);
+            create_instruction_list(shell);
             free(shell->pipe_words);
             free(shell->line_to_split);
         }
@@ -49,7 +51,7 @@ int main_loop(t_shell *shell)
     return (0);
 }
 
-int     init_prompt(t_shell *shell)
+int     init_prompt(t_shell *shell, char **env)
 {
     char    *user;
 
@@ -57,7 +59,7 @@ int     init_prompt(t_shell *shell)
     if (!user)
         user = "guest";
     shell->prompt = ft_strjoin(user, "@minishell$ ");
-    main_loop(shell);
+    main_loop(shell, env);
     free(shell->prompt);
     return (0);
 }
