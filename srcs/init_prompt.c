@@ -46,6 +46,7 @@ static void  get_pwd(t_shell *shell)
 
 void init_prompt(t_shell *shell, char **envp)
 {
+    shell->first_cmd_path = NULL;
     get_pwd(shell);
     main_loop(shell, envp);
     free(shell->prompt);

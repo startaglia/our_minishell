@@ -6,7 +6,7 @@
 /*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 10:56:51 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/05/19 14:54:56 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/05/19 16:46:52 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,25 @@ static int	strlen_neg_pos(const char *s)
 	return (i);
 }
 
-static int	count_words(const char *str, char c)
+static int	count_words(const char *str, int c)
 {
 	int	count;
 	int	flag;
+	int	i;
 
+	i = 0;
 	count = 0;
 	flag = 0;
-	while (*str)
+	while (str[i])
 	{
-		if (*str != c && flag == 0)
+		if (str[i] != c && flag == 0)
 		{
 			flag = 1;
 			count++;
 		}
-		else if (*str == c)
+		else if (str[i] == c)
 			flag = 0;
-		str++;
+		i++;
 	}
 	return (count);
 }
@@ -56,7 +58,7 @@ static char	*copy_words(const char *str, int start, int end)
 	return (out);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, int c)
 {
 	char	**split;
 	int		i;
