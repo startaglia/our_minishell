@@ -52,6 +52,7 @@ static void main_loop(t_shell *shell, char **envp)
                 create_instruction_list(shell);
                 printf("Current command: %s\n", shell->token->command);
                 right_path = get_path(shell->token->command);
+                // printf("%s\n", right_path);
                 if (!right_path)
                     write_std_error("command not found\n");
                 else
