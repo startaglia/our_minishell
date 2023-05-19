@@ -45,7 +45,7 @@ int		count_in_out(char *str)
 	return (k * 2);
 }
 
-// Aggiunge gli spazi per poter splittare con ' '
+// Aggiunge gli spazi per poter usare ft_split con ' '
 
 static char	*parsing(t_shell *shell)
 {

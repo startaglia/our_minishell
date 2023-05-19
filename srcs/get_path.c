@@ -18,8 +18,9 @@ char    *get_path(char *cmd)
     char    *path;
     int     i;
 
-    i = -1;
+    i = -1; 
     path = getenv("PATH");
+    printf("%s\n", path);
     paths = ft_split(path, ':');
     while (paths[++i])
     {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@42.fr>                  +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 10:56:51 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/01/23 10:57:09 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/05/19 14:54:56 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	**ft_split(char const *s, char c)
 	int		start;
 	int		j;
 
-	split = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
+	split = ft_calloc((count_words(s, c) + 1), sizeof(char *));
 	if (!s || !split)
 		return (0);
 	start = -1;
