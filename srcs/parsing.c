@@ -47,7 +47,7 @@ int		count_in_out(char *str)
 
 // Aggiunge gli spazi per poter splittare con ' '
 
-char	*parsing(t_shell *shell)
+static char	*parsing(t_shell *shell)
 {
 	char	*str;
 	int		i;
@@ -71,4 +71,12 @@ char	*parsing(t_shell *shell)
 	}
 	str[j] = 0;
 	return (str);
+}
+
+void	get_first_command_path(t_shell *shell)
+{
+	shell->line_to_split = parsing(shell);
+	shell->splitted_pipe = ft_split(shell->line_to_split, ' ');
+	create_instruction_list(shell);
+	shell->first_cmd_path = get_path(shell->token->command);
 }

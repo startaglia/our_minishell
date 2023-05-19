@@ -11,3 +11,15 @@ void	ft_free_matrix(char **matrix)
 		free(matrix[i]);
 	free(matrix);
 }
+
+void free_nodes(t_node *node)
+{
+    t_node  *temp;
+
+    while (node->next)
+    {
+            temp = node;
+            node = node->next;
+            free(temp);
+    }
+}

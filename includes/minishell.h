@@ -24,6 +24,7 @@ typedef struct s_shell
 	char			*prompt;
 	char			*pipeline;
 	char			*line_to_split;
+	char			*first_cmd_path;
 	char			**splitted_pipe;
 	char			**execve_arg;
 	struct s_node	*token;
@@ -32,8 +33,13 @@ typedef struct s_shell
 // Utils
 int  			mat_len(char **mat);
 
+// Signals
+void			handle_sigint(int sig);
+void			handle_sigquit(int sig);
+
 // Free
 void			ft_free_matrix(char **matrix);
+void			free_nodes(t_node *node);
 
 // Errors
 void			print_error(int error);
@@ -48,10 +54,11 @@ int 			check_syntax(char *str);
 int				check_redirs(char *str);
 
 // Parser
-char			*parsing(t_shell *shell);
 void		    create_instruction_list(t_shell *shell);
+void			get_first_command_path(t_shell *shell);
 
 // Executor
 char    		*get_path(char *cmd);
+void		    executing(t_shell *shell, char **envp);
 
 # endif
