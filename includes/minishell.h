@@ -34,8 +34,7 @@ typedef struct s_shell
 int  			mat_len(char **mat);
 
 // Signals
-void			handle_sigint(int sig);
-void			handle_sigquit(int sig);
+void			ft_sig_handel(int signal);
 
 // Free
 void			ft_free_matrix(char **matrix);

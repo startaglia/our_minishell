@@ -20,7 +20,7 @@ char    *get_path(char *cmd)
 
     i = -1; 
     path = getenv("PATH");
-    paths = ft_split(path, ':');
+    paths = ft_split(path, ":");
     while (paths[++i])
     {
         r_path = create_path(cmd, paths[i]);

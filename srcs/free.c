@@ -18,8 +18,8 @@ void free_nodes(t_node *node)
 
     while (node->next)
     {
-            temp = node;
-            node = node->next;
-            free(temp);
+        temp = node;
+        node = node->next;
+        free(temp);
     }
 }

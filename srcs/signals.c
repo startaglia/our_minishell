@@ -1,16 +1,18 @@
 #include "minishell.h"
 
-void	handle_sigint(int sig)
+void	ft_sig_handel(int signal)
 {
-	(void)sig;
-    ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-}
-
-void	handle_sigquit(int sig)
-{
-	(void)sig;
-	rl_on_new_line();
-	rl_redisplay();
+	if (signal == SIGINT)
+	{
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	if (signal == SIGQUIT)
+	{
+		printf("\r");
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }

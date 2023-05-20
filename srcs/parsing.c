@@ -56,8 +56,9 @@ static char	*parsing(t_shell *shell)
 
 	i = 0;
 	j = 0;
-	space = count_in_out(shell->pipeline);
-	str = (char *)malloc(sizeof(char *) + ft_strlen(shell->pipeline) + (space ) + 1);
+	space = 0;
+	// space = count_in_out(shell->pipeline);
+	str = malloc(sizeof(char) * (ft_strlen(shell->pipeline) + space + 1));
 	if (!str)
 		return (NULL);
 	while (shell->pipeline[i])
@@ -73,10 +74,25 @@ static char	*parsing(t_shell *shell)
 	return (str);
 }
 
+static void	tokenizing(t_node *node)
+{
+	t_node	*temp;
+
+	temp = node;
+	while (temp->next)
+	{
+		printf("%s\n", temp->command);
+		temp = temp->next;
+	}
+	printf("%s\n", temp->command);
+	printf("Current token: %s\n", node->command);
+}
+
 void	get_first_command_path(t_shell *shell)
 {
 	shell->line_to_split = parsing(shell);
-	shell->splitted_pipe = ft_split(shell->line_to_split, ' ');
+	shell->splitted_pipe = ft_split(shell->line_to_split, " ");
 	create_instruction_list(shell);
+	tokenizing(shell->token);
 	shell->first_cmd_path = get_path(shell->token->command);
 }

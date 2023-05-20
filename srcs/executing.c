@@ -13,7 +13,4 @@ void    executing(t_shell *shell, char **envp)
     }
     close (pid);
     waitpid(pid, NULL, 0);
-    free(shell->execve_arg);
-    free(shell->first_cmd_path);
-    free_nodes(shell->token);
 }
