@@ -12,44 +12,74 @@
 
 #include "../../includes/minishell.h"
 
-int	check_in(char *str)
+int	check_in(t_shell *shell)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (shell->pipeline[i])
 	{
-		if (str[i] == 60)
+		if (shell->pipeline[i] == 34)
 		{
 			i++;
-			if (str[i] == 60)
+			while (shell->pipeline[i] != 34 && shell->pipeline[i + 1])
+				i++;
+		}
+		if (shell->pipeline[i] == 39)
+		{
+			i++;
+			while (shell->pipeline[i] != 39 && shell->pipeline[i + 1])
+				i++;
+		}
+		if (shell->pipeline[i] == 60)
+		{
+			i++;
+			if (shell->pipeline[i] == 60)
 			{
 				i++;
-				if (str[i] == 60)
+				if (shell->pipeline[i] == 60)
 					return (std_error(IN));
+				shell->sng_heredoc = true;
 			}
+			else
+				shell->sng_in = true;
 		}
 		i++;
 	}
 	return (0);
 }
 
-int	check_out(char *str)
+int	check_out(t_shell *shell)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (shell->pipeline[i])
 	{
-		if (str[i] == 62)
+		if (shell->pipeline[i] == 34)
 		{
 			i++;
-			if (str[i] == 62)
+			while (shell->pipeline[i] != 34 && shell->pipeline[i + 1])
+				i++;
+		}
+		if (shell->pipeline[i] == 39)
+		{
+			i++;
+			while (shell->pipeline[i] != 39 && shell->pipeline[i + 1])
+				i++;
+		}
+		if (shell->pipeline[i] == 62)
+		{
+			i++;
+			if (shell->pipeline[i] == 62)
 			{
 				i++;
-				if (str[i] == 62)
+				if (shell->pipeline[i] == 62)
 					return (std_error(OUT));
+				shell->sng_append = true;
 			}
+			else
+				shell->sng_redir = true;
 		}
 		i++;
 	}

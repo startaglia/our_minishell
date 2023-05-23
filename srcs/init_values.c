@@ -44,11 +44,23 @@ int	init_values(t_shell *shell, char **env)
 {
     if (init_mem(shell))
     {
-        shell->pipe = false;
+        shell->sng_pipe = false;
+        shell->sng_heredoc = false;
+        shell->sng_redir = false;
+        shell->sng_in = false;
+        shell->sng_append = false;
         shell->copy_env = env;
         return (1);
     }
-    shell->pipe = false;
+    shell->sng_pipe = false;
+    if (!shell->sng_heredoc)
+        shell->sng_heredoc = false;
+    if (!shell->sng_redir)
+        shell->sng_redir = false;
+    if (!shell->sng_in)
+        shell->sng_in = false;
+    if (!shell->sng_append)
+        shell->sng_append = false;
     shell->copy_env = env;
     return (0);
 }

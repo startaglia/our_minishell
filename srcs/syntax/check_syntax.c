@@ -16,9 +16,9 @@ int check_syntax(t_shell *shell)
 {
     if (check_quotes(shell->pipeline))
         return (1);
-    if (check_in(shell->pipeline))
+    if (check_in(shell))
         return (1);
-    if (check_out(shell->pipeline))
+    if (check_out(shell))
         return (1);
     if (check_pipes(shell))
         return (1);

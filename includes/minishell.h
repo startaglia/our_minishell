@@ -6,6 +6,7 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <signal.h>
 # include <stdbool.h>
 # include <limits.h>
@@ -47,7 +48,11 @@ struct s_shell
 	char			*line_to_split;
 	char			**pipe_words;
 	char			**copy_env;
-	bool			pipe;
+	bool			sng_pipe;
+	bool			sng_redir;
+	bool			sng_heredoc;
+	bool			sng_in;
+	bool			sng_append;
 	t_node			*node;
 };
 
@@ -74,21 +79,13 @@ int				init_prompt(t_shell *shell, char **env);
 // syntax
 int				check_syntax(t_shell *shell);
 int				check_quotes(char *str);
-int				check_in(char *str);
-int				check_out(char *str);
+int				check_in(t_shell *shell);
+int				check_out(t_shell *shell);
 int				check_pipes(t_shell *shell);
 
 //parser
 char			*parsing(t_shell *shell);
 void			create_instruction_list(t_shell *shell);
-
-//executor
-int				exec_single_cmd(t_shell *shell);
-int				ft_checkbuiltin(char *command);
-int				ft_exec_builtin(char **cmd);
-int				ft_cd(char **command);
-int				ft_echo(char **command);
-int				ft_pwd(void);
 
 //free
 int				free_matrix(char **matrix);
@@ -97,6 +94,10 @@ int				free_matrix(char **matrix);
 int				exec_single_cmd(t_shell *shell);
 int				ft_checkbuiltin(char *command);
 int				ft_exec_builtin(char **cmd);
+int				ft_checkredir(t_shell *shell);
+int				ft_execredir(int red, t_shell *shell, char **cmd);
+int				execute_cmd(char *path, char **cmd, t_shell *shell);
+char			*ft_findpath(char *cmd);
 int				ft_cd(char **command);
 int				ft_echo(char **command);
 int				ft_pwd(void);

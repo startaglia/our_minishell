@@ -39,9 +39,9 @@ int main_loop(t_shell *shell, char **env)
         //! CHECK SINTAX MODIFICA IL VALORE DI SHELL->PIPE SE LA TROVA, PERO' INIT VALUE LO METTE UGUALE A 0 DI DEFAULT, CAPIRE SE SERVE TOGLIERLO DA CHECKSINTAX
 
         //* SE NON C'È UNA PIPE VUOL DIRE CHE C'È SOLO UN COMANDO QUINDI NON SERVE PROPRIO ENTRARE DENTRO LA CONDIZIONE SUCCESSIVA. 
-        if (!shell->pipe)
+        if (!shell->sng_pipe)
             exec_single_cmd(shell);
-        if (ft_strncmp(shell->pipeline, "", 1))
+        else if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
             shell->line_to_split = parsing(shell);

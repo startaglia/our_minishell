@@ -19,12 +19,12 @@ int	check_pipes(t_shell *shell)
 	i = 0;
 	while (shell->pipeline[i])
 	{
-	if (shell->pipeline[i] == 34)
-	{
-		i++;
-		while (shell->pipeline[i] != 34 && shell->pipeline[i + 1])
+		if (shell->pipeline[i] == 34)
+		{
 			i++;
-	}
+			while (shell->pipeline[i] != 34 && shell->pipeline[i + 1])
+				i++;
+		}
 		if (shell->pipeline[i] == 124)
 		{
 			i++;
@@ -37,11 +37,11 @@ int	check_pipes(t_shell *shell)
 			else
 			{
 				//shell->node->operators->pipe = true; //non funge non so perchè segmentation fault.
-				shell->pipe = true;
+				shell->sng_pipe = true;
 			}
 		}
 		else
-			shell->pipe = true;
+			shell->sng_pipe = true;
 		i++;
 	}
 	return (0);

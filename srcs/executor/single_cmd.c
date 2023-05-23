@@ -65,6 +65,7 @@ int exec_single_cmd(t_shell *shell)
     //*QUI CI SALVO IL PERCORSO DEL COMANDO SE CI STA
     char *path;
     int i;
+    int red;
 
     i = 0;
     //!PROVARE SE E' SUFFICIENTE SPLITTARE CON LO SPAZIO E BASTA, QUINDI FARE PROVE CON LE REDIRECTION
@@ -73,36 +74,37 @@ int exec_single_cmd(t_shell *shell)
     {
         //printf("%s\n", cmd[i]);
         //* TRIMMO TUTTI I SINGOLI E DOPPI APICI SE CI SONO ("" '') PERCHÈ TANTO E' IL COMPORTAMENTO CHE VOGLIO, BASH OPERA COME SE NON CI FOSSERO
-        cmd[i] = ft_strtrim2(cmd[i], 34);
-        cmd[i] = ft_strtrim2(cmd[i], 39);
+        cmd[i] = ft_strtrim(cmd[i], "\"");
+        cmd[i] = ft_strtrim(cmd[i], "'");
         i++;
     }
     // sta robba leakka da correggere.
     //*CONTROLLO SE HO SCRITTO EXIT. SE SCRIVO EXIT DEVO USCIRE DALLA MIA SHELL
     if (ft_strncmp(shell->pipeline, "exit", 4) == 0)
     {
-        // while(cmd[i--])
-        //     free(cmd[i]);
-        // free(cmd);
-        // //free(shell->pipeline);
         free_matrix(cmd);
         exit(0);
     }
     else
     {
-        //*CONTROLLO SE IL COMANDO 'E UN BUILTIN NON PERMESSO, CIO'E UNO DI QUELLI CHE DEVO COSTRUIRMI IO (ECHO, CD, PWD, EXPORT, UNSET, ENV, EXIT)
-        if (ft_checkbuiltin(cmd[0]))
-            ft_exec_builtin(cmd);
-        else
+        red = ft_checkredir(shell);
+        if (!ft_execredir(red, shell, cmd))
         {
-            //*QUI GESTISCO I COMANDI CHE IL SUB PERMETTE DI PRENDERE DAL BIN
-            path = ft_findpath(cmd[0]);
-            //printf("%s\n", path);
-            if (path != NULL)
-                execute_cmd(path, cmd, shell);
+            //*CONTROLLO SE IL COMANDO 'E UN BUILTIN NON PERMESSO, CIO'E UNO DI QUELLI CHE DEVO COSTRUIRMI IO (ECHO, CD, PWD, EXPORT, UNSET, ENV, EXIT)
+            if (ft_checkbuiltin(cmd[0]))
+                ft_exec_builtin(cmd);
             else
-                printf("Command not found: %s\n", cmd[0]);
+            {
+                //*QUI GESTISCO I COMANDI CHE IL SUB PERMETTE DI PRENDERE DAL BIN
+                path = ft_findpath(cmd[0]);
+                //printf("%s\n", path);
+                if (path != NULL)
+                    execute_cmd(path, cmd, shell);
+                else
+                    printf("Command not found: %s\n", cmd[0]);
+            }
         }
+        add_history(shell->pipeline);
         free_matrix(cmd);
     }
     return (0);

@@ -28,3 +28,16 @@ int ft_exec_builtin(char **cmd)
     //     ft_unset(cmd);
     return (0);
 }
+
+int ft_checkredir(t_shell *shell)
+{
+    if (shell->sng_in == true)
+        return (1);
+    else if (shell->sng_heredoc == true)
+        return(2);
+    else if (shell->sng_append == true)
+        return (3);
+    else if (shell->sng_redir == true)
+        return (4);
+    return (0);
+}
