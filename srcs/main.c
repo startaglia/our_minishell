@@ -6,7 +6,6 @@ int	main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
-    (void)envp;
     init_prompt(&shell, envp);
     return (0);
 }

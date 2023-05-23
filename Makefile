@@ -22,7 +22,7 @@ SRC_DIR     	= srcs
 SYNTAX_DIR  	= srcs/syntax
 PARSING_DIR  	= srcs/parsing
 EXECUTOR_DIR	= srcs/executor
-MLIBFT_DIR  	= includes/mini_libft
+LIBFT_DIR		= includes/libft
 OBJ_DIR     	= objs
 
 SRCS        	= $(wildcard $(SRC_DIR)/*.c)
@@ -37,8 +37,8 @@ OBJS_PARSING 	= $(PARSING_SRCS:$(PARSING_DIR)/%.c=$(OBJ_DIR)/%.o)
 EXECUTOR_SRCS 	= $(wildcard $(EXECUTOR_DIR)/*.c)
 OBJS_EXECUTOR 	= $(EXECUTOR_SRCS:$(EXECUTOR_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-MLIBFT_SRCS 	= $(wildcard $(MLIBFT_DIR)/*.c)
-OBJS_MLIBFT 	= $(MLIBFT_SRCS:$(MLIBFT_DIR)/%.c=$(OBJ_DIR)/%.o)
+LIBFT_SRCS 	= $(wildcard $(LIBFT_DIR)/*.c)
+OBJS_LIBFT 	= $(LIBFT_SRCS:$(LIBFT_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 READLINE        = -L/usr/include/readline -I/usr/include/readline -lreadline
 READLINE_MAC    = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include
@@ -61,12 +61,12 @@ $(OBJ_DIR)/%.o : $(EXECUTOR_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
-$(OBJ_DIR)/%.o : $(MLIBFT_DIR)/%.c
+$(OBJ_DIR)/%.o : $(LIBFT_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
-$(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_MLIBFT)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_MLIBFT) -o $(NAME) $(READLINE_MAC)
+$(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT)
+	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
 	@echo "[+] $(NAME) compiled"
 
 all: $(NAME)

@@ -19,12 +19,12 @@ int	check_pipes(t_shell *shell)
 	i = 0;
 	while (shell->pipeline[i])
 	{
-		if (shell->pipeline[i] == 34)
-		{
+	if (shell->pipeline[i] == 34)
+	{
+		i++;
+		while (shell->pipeline[i] != 34 && shell->pipeline[i + 1])
 			i++;
-			while (shell->pipeline[i] != 34 && shell->pipeline[i + 1])
-				i++;
-		}
+	}
 		if (shell->pipeline[i] == 124)
 		{
 			i++;
@@ -40,6 +40,8 @@ int	check_pipes(t_shell *shell)
 				shell->pipe = true;
 			}
 		}
+		else
+			shell->pipe = true;
 		i++;
 	}
 	return (0);

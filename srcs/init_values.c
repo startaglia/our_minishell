@@ -40,15 +40,15 @@ int	init_mem(t_shell *shell)
     return (0);  
 }
 
-int	init_values(t_shell *shell, char **envp)
+int	init_values(t_shell *shell, char **env)
 {
     if (init_mem(shell))
     {
         shell->pipe = false;
-        shell->copy_env = envp;
+        shell->copy_env = env;
         return (1);
     }
     shell->pipe = false;
-    shell->copy_env = envp;
+    shell->copy_env = env;
     return (0);
 }
