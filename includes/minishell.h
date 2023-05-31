@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
+/*   Updated: 2023/05/26 21:43:24 by scastagn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -6,104 +18,57 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <fcntl.h>
 # include <signal.h>
 # include <stdbool.h>
 # include <limits.h>
 # include <sys/ioctl.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 # include "macros.h"
 # include "libft/libft.h"
 
-typedef struct s_shell	t_shell;
-typedef struct s_node	t_node;
 
 
-typedef	struct operators
+typedef struct s_shell
 {
-	bool	or;
-	bool	and;
-	bool	pipe;
-	bool	in;
-	bool	out;
-	bool	append;
-	bool	heredoc;
+	char	*prompt;
+	char	*pipeline;
+	char	*line_to_split;
+	char	**pipe_words;
+	char	**copy_env;
+}	t_shell;
 
-} t_operators;
-
-struct s_node
+typedef struct s_node
 {
-	t_operators		*operators;
-	t_shell 		*shell;
-	t_node			*next;
-	t_node			*prev;
-	char			*command;
-};
-
-struct s_shell
-{
-	char			*prompt;
-	char			*test;
-	char			*pipeline;
-	char			*line_to_split;
-	char			**pipe_words;
-	char			**copy_env;
-	bool			sng_pipe;
-	bool			sng_redir;
-	bool			sng_heredoc;
-	bool			sng_in;
-	bool			sng_append;
-	t_node			*node;
-};
+	t_shell *shell;
+}	t_node;
 
 // Errors
 int				std_error(char *error);
-// void			print_error(int error);
-
-// // mini_libft
-// int				ft_strlen(const char *str);
-// char			**ft_split(const char *s, char c);
-// char			*ft_strdup(char *src);
-// char			*ft_strjoin(const char *s1, const char *s2);
-// int				ft_strncmp(const char *s1, const char *s2, unsigned int n);
 
 // readline
 extern	void	rl_replace_line(const char *text, int clear_undo);
 
-//init_functs
-int				init_values(t_shell *shell, char **env);
-
 // reader
-int				init_prompt(t_shell *shell, char **env);
+void 			init_prompt(t_shell *shell, char **envp);
+int				init_values(t_shell *shell);
 
 // syntax
-int				check_syntax(t_shell *shell);
+int				check_syntax(char *str);
 int				check_quotes(char *str);
-int				check_in(t_shell *shell);
-int				check_out(t_shell *shell);
-int				check_pipes(t_shell *shell);
+int				check_in(char *str);
+int				check_out(char *str);
+int				check_pipes(char *str);
 
-//parser
+// parser
 char			*parsing(t_shell *shell);
-void			create_instruction_list(t_shell *shell);
-
-//free
-int				free_matrix(char **matrix);
 
 //executor
-int				exec_single_cmd(t_shell *shell);
-int				ft_checkbuiltin(char *command);
-int				ft_exec_builtin(char **cmd);
-int				ft_checkredir(t_shell *shell);
-int				ft_execredir(int red, t_shell *shell, char **cmd);
-int				execute_cmd(char *path, char **cmd, t_shell *shell);
-char			*ft_findpath(char *cmd);
-int				ft_cd(char **command);
-int				ft_echo(char **command);
-int				ft_pwd(void);
+int				executor(t_shell *shell);
 
 //free
 int				free_matrix(char **matrix);
+void			ft_free_shell(t_shell *shell);
 
 
 # endif

@@ -12,74 +12,93 @@
 
 #include "libft.h"
 
-static int	strlen_neg_pos(const char *s)
+static char	**free_array(char **ptr, int i)
 {
-	int	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	while (i > 0)
+	{
+		i--;
+		free(ptr[i]);
+	}
+	free(ptr);
+	return (0);
 }
 
-static int	count_words(const char *str, char c)
+static int	ft_count_words(char const *str, char c)
 {
+	int	i;
 	int	count;
-	int	flag;
 
+	i = 0;
 	count = 0;
-	flag = 0;
-	while (*str)
+	while (str[i] != '\0')
 	{
-		if (*str != c && flag == 0)
+		if (str[i] == c)
+			i++;
+		else
 		{
-			flag = 1;
 			count++;
+			while (str[i] && str[i] != c)
+				i++;
 		}
-		else if (*str == c)
-			flag = 0;
-		str++;
 	}
 	return (count);
 }
 
-static char	*copy_words(const char *str, int start, int end)
+static char	*ft_putword(char *word, char const *s, int i, int word_len)
 {
-	char	*out;
-	int		i;
+	int	j;
+
+	j = 0;
+	while (word_len > 0)
+	{
+		word[j] = s[i - word_len];
+		j++;
+		word_len--;
+	}
+	word[j] = '\0';
+	return (word);
+}
+
+static char	**ft_split_words(char const *s, char c, char **s2, int num_words)
+{
+	int	i;
+	int	word;
+	int	word_len;
 
 	i = 0;
-	out = (char *)malloc(sizeof(char) * ((end - start) + 1));
-	while (start < end)
-		out[i++] = str[start++];
-	out[i] = 0;
-	return (out);
+	word = 0;
+	word_len = 0;
+	while (word < num_words)
+	{
+		while (s[i] && s[i] == c)
+			i++;
+		while (s[i] && s[i] != c)
+		{
+			i++;
+			word_len++;
+		}
+		s2[word] = (char *)malloc(sizeof(char) * (word_len + 1));
+		if (!s2)
+			return (free_array(s2, word));
+		ft_putword(s2[word], s, i, word_len);
+		word_len = 0;
+		word++;
+	}
+	s2[word] = 0;
+	return (s2);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**split;
-	int		i;
-	int		start;
-	int		j;
+	char			**s2;
+	unsigned int	num_words;
 
-	split = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
-	if (!s || !split)
+	if (!s)
 		return (0);
-	start = -1;
-	i = 0;
-	j = 0;
-	while (i <= strlen_neg_pos(s))
-	{
-		if (s[i] != c && start < 0)
-			start = i;
-		else if ((s[i] == c || i == strlen_neg_pos(s)) && start >= 0)
-		{
-			split[j++] = copy_words(s, start, i);
-			start = -1;
-		}
-		i++;
-	}
-	split[j] = 0;
-	return (split);
+	num_words = ft_count_words(s, c);
+	s2 = (char **)malloc(sizeof(char *) * (num_words + 1));
+	if (!s2)
+		return (0);
+	s2 = ft_split_words(s, c, s2, num_words);
+	return (s2);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:42:48 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/15 14:11:37 by startagl         ###   ########.fr       */
+/*   Updated: 2023/05/26 21:24:22 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static int add_space(char *tmp, int i, char *line, int j)
     return j;
 }
 
-// 60(<) 62(>)
 int		count_in_out(char *str)
 {
 	int	i;
@@ -58,27 +57,6 @@ int		count_in_out(char *str)
 	return (k * 2);
 }
 
-void    create_instruction_list(t_shell *shell)
-{
-    int     i;
-
-    shell->node = ft_lstnew((char*)shell->pipe_words[0]);
-    i = 1;
-    while (shell->pipe_words[i])
-    {
-        ft_lstadd_back(&shell->node, ft_lstnew((char *)shell->pipe_words[i]));
-		printf("LIST: %s\n", shell->node->command);
-        shell->node = shell->node->next;
-        i++;
-    }
-    // if (shell->node->prev)
-    // {
-    //     while (shell->node->prev)
-    //         shell->node = shell->node->prev;
-    // }
-    // shell->execve_arg = create_execve_arg(shell);
-}
-
 char	*parsing(t_shell *shell)
 {
 	char	*str;
@@ -90,7 +68,6 @@ char	*parsing(t_shell *shell)
 	j = 0;
 	// 	count_space ritorna il numero di simboli totlai in / out, anche se trova un heredoc o un append conto inizialmente quanti sono in totale;
 	space = count_in_out(shell->pipeline);
-	printf("simbol %d\n", space);
 	str = (char *)malloc(sizeof(char *) + ft_strlen(shell->pipeline) + (space ) + 1);
 	if (!str)
 		return (NULL);
@@ -98,8 +75,6 @@ char	*parsing(t_shell *shell)
 	{
 		if (shell->pipeline[i] == 60 || shell->pipeline[i] == 62 || shell->pipeline[i] == 124)
 			j = add_space(shell->pipeline, i, str, j);
-		// if (shell->pipeline[i] == 124)
-		// 	j = pipe_space
 		else
 			str[j] = shell->pipeline[i];
 		i++;

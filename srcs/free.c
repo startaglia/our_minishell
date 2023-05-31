@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:57:08 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/11 12:05:12 by startagl         ###   ########.fr       */
+/*   Updated: 2023/05/26 21:43:05 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,25 @@ int	free_matrix(char **matrix)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if(!matrix)
 		return (1);
-	while (matrix[++i])
+	while (matrix[i])
+	{
 		free(matrix[i]);
+		i++;
+	}
 	free(matrix);
 	return (0);
 }
 
-// int	free_nodes(t_node *node)
-// {
-// 	if (!node)
-// 		return (1);
-// 	while (node)
-// 	{
-		
-// 	}
-	
-// }
+void ft_free_shell(t_shell *shell)
+{
+	if (shell != NULL)
+	{
+		free(shell->prompt);
+		free(shell->pipeline);
+		free(shell->line_to_split);
+		free_matrix(shell->pipe_words);
+	}
+}

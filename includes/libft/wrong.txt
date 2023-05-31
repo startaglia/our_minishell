@@ -1,1 +1,0 @@
-ft_strnstr  ft_strrchr  ft_substr   
