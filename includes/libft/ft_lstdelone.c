@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:49:41 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 20:49:42 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 10:00:42 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 10:02:12 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int std_error(char *error)
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-    int i;
+	t_list	*cpy;
 
-    i = 0;
-    while (error[i])
-        i++;
-    return(write(2, error, i));
+	cpy = lst;
+	if (lst)
+	{
+		lst = lst -> next;
+		del(cpy -> content);
+		free(cpy);
+	}
+	return ;
 }

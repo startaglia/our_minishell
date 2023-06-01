@@ -1,0 +1,8 @@
+en.subject.pdf
+includes
+Makefile
+minishell
+objs
+srcs
+test.txt
+/nfs/homes/startagl/Desktop/c_shell

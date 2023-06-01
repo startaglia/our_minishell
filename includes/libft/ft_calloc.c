@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:49:41 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 20:49:42 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/20 11:22:06 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/20 14:04:31 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int std_error(char *error)
+void	*ft_calloc(size_t count, size_t size)
 {
-    int i;
+	void	*ptr;
 
-    i = 0;
-    while (error[i])
-        i++;
-    return(write(2, error, i));
+	ptr = (void *) malloc(count * size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, (count * size));
+	return (ptr);
 }
