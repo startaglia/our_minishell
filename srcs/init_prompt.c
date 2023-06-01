@@ -6,7 +6,7 @@
 /*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/01 12:51:10 by startagl         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:12:14 by startagl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ static void main_loop(t_shell *shell)
             if (shell->line_to_split == NULL)
                 break ;
             shell->pipe_words = ft_split(shell->line_to_split, 32);
-            executor(shell);
+            executor(shell);   
+            free_matrix(shell->pipe_words);
         }
         free(shell->pipeline);
         free(shell->line_to_split);

@@ -6,7 +6,7 @@
 /*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:52 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/01 12:53:14 by startagl         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:41:35 by startagl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,20 +70,32 @@ int	exec(char **args, int len, int fd, char **env)
 int executor(t_shell *shell)
 {
 	int	i;
+	int	j;
 	int	pid;
 	int	tmp;
 	int	fd[2];
 	char **matrix_tmp;
 
+	j = 0;
 	i = 0;
 	pid = 0;
 	tmp = dup(0);
-	matrix_tmp = shell->pipe_words;
+	while(shell->pipe_words[j])
+		j++;
+	if (j == 0)
+		return (1);
+    matrix_tmp = (char **)malloc(sizeof(char *) * (j + 1));
+    j = 0;
+    while (shell->pipe_words[j])
+    {
+        matrix_tmp[j] = ft_strdup(shell->pipe_words[j]);
+        j++;
+    }
+    matrix_tmp[j] = NULL;
 	while (matrix_tmp[i])
 	{
 		if (i != 0)
-			matrix_tmp = &matrix_tmp[i + 1];
-		i = 0;
+			i++;
 		while (matrix_tmp[i] && strcmp(matrix_tmp[i], "|"))
 			i++;
 		if (i != 0 && matrix_tmp[i] == NULL)
@@ -108,6 +120,11 @@ int executor(t_shell *shell)
 		else if (i != 0 && !strcmp(matrix_tmp[i], "|"))
 		{
 			pipe(fd);
+			if (pipe(fd) == -1)
+			{
+				free_matrix(matrix_tmp);
+				return (1);
+			}
 			pid = fork();
 			if (!pid)
 			{
