@@ -6,25 +6,18 @@
 /*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:57:08 by startagl          #+#    #+#             */
-/*   Updated: 2023/06/01 11:55:54 by startagl         ###   ########.fr       */
+/*   Updated: 2023/06/01 14:16:52 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// int	check_mem(t_shell *shell)
-// {
-	
-// 	return (0);
-// }
-
 
 int	free_matrix(char **matrix)
 {
 	int	i;
 
 	i = 0;
-	if(!matrix)
+	if (!matrix)
 		return (1);
 	while (matrix[i])
 	{
@@ -35,7 +28,7 @@ int	free_matrix(char **matrix)
 	return (0);
 }
 
-void ft_free_shell(t_shell *shell)
+void	ft_free_shell(t_shell *shell)
 {
 	if (shell != NULL)
 	{
