@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:55:01 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 21:16:31 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 09:55:53 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 09:57:00 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+int	ft_lstsize(t_list *lst)
 {
-    t_shell shell;
+	int	size;
 
-    (void)argc;
-    (void)argv;
-    (void)envp;
-    init_prompt(&shell, envp);
-    free(shell.prompt);
-    // free();
-    return (0);
+	size = 0;
+	while (lst)
+	{
+		lst = lst -> next;
+		size = size + 1;
+	}
+	return (size);
 }

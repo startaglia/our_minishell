@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:55:01 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 21:16:31 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 10:02:32 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 10:05:29 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-    t_shell shell;
+	t_list	*clone;
 
-    (void)argc;
-    (void)argv;
-    (void)envp;
-    init_prompt(&shell, envp);
-    free(shell.prompt);
-    // free();
-    return (0);
+	if (*lst)
+	{
+		while (*lst)
+		{
+			clone = (*lst)-> next;
+			ft_lstdelone(*lst, del);
+			*lst = clone;
+		}
+	}
 }

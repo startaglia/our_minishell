@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:55:01 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 21:16:31 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 09:57:22 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 09:58:17 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+t_list	*ft_lstlast(t_list *lst)
 {
-    t_shell shell;
-
-    (void)argc;
-    (void)argv;
-    (void)envp;
-    init_prompt(&shell, envp);
-    free(shell.prompt);
-    // free();
-    return (0);
+	while (lst != NULL)
+	{
+		if (lst -> next == NULL)
+			return (lst);
+		lst = lst -> next;
+	}
+	return (lst);
 }

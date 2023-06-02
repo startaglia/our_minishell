@@ -1,63 +1,74 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
+/*   Updated: 2023/05/26 21:43:24 by scastagn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <unistd.h>
 # include <signal.h>
+# include <stdbool.h>
+# include <limits.h>
 # include <sys/ioctl.h>
-# include <sys/types.h>
 # include <sys/wait.h>
-# include "../libft/libft.h"
+# include <fcntl.h>
+# include "macros.h"
+# include "libft/libft.h"
 
-typedef struct s_node
-{
-	char			*command;
-	struct s_node	*next;
-	struct s_node	*prev;
-}	t_node;
+
 
 typedef struct s_shell
 {
-	char			*prompt;
-	char			*pipeline;
-	char			*line_to_split;
-	char			*first_cmd_path;
-	char			**splitted_pipe;
-	char			**execve_arg;
-	struct s_node	*token;
+	char	*prompt;
+	char	*pipeline;
+	char	*line_to_split;
+	char	**pipe_words;
+	char	**copy_env;
 }	t_shell;
 
-// Utils
-int  			mat_len(char **mat);
-
-// Signals
-void			ft_sig_handel(int signal);
-
-// Free
-void			ft_free_matrix(char **matrix);
-void			free_nodes(t_node *node);
+typedef struct s_node
+{
+	t_shell *shell;
+}	t_node;
 
 // Errors
-void			print_error(int error);
-void 			write_std_error(char *error);
+int				std_error(char *error);
 
-// Readline
+// readline
 extern	void	rl_replace_line(const char *text, int clear_undo);
 
-// Reader
-void			init_prompt(t_shell *shell, char **envp);
-int 			check_syntax(char *str);
-int				check_redirs(char *str);
+// reader
+void 			init_prompt(t_shell *shell, char **envp);
+int				init_values(t_shell *shell);
 
-// Parser
-void		    create_instruction_list(t_shell *shell);
-void			get_first_command_path(t_shell *shell);
+// syntax
+int				check_syntax(char *str);
+int				check_quotes(char *str);
+int				check_in(char *str);
+int				check_out(char *str);
+int				check_pipes(char *str);
 
-// Executor
-char    		*get_path(char *cmd);
-void		    executing(t_shell *shell, char **envp);
+// parser
+char			*parsing(t_shell *shell);
+
+//executor
+int				executor(t_shell *shell);
+
+//free
+int				free_matrix(char **matrix);
+void			ft_free_shell(t_shell *shell);
+
 
 # endif

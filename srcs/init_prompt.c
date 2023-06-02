@@ -1,60 +1,85 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_prompt.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
+/*   Updated: 2023/05/26 22:10:20 by scastagn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void main_loop(t_shell *shell, char **envp)
+#include "../includes/minishell.h"
+
+static void handle_siginit(int sig)
 {
-    (void)envp;
-    signal(SIGINT, ft_sig_handel);
-    signal(SIGQUIT, ft_sig_handel);
-    while (1)
+    if (sig == SIGINT)
     {
-        shell->pipeline = readline(shell->prompt);
-        if (!shell->pipeline)
-            break ;
-        if (ft_strncmp(shell->pipeline, "", 1))
-        {
-            add_history(shell->pipeline);
-            if (!check_syntax(shell->pipeline))
-            {
-                get_first_command_path(shell);
-                if (!shell->first_cmd_path)
-                    write_std_error("command not found\n");
-                else
-                {
-                    free(shell->execve_arg);
-                    free(shell->first_cmd_path);
-                    free_nodes(shell->token);
-                    // executing(shell, envp);
-                }
-            }
-            free(shell->pipeline);
-            free(shell->line_to_split);
-            free(shell->splitted_pipe);
-        }
+        ioctl(STDIN_FILENO, TIOCSTI, "\n");
+        rl_replace_line("", 0);
+        rl_on_new_line();
     }
 }
 
-static void  get_pwd(t_shell *shell)
+static void	handle_sigquit(int sig)
 {
-    char    *home;
-    char    *temp;
-
-    shell->prompt = "\n$";
-    home = getenv("PWD");
-    if (!home)
-        print_error(1);
-    temp = getenv("USER");
-    if (!temp)
-        temp = "guest";
-    temp = ft_strjoin(temp, "@minishell-");
-    temp = ft_strjoin(temp, home);
-    shell->prompt = ft_strjoin(temp, shell->prompt);
-    free(temp);
+	(void)sig;
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-void init_prompt(t_shell *shell, char **envp)
+static void main_loop(t_shell *shell)
 {
-    shell->first_cmd_path = NULL;
-    get_pwd(shell);
-    main_loop(shell, envp);
-    free(shell->prompt);
+    while (1)
+    {
+        signal(SIGINT, handle_siginit);
+        signal(SIGQUIT, handle_sigquit);
+        shell->pipeline = readline(shell->prompt);
+        if (!shell->pipeline)
+        // {
+            // printf("PRIMO BREAK\n");
+            // break ;
+            return ;
+        // }
+        if(check_syntax(shell->pipeline))
+            return ;
+        shell->line_to_split = parsing(shell);
+        if (ft_strncmp(shell->pipeline, "", 1))
+        {
+            add_history(shell->pipeline);
+            // if (shell->line_to_split == NULL)
+            // {
+            // printf("SEC BREAK\n");
+
+            //     break ;
+            // }
+            shell->pipe_words = ft_split(shell->line_to_split, 32);
+            executor(shell);
+        }
+    free(shell->pipeline);
+	free(shell->line_to_split);
+	free_matrix(shell->pipe_words);
+    // free(shell->pipe_words);
+    }
+    // free(shell);
+}
+
+void    init_prompt(t_shell *shell, char **envp)
+{
+    char    *user;
+    char    *tmp;
+
+    tmp = "\n";
+    user = getenv("USER");
+    if (!user)
+        user = "\nguest";
+    user = ft_strjoin(tmp, user);
+    init_values(shell);
+    shell->prompt = ft_strjoin(user, "@minishell$ ");
+    free(user);
+    shell->copy_env = envp;
+    main_loop(shell);
+    // printf("sono uscito dal loop infernale\n");
+    //free(shell);
 }
