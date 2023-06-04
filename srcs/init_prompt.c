@@ -55,11 +55,14 @@ static void main_loop(t_shell *shell)
             //     break ;
             // }
             shell->pipe_words = ft_split(shell->line_to_split, 32);
+            // "ls -la | cose" ha comportamenti strani, poi quando scrivi un comando che non riesce ad eseguire
+            // N volte bisogna premere N volte CTRL+D per uscire dal loop infernale
             executor(shell);
+            free_matrix(shell->pipe_words);
         }
     free(shell->pipeline);
 	free(shell->line_to_split);
-	free_matrix(shell->pipe_words);
+	// free_matrix(shell->pipe_words);
     // free(shell->pipe_words);
     }
     // free(shell);

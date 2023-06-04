@@ -24,7 +24,6 @@ int	init_mem(t_shell *shell)
     // shell->node->operators = (t_operators *)malloc(sizeof(t_operators));
     //     if (!shell->node->operators)
     //         return (1);
-    printf("No need\n");
     return (0);  
 }
 
