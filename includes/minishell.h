@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/04 19:00:38 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/05 21:50:05 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ char			*parsing(t_shell *shell);
 char			**ft_split_pipes(char const *s, char c);
 char			**ft_add_pipes(char **pipe_words);
 void			create_cmd_list(t_shell *shell);
+void			ft_set_redirs(t_shell *shell);
+char			**ft_get_cmd(char **args);
 
 //executor
 int				executor(t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/04 20:28:38 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/05 21:59:45 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,16 @@ static int	error(char *str, char *err)
 static int	exec(char **args, int fd, char **env)
 {
     char *bin_path;
+	char **trimmed;
     
 	dup2(fd, 0);
 	close(fd);
     bin_path = ft_findpath(args[0]);
-	execve(bin_path, args, env);
+	trimmed = ft_get_cmd(args);
+	//execve(bin_path, args, env);
+	execve(bin_path, trimmed, env);
     free(bin_path);
+	free_matrix(trimmed);
 	return (error("error: cannot execute ", args[0]));
 }
 
@@ -75,6 +79,7 @@ int executorprova(t_shell *shell)
 
 	pid = 0;
 	tmp = dup(0);
+	ft_set_redirs(shell);
 	while (shell->cmds_list)
 	{
 		while (shell->cmds_list->next && strcmp(((t_command *)shell->cmds_list->content)->cmd, "|"))
@@ -87,8 +92,18 @@ int executorprova(t_shell *shell)
 			pid = fork();
 			if (!pid)
 			{
+				if (((t_command *)shell->cmds_list->content)->outfile != 1)
+				{
+					dup2(((t_command *)shell->cmds_list->content)->outfile, STDOUT_FILENO);
+					close(((t_command *)shell->cmds_list->content)->outfile);
+				}
 				if (exec((((t_command *)shell->cmds_list->content)->split_cmd), tmp, shell->copy_env))
 					return (1);
+				if (((t_command *)shell->cmds_list->content)->outfile != 1)
+				{
+					dup2(((t_command *)shell->cmds_list->content)->copy_stdout, STDOUT_FILENO);
+					close(((t_command *)shell->cmds_list->content)->copy_stdout);
+				}
 			}
 			else
 			{
@@ -108,8 +123,18 @@ int executorprova(t_shell *shell)
 				dup2(fd[1], 1);
 				close(fd[1]);
 				close(fd[0]);
+				if (((t_command *)prev->content)->outfile != 1)
+				{
+					dup2(((t_command *)prev->content)->outfile, STDOUT_FILENO);
+					close(((t_command *)prev->content)->outfile);
+				}
 				if (exec((((t_command *)prev->content)->split_cmd), tmp, shell->copy_env))
 					return (1);
+				if (((t_command *)prev->content)->outfile != 1)
+				{
+					dup2(((t_command *)prev->content)->copy_stdout, STDOUT_FILENO);
+					close(((t_command *)prev->content)->copy_stdout);
+				}
 			}
 			else
 			{
