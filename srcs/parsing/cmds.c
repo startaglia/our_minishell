@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 12:17:44 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/05 22:03:45 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/06 21:57:23 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,32 @@ int     ft_set_out(char **cmd)
     return (fd);
 }
 
+int     ft_set_in(char **cmd)
+{
+    int i;
+    int fd;
+
+    i = 0;
+    // fd = dup(STDOUT_FILENO);
+    fd = 0;
+    while (cmd[i])
+    {
+        if (!strcmp(cmd[i], "<"))
+        {
+            if (access(cmd[i + 1], F_OK) == 0)
+                fd = open(cmd[i + 1], O_RDONLY);
+            else
+            {
+                printf("Cannot open: %s\n", cmd[i + 1]);
+                fd = -1;
+            }
+            i++;
+        }
+        i++;
+    }
+    return (fd);
+}
+
 void    ft_set_redirs(t_shell *shell)
 {
     t_list *temp;
@@ -72,6 +98,11 @@ void    ft_set_redirs(t_shell *shell)
     {
         space_splitted = ft_split_pipes(((t_command *)temp->content)->cmd, 32);
         ((t_command *)temp->content)->outfile = ft_set_out(space_splitted);
+        ((t_command *)temp->content)->infile = ft_set_in(space_splitted);
+        if (ft_find_heredoc(space_splitted))
+            ((t_command *)temp->content)->heredoc = ft_strdup(ft_find_heredoc(space_splitted));
+        else
+            ((t_command *)temp->content)->heredoc = NULL;
         temp = temp->next;
         free_matrix(space_splitted);
     }

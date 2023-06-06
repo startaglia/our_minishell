@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:57:08 by startagl          #+#    #+#             */
-/*   Updated: 2023/06/04 20:33:37 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/06 21:55:46 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void ft_free_list(t_list *list)
 		tmp = list->next;
 		free(((t_command *)list->content)->cmd);
 		free_matrix(((t_command *)list->content)->split_cmd);
+		free(((t_command *)list->content)->heredoc);
 		free(list->content);
 		free(list);
 		list = tmp;

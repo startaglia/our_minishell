@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/05 21:50:05 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/06 21:47:41 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_command
 	int					outfile;
 	int					copy_stdout;
 	int					copy_stdin;
+	char				*heredoc;
 	struct t_command	*next;
 }	t_command;
 
@@ -74,6 +75,7 @@ char			**ft_add_pipes(char **pipe_words);
 void			create_cmd_list(t_shell *shell);
 void			ft_set_redirs(t_shell *shell);
 char			**ft_get_cmd(char **args);
+char			*ft_find_heredoc(char **cmd);
 
 //executor
 int				executor(t_shell *shell);
