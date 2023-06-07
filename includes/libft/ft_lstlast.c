@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:49:41 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 20:49:42 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 09:57:22 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 09:58:17 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int std_error(char *error)
+t_list	*ft_lstlast(t_list *lst)
 {
-    int i;
-
-    i = 0;
-    while (error[i])
-        i++;
-    return(write(2, error, i));
+	while (lst != NULL)
+	{
+		if (lst -> next == NULL)
+			return (lst);
+		lst = lst -> next;
+	}
+	return (lst);
 }

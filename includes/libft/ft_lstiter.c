@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_lstiter.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:49:41 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 20:49:42 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 10:06:15 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 10:07:42 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int std_error(char *error)
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-    int i;
+	t_list	*clone;
 
-    i = 0;
-    while (error[i])
-        i++;
-    return(write(2, error, i));
+	if (!lst)
+		return ;
+	clone = lst;
+	while (clone != NULL)
+	{
+		(*f)(clone -> content);
+		clone = clone -> next;
+	}
 }

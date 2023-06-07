@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:49:41 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 20:49:42 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/20 12:45:48 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/20 12:52:16 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int std_error(char *error)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-    int i;
+	size_t	k;
 
-    i = 0;
-    while (error[i])
-        i++;
-    return(write(2, error, i));
+	k = 0;
+	if (!s)
+		return (NULL);
+	while (k < n)
+	{
+		if (((unsigned char *)s)[k] == (unsigned char)c)
+			return ((void *)s + k);
+		k++;
+	}
+	return (NULL);
 }

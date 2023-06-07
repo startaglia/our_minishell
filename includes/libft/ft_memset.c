@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:49:41 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 20:49:42 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/20 09:46:45 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/20 09:49:05 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int std_error(char *error)
+void	*ft_memset(void *s, int c, size_t n)
 {
-    int i;
+	size_t			k;
+	unsigned char	*new;
 
-    i = 0;
-    while (error[i])
-        i++;
-    return(write(2, error, i));
+	k = 0;
+	new = (unsigned char *)s;
+	while (k < n)
+	{
+		new[k] = c;
+		k++;
+	}
+	s = new;
+	return (s);
 }

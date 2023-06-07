@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   in_out.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: startagl <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 16:01:18 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/10 13:01:58 by startagl         ###   ########.fr       */
+/*   Updated: 2023/05/26 21:01:30 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,18 @@ int	check_in(char *str)
 	i = 0;
 	while (str[i])
 	{
+		if (str[i] == 34)
+		{
+			i++;
+			while (str[i] != 34 && str[i + 1])
+				i++;
+		}
+		if (str[i] == 39)
+		{
+			i++;
+			while (str[i] != 39 && str[i + 1])
+				i++;
+		}
 		if (str[i] == 60)
 		{
 			i++;
@@ -41,6 +53,18 @@ int	check_out(char *str)
 	i = 0;
 	while (str[i])
 	{
+		if (str[i] == 34)
+		{
+			i++;
+			while (str[i] != 34 && str[i + 1])
+				i++;
+		}
+		if (str[i] == 39)
+		{
+			i++;
+			while (str[i] != 39 && str[i + 1])
+				i++;
+		}
 		if (str[i] == 62)
 		{
 			i++;

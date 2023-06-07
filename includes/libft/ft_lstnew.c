@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:49:41 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 20:49:42 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 09:53:11 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 09:54:16 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int std_error(char *error)
+t_list	*ft_lstnew(void *content)
 {
-    int i;
+	t_list	*new;
 
-    i = 0;
-    while (error[i])
-        i++;
-    return(write(2, error, i));
+	new = malloc(sizeof(t_list));
+	if (!new)
+		return (NULL);
+	new -> content = content;
+	new -> next = NULL;
+	return (new);
 }

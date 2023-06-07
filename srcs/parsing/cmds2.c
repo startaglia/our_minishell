@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_syntax.c                                     :+:      :+:    :+:   */
+/*   cmds2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/08 11:58:36 by startagl          #+#    #+#             */
-/*   Updated: 2023/05/26 20:57:56 by scastagn         ###   ########.fr       */
+/*   Created: 2023/06/06 21:40:11 by scastagn          #+#    #+#             */
+/*   Updated: 2023/06/06 21:47:15 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
-int check_syntax(char *str)
+char     *ft_find_heredoc(char **cmd)
 {
-    if (check_quotes(str))
-        return (1);
-    if (check_in(str))
-        return (1);
-    if (check_out(str))
-        return (1);
-    if (check_pipes(str))
-        return (1);
-    return (0);
+    int i;
+
+    i = 0;
+    while (cmd[i])
+    {
+        if (!strcmp(cmd[i], "<<"))
+        {
+            if (cmd[i + 1])
+                return (cmd[i + 1]);
+            i++;
+        }
+        i++;
+    }
+    return (NULL);
 }
