@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/20 14:33:14 by scastagn          #+#    #+#             */
-/*   Updated: 2023/01/20 14:41:38 by scastagn         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "libft.h"
+#include "../includes/minishell.h"
 
 static int	ft_countwords(char const *s, char c)
 {
@@ -23,6 +11,20 @@ static int	ft_countwords(char const *s, char c)
 	nwords = 0;
 	while (s[k] != 0)
 	{
+	    if (s[k] == 34)
+	    {
+	        k++;
+	        while (s[k] && s[k] != 34)
+	        {
+	            k++;
+	        }
+	    }
+	    if (s[k] == 39)
+	    {
+	        k++;
+	        while (s[k] && s[k] != 39)
+	            k++;
+	    }
 		if (s[k] != c && trovato == 0)
 		{
 			nwords = nwords + 1;
@@ -67,7 +69,21 @@ static char	**ft_dosplit(char **strs, char c, char const *s)
 		{
 			inizio = j;
 			while (s[j] != c && s[j])
-				j++;
+			{
+			    if (s[j] == 34)
+        	    {
+        	        j++;
+        	        while(s[j] && s[j] != 34)
+        	            j++;
+        	    }
+                if (s[j] == 39)
+        	    {
+        	        j++;
+        	        while(s[j] && s[j] != 39)
+        	            j++;
+        	    }
+        	    j++;
+			}
 			fine = j;
 			strs[k++] = ft_strdupfrom(s, inizio, fine);
 		}
@@ -78,7 +94,7 @@ static char	**ft_dosplit(char **strs, char c, char const *s)
 	return (strs);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split_pipes(char const *s, char c)
 {
 	char	**strs;
 

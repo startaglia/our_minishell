@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cmds2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:55:01 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 21:16:31 by scastagn         ###   ########.fr       */
+/*   Created: 2023/06/06 21:40:11 by scastagn          #+#    #+#             */
+/*   Updated: 2023/06/06 21:47:15 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/minishell.h"
+#include "../includes/minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+char     *ft_find_heredoc(char **cmd)
 {
-    t_shell shell;
+    int i;
 
-    (void)argc;
-    (void)argv;
-    (void)envp;
-    init_prompt(&shell, envp);
-    return (0);
+    i = 0;
+    while (cmd[i])
+    {
+        if (!strcmp(cmd[i], "<<"))
+        {
+            if (cmd[i + 1])
+                return (cmd[i + 1]);
+            i++;
+        }
+        i++;
+    }
+    return (NULL);
 }

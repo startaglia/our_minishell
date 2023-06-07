@@ -6,7 +6,7 @@
 #    By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
-#    Updated: 2023/05/26 22:46:27 by scastagn         ###   ########.fr        #
+#    Updated: 2023/06/05 21:59:49 by scastagn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,6 @@ NAME        	= minishell
 CC          	= cc
 
 CFLAGS      	= -Wall -Wextra -Werror -g -fcommon -fsanitize=address
-#-fcommon -fsanitize=address
 
 INCLUDE     	= includes/
 
@@ -46,8 +45,6 @@ READLINE        = -L/usr/include/readline -I/usr/include/readline -lreadline
 READLINE_MAC    = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$(HOME)/.brew/opt/readline/include
 
 RM          	= rm -rf
-
-CLEAR			= clear
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	@mkdir -p $(@D)

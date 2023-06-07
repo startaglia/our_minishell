@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 21:30:52 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/26 22:15:04 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/04 18:30:39 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,23 @@ int executor(t_shell *shell)
 	int	pid;
 	int	tmp;
 	int	fd[2];
-	char **matrix_tmp;
 
 	i = 0;
 	pid = 0;
 	tmp = dup(0);
-	matrix_tmp = shell->pipe_words;
-	while (matrix_tmp[i])
+	while (shell->pipe_words[i])
 	{
 		if (i != 0)
-			matrix_tmp = &matrix_tmp[i + 1];
+			shell->pipe_words = &shell->pipe_words[i + 1];
 		i = 0;
-		while (matrix_tmp[i] && strcmp(matrix_tmp[i], "|"))
+		while (shell->pipe_words[i] && strcmp(shell->pipe_words[i], "|"))
 			i++;
-		if (i != 0 && matrix_tmp[i] == NULL)
+		if (i != 0 && shell->pipe_words[i] == NULL)
 		{
 			pid = fork();
 			if (!pid)
 			{
-				if (exec(matrix_tmp, i, tmp, shell->copy_env))
+				if (exec(shell->pipe_words, i, tmp, shell->copy_env))
 					return (1);
 			}
 			else
@@ -102,7 +100,7 @@ int executor(t_shell *shell)
 				tmp = dup(0);
 			}
 		}
-		else if (i != 0 && !strcmp(matrix_tmp[i], "|"))
+		else if (i != 0 && !strcmp(shell->pipe_words[i], "|"))
 		{
 			pipe(fd);
 			pid = fork();
@@ -111,7 +109,7 @@ int executor(t_shell *shell)
 				dup2(fd[1], 1);
 				close(fd[1]);
 				close(fd[0]);
-				if (exec(matrix_tmp, i, tmp, shell->copy_env))
+				if (exec(shell->pipe_words, i, tmp, shell->copy_env))
 					return (1);
 			}
 			else
