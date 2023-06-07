@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executorprova.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/06 21:46:20 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/07 12:35:52 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,40 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 {
     char *bin_path;
 	char **trimmed;
+	int	builtin;
     
+	builtin = ft_is_builtin(args[0]);
+	trimmed = ft_get_cmd(args);
 	if (cmd->infile == 0)
 	{
 		dup2(fd, 0);
 		close(fd);
 	}
 	(void)fd;
-    bin_path = ft_findpath(args[0]);
-	trimmed = ft_get_cmd(args);
-	//execve(bin_path, args, env);
-	if (cmd->infile >= 0)
-		execve(bin_path, trimmed, env);
-    free(bin_path);
-	free_matrix(trimmed);
+	if (builtin)
+	{
+		// printf("%d\n", builtin);
+		if (builtin == 1)
+			ft_echo(trimmed);
+		else if (builtin == 2)
+			ft_cd(trimmed);
+		else if (builtin == 3)
+			ft_pwd();
+		else if(builtin == 7)
+			ft_exit();
+		bin_path = NULL;
+		free_matrix(trimmed);
+		return (0);
+	}
+	else
+	{
+			bin_path = ft_findpath(args[0]);
+		//execve(bin_path, args, env);
+		if (cmd->infile >= 0)
+			execve(bin_path, trimmed, env);
+		free(bin_path);
+		free_matrix(trimmed);
+	}
 	return (error("error: cannot execute ", args[0]));
 }
 

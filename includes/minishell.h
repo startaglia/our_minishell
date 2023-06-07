@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/06 21:47:41 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/07 12:32:46 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,13 @@ char			*ft_find_heredoc(char **cmd);
 //executor
 int				executor(t_shell *shell);
 int				executorprova(t_shell *shell);
+
+//builtins
+void			ft_echo(char **args);
+void			ft_pwd();
+void			ft_cd(char **args);
+int				ft_is_builtin(char *cmd);
+void			ft_exit();
 
 //free
 int				free_matrix(char **matrix);
