@@ -73,19 +73,20 @@ static int	exec(char **args, t_command *cmd, int fd, t_shell *shell)
 	{
 		if (builtin == 1)
 			ft_echo(trimmed);
-		else if (builtin == 2)
+		if (builtin == 2)
 		{
 			ft_cd(trimmed, shell);
 			//printf("%s\n", shell->copy_env[9]);
 		}
-		else if (builtin == 3)
+		if (builtin == 3)
 			ft_pwd(shell->copy_env);
+		if (builtin == 6)
+			print_env(shell->copy_env);
 		// else if(builtin == 7)
 		// 	ft_exit();
 		bin_path = NULL;
-		printf("%s\n", shell->copy_env[9]);
 		free_matrix(trimmed);
-		exit(0);
+		//exit(0);
 		return (0);
 	}
 	else

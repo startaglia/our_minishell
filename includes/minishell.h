@@ -86,7 +86,10 @@ void			ft_echo(char **args);
 void			ft_pwd(char **env);
 void			ft_cd(char **args, t_shell *shell);
 int				ft_is_builtin(char *cmd);
-void			ft_exit();
+int				ft_exit_status(int x);
+int				print_env(char **copy_env);
+int				line_counter(char **copyenv, char *str);
+char			*exclude_var_name(char *line, char *str);
 
 //free
 int				free_matrix(char **matrix);

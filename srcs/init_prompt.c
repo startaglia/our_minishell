@@ -44,6 +44,8 @@ void    ft_setenv(t_shell *shell, char **copy_env)
         i++;
     }
     shell->copy_env[i] = NULL;
+    // shell->copy_env[10] = (strdup("PWD=/nfs/homes/alpelliz/Documents/our_minishell/srcs"));
+    // printf ("copyenv = %s\n", shell->copy_env[10]);
 }
 
 static void main_loop(t_shell *shell)
