@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:57:08 by startagl          #+#    #+#             */
-/*   Updated: 2023/06/06 21:55:46 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/08 10:28:18 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void ft_free_shell(t_shell *shell)
 	if (shell->cmds)
 		free_matrix(shell->cmds);
 	if (shell->pipe_words)
-    	free_matrix(shell->pipe_words);
+		free_matrix(shell->pipe_words);
 }
 
 void ft_free_list(t_list *list)

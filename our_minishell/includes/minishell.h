@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/07 12:32:46 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:17:07 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ int				executorprova(t_shell *shell);
 
 //builtins
 void			ft_echo(char **args);
+void			ft_pwd(char **env);
+void			ft_cd(char **args, t_shell *shell);
 int				ft_is_builtin(char *cmd);
+void			ft_exit();
 
 //free
 int				free_matrix(char **matrix);

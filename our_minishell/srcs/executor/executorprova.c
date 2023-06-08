@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executorprova.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/07 12:35:52 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:23:22 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,11 @@ static int	error(char *str, char *err)
 		while (*err)
 			write(2, err++, 1);
 	write(2, "\n", 1);
+	exit(1);
 	return (1);
 }
 
-static int	exec(char **args, t_command *cmd, int fd, char **env)
+static int	exec(char **args, t_command *cmd, int fd, t_shell *shell)
 {
     char *bin_path;
 	char **trimmed;
@@ -70,23 +71,36 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	(void)fd;
 	if (builtin)
 	{
-		// printf("%d\n", builtin);
 		if (builtin == 1)
 			ft_echo(trimmed);
+		else if (builtin == 2)
+		{
+			ft_cd(trimmed, shell);
+			//printf("%s\n", shell->copy_env[9]);
+		}
+		else if (builtin == 3)
+			ft_pwd(shell->copy_env);
+		// else if(builtin == 7)
+		// 	ft_exit();
 		bin_path = NULL;
+		printf("%s\n", shell->copy_env[9]);
 		free_matrix(trimmed);
+		exit(0);
 		return (0);
 	}
 	else
 	{
-			bin_path = ft_findpath(args[0]);
+		bin_path = ft_findpath(args[0]);
 		//execve(bin_path, args, env);
 		if (cmd->infile >= 0)
-			execve(bin_path, trimmed, env);
+		{
+			execve(bin_path, trimmed, shell->copy_env);
+		}
 		free(bin_path);
 		free_matrix(trimmed);
+		return (error("error: cannot execute ", args[0]));
 	}
-	return (error("error: cannot execute ", args[0]));
+	return (0);
 }
 
 int executorprova(t_shell *shell)
@@ -130,14 +144,14 @@ int executorprova(t_shell *shell)
 						if (!line || !strcmp(line, ((t_command *)shell->cmds_list->content)->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
+							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
+					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell))
 						return (1);
 				if (((t_command *)shell->cmds_list->content)->outfile != 1)
 				{
@@ -187,14 +201,14 @@ int executorprova(t_shell *shell)
 						if (!line || !strcmp(line, ((t_command *)prev->content)->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
+							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
+					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell))
 						return (1);
 				if (((t_command *)prev->content)->outfile != 1)
 				{
