@@ -12,18 +12,24 @@
 
 # include "../includes/minishell.h"
 
+void    print_env(t_shell *shell, char **envp)
+{
+    (void)shell;
+    int i;
+
+    i = 0;
+    while (envp[i])
+    {
+        // if (!strncmp(envp[i], "OLDPWD", 6))
+        printf("%d\t%s\n", i, envp[i]);
+        // printf("Trovato Daniele\n");
+        i++;
+    }
+}
 int	main(int argc, char **argv, char **envp)
 {
     t_shell shell;
-    // int     i;
-
-    // i = 0;
-    // while (envp[i])
-    // {
-    //     if (!strncmp(envp[i], "OLDPWD", 6))
-    //         printf("Trovato Daniele\n");
-    //     i++;
-    // }
+    // print_env(&shell, envp);
 
     (void)argc;
     (void)argv;

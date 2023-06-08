@@ -91,6 +91,7 @@ void			ft_exit();
 //free
 int				free_matrix(char **matrix);
 void			ft_free_shell(t_shell *shell);
+void			ft_free_execve(t_shell *shell);
 void			ft_free_list(t_list *list);
 
 

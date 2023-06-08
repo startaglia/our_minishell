@@ -83,7 +83,7 @@ static int	exec(char **args, t_command *cmd, int fd, t_shell *shell)
 		// else if(builtin == 7)
 		// 	ft_exit();
 		bin_path = NULL;
-		printf("%s\n", shell->copy_env[9]);
+		// printf("%s\n", shell->copy_env[9]);
 		free_matrix(trimmed);
 		exit(0);
 		return (0);

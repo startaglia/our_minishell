@@ -64,11 +64,11 @@ void    ft_echo(char **args)
 
 void	ft_pwd(char **env)
 {
-	char	cwd[256];
+	// char	cwd[256];
 	//int i;
 	(void)env;
-	char *path_history_prev = getcwd(cwd, sizeof(cwd));
-	printf("%s", path_history_prev);
+	// char *path_history_prev = getcwd(cwd, sizeof(cwd));
+	// printf("%s", path_history_prev);
 	// i = 4;
 	// while(env[9][i])
 	// {
@@ -77,38 +77,24 @@ void	ft_pwd(char **env)
 	// }
 	printf ("\n");
 }
-//IMPLEMENTARE CD -
+
+// Nell'env di linux HOME=22, PWD=15, OLD_PWD=50
 void ft_cd(char **args, t_shell *shell)
-{
-	// char	*prev_path;
-	char 	*path_history_prev;
-	char	cwd[256];
+{	
+	// char	*home;
 
-	// prev_path = NULL;
-	path_history_prev = getcwd(cwd, sizeof(cwd));
-	//printf("%s\n", path_history_prev);
-	// if (!strcmp(args[1], "~"))
-	// 	chdir(getenv("HOME"));
-	// else if (!strcmp(args[1], "-"))
-	// {
-	// 	chdir(getenv("OLDPWD"));
-	// 	ft_pwd(env);
-	// }
-	// else
-	// {
-		if (chdir(args[1]) == -1)
-			printf("minishell: cd: %s: No such file or directory\n", args[1]);
-		else
-		{
-			free(shell->copy_env[9]);
-			shell->copy_env[9] = ft_strjoin("PWD=", getcwd(cwd, sizeof(cwd)));
-			//printf("%s\n", shell->copy_env[9]);
-			free(shell->copy_env[48]);
-			shell->copy_env[48] = ft_strjoin("OLDPWD=", path_history_prev);
-			//printf("%s\n", env[48]);
-		}
-	// }
-
+	// (void)shell;
+	// home = NULL;
+	// printf("%s\n", getenv("HOME"));
+	if (!args[1] || !strcmp(args[1], "~"))
+	{
+		// home = getenv("HOME");
+		chdir(shell->copy_env[22]);
+	}
+	// else if (!strcmp(args[1], ".."))
+	// 	chdir("..");
+	else if (chdir(args[1]) == -1)
+		printf("minishell: cd: %s: No such file or directory\n", args[1]);
 }
 
 // void	ft_exit()

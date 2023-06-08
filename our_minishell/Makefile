@@ -18,6 +18,8 @@ CFLAGS      	= -Wall -Wextra -Werror -g -fcommon -fsanitize=address
 
 INCLUDE     	= includes/
 
+CLEAR			= clear
+
 SRC_DIR     	= srcs
 SYNTAX_DIR  	= srcs/syntax
 PARSING_DIR  	= srcs/parsing
@@ -67,7 +69,8 @@ $(OBJ_DIR)/%.o : $(LIBFT_DIR)/%.c
 	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
+	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC) 
+	@$(CLEAR)
 	@echo "[+] $(NAME) compiled"
 
 all:	$(NAME)
