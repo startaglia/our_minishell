@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/07 12:02:28 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/06/08 13:49:02 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,23 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
+void    ft_setenv(t_shell *shell, char **copy_env)
+{
+    int i;
+
+    i = 0;
+    while (copy_env[i])
+        i++;
+    shell->copy_env = malloc (sizeof(char *) * (i + 1));
+    i = 0;
+    while (copy_env[i])
+    {
+        shell->copy_env[i] = ft_strdup(copy_env[i]);
+        i++;
+    }
+    shell->copy_env[i] = NULL;
+}
+
 static void main_loop(t_shell *shell)
 {
     t_list  *start;
@@ -40,7 +57,11 @@ static void main_loop(t_shell *shell)
         shell->pipeline = readline(shell->prompt);
         if (!shell->pipeline)
             break ;
-        check_syntax(shell->pipeline);
+        if (check_syntax(shell->pipeline))
+        {
+            free(shell->pipeline);
+            continue ;
+        }
         shell->line_to_split = parsing(shell);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
@@ -67,8 +88,9 @@ void init_prompt(t_shell *shell, char **envp)
         user = "guest";
     init_values(&shell);
     shell->prompt = ft_strjoin(user, "@minishell$ ");
-    shell->copy_env = envp;
+    ft_setenv(shell, envp);
     main_loop(shell);
     free(shell->prompt);
+    free_matrix(shell->copy_env);
     free(shell);
 }

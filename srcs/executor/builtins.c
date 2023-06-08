@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 12:10:48 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/06/07 12:38:54 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:25:51 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,79 +62,52 @@ void    ft_echo(char **args)
             printf("\n");
 }
 
-void	ft_pwd()
+void	ft_pwd(char **env)
 {
 	char	cwd[256];
-
-	printf("%s\n", getcwd(cwd, sizeof(cwd)));
+	//int i;
+	(void)env;
+	char *path_history_prev = getcwd(cwd, sizeof(cwd));
+	printf("%s", path_history_prev);
+	// i = 4;
+	// while(env[9][i])
+	// {
+	// 	write (1, &env[9][i], 1);
+	// 	i++;
+	// }
+	printf ("\n");
 }
-
-char	*ft_strncpy(char *dest, char *src, int n)
-{
-	int	i;
-	int				cond;
-
-	cond = 1;
-	i = 0;
-	while (i < n)
-	{
-		if (src[i] != '\0' && cond == 1)
-			dest[i] = src[i];
-		else
-			cond = 0;
-		if (cond == 0)
-			dest[i] = '\0';
-		i++;
-	}
-	printf("%s\n", dest);
-	return (dest);
-}
-
 //IMPLEMENTARE CD -
-void ft_cd(char **args)
+void ft_cd(char **args, t_shell *shell)
 {
-	// int		i;
-	// char	*curr_path;
 	char	*prev_path;
 	char 	*path_history_prev;
 	char	cwd[256];
 
 	prev_path = NULL;
 	path_history_prev = getcwd(cwd, sizeof(cwd));
-	if (!strcmp(args[1], "~"))
-		chdir(getenv("HOME"));
-	else if (!strcmp(args[1], ".."))
-	{
-		chdir("..");
-		// curr_path = getenv("PWD");
-		// i = ft_strlen(curr_path);
-		// printf("i vale : %d\n", i);
-		// while (i >= 0)
-		// {
-		// 	printf("%d\n", i);
-		// 	if (curr_path[i] == '/')
-		// 	{
-		// 		prev_path = ft_strncpy(prev_path, curr_path, i);
-		// 		printf("%s\n", prev_path);
-		// 		// chdir(prev_path);
-		// 		break ;
-		// 	}
-		// 	i--;
-		// }
-	}
-	else if (!strcmp(args[1], "-"))
-	{
-		chdir(path_history_prev);
-		ft_pwd();
-	}
-	else if (!strcmp(args[1], "."))
-		return ;
-	else
-	{
-		//curr_path = getenv("PWD");
+	//printf("%s\n", path_history_prev);
+	// if (!strcmp(args[1], "~"))
+	// 	chdir(getenv("HOME"));
+	// else if (!strcmp(args[1], "-"))
+	// {
+	// 	chdir(getenv("OLDPWD"));
+	// 	ft_pwd(env);
+	// }
+	// else
+	// {
 		if (chdir(args[1]) == -1)
-			printf("Nn esiste la cattella\n");
-	}
+			printf("minishell: cd: %s: No such file or directory\n", args[1]);
+		else
+		{
+			free(shell->copy_env[9]);
+			shell->copy_env[9] = ft_strjoin("PWD=", getcwd(cwd, sizeof(cwd)));
+			//printf("%s\n", shell->copy_env[9]);
+			free(shell->copy_env[48]);
+			shell->copy_env[48] = ft_strjoin("OLDPWD=", path_history_prev);
+			//printf("%s\n", env[48]);
+		}
+	// }
 
 }
 
