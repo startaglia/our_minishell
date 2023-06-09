@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 14:17:07 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/08 22:17:47 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,17 @@ void			create_cmd_list(t_shell *shell);
 void			ft_set_redirs(t_shell *shell);
 char			**ft_get_cmd(char **args);
 char			*ft_find_heredoc(char **cmd);
+char			*trim_def(char *full);
 
 //executor
 int				executor(t_shell *shell);
 int				executorprova(t_shell *shell);
-
-//builtins
-void			ft_echo(char **args);
-void			ft_pwd(char **env);
-void			ft_cd(char **args, t_shell *shell);
 int				ft_is_builtin(char *cmd);
-void			ft_exit();
+void			ft_echo(char **args, char **env);
+void			ft_pwd(char **env);
+void			ft_env(char **env);
+void			ft_cd(t_shell *shell, t_list *node);
+void			update_cwd(t_shell *shell);
 
 //free
 int				free_matrix(char **matrix);

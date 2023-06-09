@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+         #
+#    By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
-#    Updated: 2023/06/08 11:39:19 by scastagn         ###   ########.fr        #
+#    Updated: 2023/06/08 22:31:24 by scastagn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,9 @@ NAME        	= minishell
 
 CC          	= cc
 
-CFLAGS      	= -Wall -Wextra -Werror -g -fcommon -fsanitize=address
+CFLAGS      	= -Wall -Wextra -Werror -g #-fcommon -fsanitize=address
 
 INCLUDE     	= includes/
-
-CLEAR			= clear
 
 SRC_DIR     	= srcs
 SYNTAX_DIR  	= srcs/syntax
@@ -69,8 +67,7 @@ $(OBJ_DIR)/%.o : $(LIBFT_DIR)/%.c
 	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC) 
-	@$(CLEAR)
+	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
 	@echo "[+] $(NAME) compiled"
 
 all:	$(NAME)

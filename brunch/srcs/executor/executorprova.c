@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executorprova.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 14:23:22 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/08 21:54:15 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,51 +55,42 @@ static int	error(char *str, char *err)
 	return (1);
 }
 
-static int	exec(char **args, t_command *cmd, int fd, t_shell *shell)
+static int	exec(char **args, t_command *cmd, int fd, char **env)
 {
-    char *bin_path;
-	char **trimmed;
-	int	builtin;
+    char	*bin_path;
+	char	**trimmed;
+	int		builtin;
     
 	builtin = ft_is_builtin(args[0]);
-	trimmed = ft_get_cmd(args);
 	if (cmd->infile == 0)
 	{
 		dup2(fd, 0);
 		close(fd);
 	}
 	(void)fd;
+	trimmed = ft_get_cmd(args);
 	if (builtin)
 	{
 		if (builtin == 1)
-			ft_echo(trimmed);
+			ft_echo(trimmed, env);
 		else if (builtin == 2)
-		{
-			ft_cd(trimmed, shell);
-			//printf("%s\n", shell->copy_env[9]);
-		}
+			ft_pwd(env);
 		else if (builtin == 3)
-			ft_pwd(shell->copy_env);
-		// else if(builtin == 7)
-		// 	ft_exit();
+			ft_env(env);
 		bin_path = NULL;
-		// printf("%s\n", shell->copy_env[9]);
 		free_matrix(trimmed);
 		exit(0);
-		return (0);
 	}
 	else
 	{
 		bin_path = ft_findpath(args[0]);
-		//execve(bin_path, args, env);
 		if (cmd->infile >= 0)
-		{
-			execve(bin_path, trimmed, shell->copy_env);
-		}
+			execve(bin_path, trimmed, env);
 		free(bin_path);
 		free_matrix(trimmed);
 		return (error("error: cannot execute ", args[0]));
 	}
+	//execve(bin_path, args, env);
 	return (0);
 }
 
@@ -120,7 +111,9 @@ int executorprova(t_shell *shell)
             prev = shell->cmds_list;
 			shell->cmds_list = shell->cmds_list->next;
         }
-		if (shell->cmds_list->next == NULL)
+		if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "cd"))
+			ft_cd(shell, shell->cmds_list);
+		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();
 			if (!pid)
@@ -144,14 +137,14 @@ int executorprova(t_shell *shell)
 						if (!line || !strcmp(line, ((t_command *)shell->cmds_list->content)->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell))
+							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell))
+					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
 						return (1);
 				if (((t_command *)shell->cmds_list->content)->outfile != 1)
 				{
@@ -201,14 +194,14 @@ int executorprova(t_shell *shell)
 						if (!line || !strcmp(line, ((t_command *)prev->content)->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell))
+							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell))
+					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
 						return (1);
 				if (((t_command *)prev->content)->outfile != 1)
 				{

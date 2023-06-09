@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 13:49:02 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/08 21:13:56 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,18 @@ static void	handle_sigquit(int sig)
 	rl_redisplay();
 }
 
-void    ft_setenv(t_shell *shell, char **copy_env)
+void    ft_setenv(t_shell *shell, char **envp)
 {
     int i;
 
     i = 0;
-    while (copy_env[i])
+    while (envp[i])
         i++;
     shell->copy_env = malloc (sizeof(char *) * (i + 1));
     i = 0;
-    while (copy_env[i])
+    while (envp[i])
     {
-        shell->copy_env[i] = ft_strdup(copy_env[i]);
+        shell->copy_env[i] = ft_strdup(envp[i]);
         i++;
     }
     shell->copy_env[i] = NULL;

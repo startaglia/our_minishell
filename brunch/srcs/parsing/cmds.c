@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 12:17:44 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/07 12:04:30 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/06/08 21:49:03 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void create_cmd_list(t_shell *shell)
     {
         element = malloc(sizeof(t_command));
         element->cmd = ft_strdup(shell->cmds[i]);
-        element->split_cmd = ft_split(element->cmd, 32);
+        element->split_cmd = ft_split_pipes(element->cmd, 32);
         element->infile = 1;
         element->outfile = 0;
         element->copy_stdout = dup(STDOUT_FILENO);
