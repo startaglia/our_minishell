@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 22:17:47 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/09 22:32:40 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,11 @@ int				ft_is_builtin(char *cmd);
 void			ft_echo(char **args);
 void			ft_pwd(char **env);
 void			ft_env(char **env);
-void			ft_cd(t_shell *shell, t_list *node);
+void			ft_cd(t_shell *shell, t_command *cmd);
 void			update_cwd(t_shell *shell);
+void			ft_back_home(t_shell *shell);
+void			ft_export(t_shell *shell, t_command *cmd);
+void			ft_exit();
 
 //free
 int				free_matrix(char **matrix);

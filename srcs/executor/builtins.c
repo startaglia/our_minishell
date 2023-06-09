@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 21:02:37 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 22:43:28 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/09 21:39:09 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,8 @@ void    ft_env(char **env)
         printf("%s\n", env[i]);
 }
 
-void    ft_cd(t_shell *shell, t_list *node)
+void    ft_cd(t_shell *shell, t_command *cmd)
 {
-    t_command *cmd;
-    int i;
-    char *dir;
-
-    i = 0;
-    cmd = ((t_command *)node->content);
     if (cmd->split_cmd[1])
     {
         if (chdir(cmd->split_cmd[1]) != 0)
@@ -88,17 +82,5 @@ void    ft_cd(t_shell *shell, t_list *node)
             update_cwd(shell);
     }
     else
-    {
-        while (shell->copy_env[i])
-        {
-            if (!ft_strncmp("HOME=", shell->copy_env[i], 5))
-            {
-                dir = trim_def(shell->copy_env[i]);
-                chdir(dir);
-                update_cwd(shell);
-                free(dir);
-            }
-            i++;
-        }
-    }
+        ft_back_home(shell);
 }

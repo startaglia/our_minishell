@@ -6,7 +6,7 @@
 #    By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
-#    Updated: 2023/06/08 22:31:24 by scastagn         ###   ########.fr        #
+#    Updated: 2023/06/09 22:33:12 by scastagn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME        	= minishell
 
 CC          	= cc
 
-CFLAGS      	= -Wall -Wextra -Werror -g #-fcommon -fsanitize=address
+CFLAGS      	= -Wall -Wextra -Werror -g -fcommon -fsanitize=address
 
 INCLUDE     	= includes/
 

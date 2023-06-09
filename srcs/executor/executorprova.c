@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 21:54:15 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/09 22:43:56 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ int executorprova(t_shell *shell)
 	int	pid;
 	int	tmp;
 	int	fd[2];
-    t_list *prev;
+    t_command *prev;
+	t_command *actual;
 
 	pid = 0;
 	tmp = dup(0);
@@ -108,53 +109,62 @@ int executorprova(t_shell *shell)
 	{
 		while (shell->cmds_list->next && strcmp(((t_command *)shell->cmds_list->content)->cmd, "|"))
         {
-            prev = shell->cmds_list;
+            prev = (t_command *)shell->cmds_list->content;
 			shell->cmds_list = shell->cmds_list->next;
         }
-		if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "cd"))
-			ft_cd(shell, shell->cmds_list);
+		actual = (t_command *)shell->cmds_list->content;
+		if (!strcmp(actual->split_cmd[0], "cd"))
+			ft_cd(shell, actual);
+		else if(!strcmp(actual->split_cmd[0], "export"))
+			ft_export(shell, actual);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "cd"))
+			ft_cd(shell, prev);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "export"))
+			ft_export(shell, prev);
+		// else if (!strcmp(actual->split_cmd[0], "exit"))
+		// 	ft_exit();
 		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();
 			if (!pid)
 			{
-				if (((t_command *)shell->cmds_list->content)->outfile != 1)
+				if (actual->outfile != 1)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->outfile, STDOUT_FILENO);
-					close(((t_command *)shell->cmds_list->content)->outfile);
+					dup2(actual->outfile, STDOUT_FILENO);
+					close(actual->outfile);
 				}
-				if (((t_command *)shell->cmds_list->content)->infile != 0)
+				if (actual->infile != 0)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->infile, STDIN_FILENO);
-					close(((t_command *)shell->cmds_list->content)->infile);
+					dup2(actual->infile, STDIN_FILENO);
+					close(actual->infile);
 				}
-				if (((t_command *)shell->cmds_list->content)->heredoc)
+				if (actual->heredoc)
 				{
 					char *line;
 					while(1)
 					{
 						line = readline("> ");
-						if (!line || !strcmp(line, ((t_command *)shell->cmds_list->content)->heredoc))
+						if (!line || !strcmp(line, actual->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
+							if (exec((actual->split_cmd), actual, tmp, shell->copy_env))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
+					if (exec((actual->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
 						return (1);
-				if (((t_command *)shell->cmds_list->content)->outfile != 1)
+				if (actual->outfile != 1)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->copy_stdout, STDOUT_FILENO);
-					close(((t_command *)shell->cmds_list->content)->copy_stdout);
+					dup2(actual->copy_stdout, STDOUT_FILENO);
+					close(actual->copy_stdout);
 				}
-				if (((t_command *)shell->cmds_list->content)->infile != 0)
+				if (actual->infile != 0)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->copy_stdin, STDIN_FILENO);
-					close(((t_command *)shell->cmds_list->content)->copy_stdin);
+					dup2(actual->copy_stdin, STDIN_FILENO);
+					close(actual->copy_stdin);
 				}
 			}
 			else
@@ -175,43 +185,43 @@ int executorprova(t_shell *shell)
 				dup2(fd[1], 1);
 				close(fd[1]);
 				close(fd[0]);
-				if (((t_command *)prev->content)->outfile != 1)
+				if (prev->outfile != 1)
 				{
-					dup2(((t_command *)prev->content)->outfile, STDOUT_FILENO);
-					close(((t_command *)prev->content)->outfile);
+					dup2(prev->outfile, STDOUT_FILENO);
+					close(prev->outfile);
 				}
-				if (((t_command *)prev->content)->infile != 0)
+				if (prev->infile != 0)
 				{
-					dup2(((t_command *)prev->content)->infile, STDIN_FILENO);
-					close(((t_command *)prev->content)->infile);
+					dup2(prev->infile, STDIN_FILENO);
+					close(prev->infile);
 				}
-				if (((t_command *)prev->content)->heredoc)
+				if (prev->heredoc)
 				{
 					char *line;
 					while(1)
 					{
 						line = readline("> ");
-						if (!line || !strcmp(line, ((t_command *)prev->content)->heredoc))
+						if (!line || !strcmp(line, prev->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
+							if (exec((prev->split_cmd), prev, tmp, shell->copy_env))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
+					if (exec(prev->split_cmd, prev, tmp, shell->copy_env))
 						return (1);
-				if (((t_command *)prev->content)->outfile != 1)
+				if (prev->outfile != 1)
 				{
-					dup2(((t_command *)prev->content)->copy_stdout, STDOUT_FILENO);
-					close(((t_command *)prev->content)->copy_stdout);
+					dup2(prev->copy_stdout, STDOUT_FILENO);
+					close(prev->copy_stdout);
 				}
-				if (((t_command *)prev->content)->infile != 0)
+				if (prev->infile != 0)
 				{
-					dup2(((t_command *)prev->content)->copy_stdin, STDIN_FILENO);
-					close(((t_command *)prev->content)->copy_stdin);
+					dup2(prev->copy_stdin, STDIN_FILENO);
+					close(prev->copy_stdin);
 				}
 			}
 			else
