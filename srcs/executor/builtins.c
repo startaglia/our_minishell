@@ -79,7 +79,11 @@ void    ft_cd(t_shell *shell, t_list *node)
     if (cmd->split_cmd[1])
     {
         if (chdir(cmd->split_cmd[1]) != 0)
+        {
             printf("minishell: cd: %s: No such file or directory\n", cmd->split_cmd[1]);
+            // shell->exit_status = 127;
+            exit_status = 127;
+        }
         else
             update_cwd(shell);
     }

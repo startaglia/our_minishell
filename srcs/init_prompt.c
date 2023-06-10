@@ -90,6 +90,8 @@ void init_prompt(t_shell *shell, char **envp)
     init_values(&shell);
     shell->prompt = ft_strjoin(user, "@minishell$ ");
     ft_setenv(shell, envp);
+    exit_status = 0;
+    // shell->exit_status = 0;
     main_loop(shell);
     free(shell->prompt);
     free_matrix(shell->copy_env);

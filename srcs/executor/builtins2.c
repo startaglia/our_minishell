@@ -60,6 +60,11 @@ void    ft_echo(char **args, char **env)
     int i;
     int newline;
 
+    if (!args[1])
+    {
+        printf("\n");
+        return ;
+    }
     i = 1;
     if (!strcmp(args[1], "-n"))
     {

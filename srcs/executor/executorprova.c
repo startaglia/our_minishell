@@ -55,12 +55,13 @@ static int	error(char *str, char *err)
 	return (1);
 }
 
-static int	exec(char **args, t_command *cmd, int fd, char **env)
+static int	exec(char **args, t_command *cmd, int fd, char **env, t_shell *shell)
 {
     char	*bin_path;
 	char	**trimmed;
 	int		builtin;
     
+	(void)shell;
 	builtin = ft_is_builtin(args[0]);
 	if (cmd->infile == 0)
 	{
@@ -111,10 +112,22 @@ int executorprova(t_shell *shell)
             prev = shell->cmds_list;
 			shell->cmds_list = shell->cmds_list->next;
         }
+		if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "$?"))
+		{
+			printf("minishell: %d: command not found\n", exit_status);
+			// shell->exit_status = 127;
+			exit_status = 127;
+			return(1);
+		}
 		if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "cd"))
 			ft_cd(shell, shell->cmds_list);
 		else if (shell->cmds_list->next == NULL)
 		{
+			char	*first_path = ft_findpath(((t_command *)shell->cmds_list->content)->split_cmd[0]);
+			if (!first_path)
+				exit_status = 127;
+			else
+				exit_status = 0;
 			pid = fork();
 			if (!pid)
 			{
@@ -137,14 +150,14 @@ int executorprova(t_shell *shell)
 						if (!line || !strcmp(line, ((t_command *)shell->cmds_list->content)->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
+							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env, shell))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
+					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env, shell))
 						return (1);
 				if (((t_command *)shell->cmds_list->content)->outfile != 1)
 				{
@@ -194,14 +207,14 @@ int executorprova(t_shell *shell)
 						if (!line || !strcmp(line, ((t_command *)prev->content)->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
+							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env, shell))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env))
+					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env, shell))
 						return (1);
 				if (((t_command *)prev->content)->outfile != 1)
 				{

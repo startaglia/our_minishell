@@ -42,6 +42,7 @@ typedef struct s_command
 
 typedef struct s_shell
 {
+	// int					exit_status;
 	char				*prompt;
 	char				*pipeline;
 	char				*line_to_split;
@@ -50,6 +51,8 @@ typedef struct s_shell
 	char				**copy_env;
 	struct s_list		*cmds_list;
 }	t_shell;
+
+extern int			exit_status;
 
 // Errors
 int				std_error(char *error);
