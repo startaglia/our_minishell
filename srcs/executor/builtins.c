@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 21:02:37 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/09 21:39:09 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/11 10:53:10 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ void    ft_cd(t_shell *shell, t_command *cmd)
 {
     if (cmd->split_cmd[1])
     {
-        if (chdir(cmd->split_cmd[1]) != 0)
+        if (!strcmp(cmd->split_cmd[1], "-"))
+            update_cwd_reverse(shell);
+        else if (chdir(cmd->split_cmd[1]) != 0)
             printf("minishell: cd: %s: No such file or directory\n", cmd->split_cmd[1]);
         else
             update_cwd(shell);

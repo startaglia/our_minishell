@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 21:40:11 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 22:43:17 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/11 12:02:19 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,46 +28,4 @@ char     *ft_find_heredoc(char **cmd)
         i++;
     }
     return (NULL);
-}
-
-char    *trim_def(char *full)
-{
-    int     i;
-    int     count;
-    char    *trimmed;
-
-    i = 0;
-    count = 0;
-    while (full[i])
-    {
-        if (full[i] == 61)
-        {
-            i++;
-            while (full[i])
-            {
-                i++;
-                count++;
-            }
-        }
-        i++;
-    }
-    trimmed = malloc(sizeof(char) * (count + 1));
-    i = 0;
-    count = 0;
-    while (full[i])
-    {
-        if (full[i] == 61)
-        {
-            i++;
-            while (full[i])
-            {
-                trimmed[count] = full[i];
-                i++;
-                count++;
-            }
-        }
-        i++;
-    }
-    trimmed[count] = 0;
-    return (trimmed);
 }

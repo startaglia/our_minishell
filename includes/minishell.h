@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/09 22:32:40 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/11 16:15:52 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void			ft_set_redirs(t_shell *shell);
 char			**ft_get_cmd(char **args);
 char			*ft_find_heredoc(char **cmd);
 char			*trim_def(char *full);
+char			*getpath(char **env);
+int				ft_findvar(t_shell *shell, t_command *cmd);
 
 //executor
 int				executor(t_shell *shell);
@@ -87,8 +89,12 @@ void			ft_pwd(char **env);
 void			ft_env(char **env);
 void			ft_cd(t_shell *shell, t_command *cmd);
 void			update_cwd(t_shell *shell);
+void			update_cwd_reverse(t_shell *shell);
 void			ft_back_home(t_shell *shell);
 void			ft_export(t_shell *shell, t_command *cmd);
+int				ft_check_var(char **copy_env, t_command *cmd, int mode);
+int				ft_changevalue(char **copy_env, t_command *cmd, int	i);
+void			ft_unset(t_shell *shell, t_command *cmd);
 void			ft_exit();
 
 //free

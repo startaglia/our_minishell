@@ -6,29 +6,25 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/09 22:43:56 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/11 15:41:54 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char *ft_findpath(char *cmd)
+static char *ft_findpath(char *cmd, char **env)
 {
     char *path;
-    //* QUESTA E' LA PATH CORRETTA DELL'ESEGUIBILE, SE VIENE TROVATO
     char *right_path;
-    //*QUESTA 'E MATRIX DELLA SPLIT FATTA SU PATH CON I :
     char **paths;
     int i;
 
     i = 0;
-    path = getenv("PATH");
+    path = getpath(env);
     paths = ft_split(path, ':');
     while(paths[i])
     {
-        //*MI SERVE CREARE UNA STRINGA CHE ABBIA OGNI DIRECTORY CHE ERA NELLA VAR DI AMBIENTE PATH SEPARATA DAI : CON AGGIUNTO ALLA FINE /, PERCHE' SUBITO DOPO ANDRO' A CONTROLLARE SE IL COMMAND INSERITO HA GLI ACCESSI E QUINDI SE ESISTE. IN SOSTANZA CICLO SU OGNI DIRECTORY DEGLI ESEGUIBILI BIM E CONTROLLO SE IL COMANDO CHE HO SCRITTO E' UNO DI LORO.
         path = ft_strjoin(paths[i], "/");
-        //* ALLA FINE DELLA PATH DEL MOMENTO, DOPO AVERCI MESSO IL / CI METTO ANCHE IL COMANDO CHE HO SCRITTO, SE LA DIR ESISTE CI ENTRA CON ACCESS E MI RITORNO LA PATH CHE CERCAVO.
         right_path = ft_strjoin(path, cmd);
         free(path);
         if (access(right_path, F_OK) == 0)
@@ -83,8 +79,8 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	}
 	else
 	{
-		bin_path = ft_findpath(args[0]);
-		if (cmd->infile >= 0)
+		bin_path = ft_findpath(args[0], env);
+		if (cmd->infile >= 0 && bin_path != NULL)
 			execve(bin_path, trimmed, env);
 		free(bin_path);
 		free_matrix(trimmed);
@@ -117,10 +113,14 @@ int executorprova(t_shell *shell)
 			ft_cd(shell, actual);
 		else if(!strcmp(actual->split_cmd[0], "export"))
 			ft_export(shell, actual);
+		else if(!strcmp(actual->split_cmd[0], "unset"))
+			ft_unset(shell, actual);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "cd"))
 			ft_cd(shell, prev);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "export"))
 			ft_export(shell, prev);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "unset"))
+			ft_unset(shell, prev);
 		// else if (!strcmp(actual->split_cmd[0], "exit"))
 		// 	ft_exit();
 		else if (shell->cmds_list->next == NULL)
@@ -154,7 +154,7 @@ int executorprova(t_shell *shell)
 					}
 				}
 				else
-					if (exec((actual->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env))
+					if (exec((actual->split_cmd), actual, tmp, shell->copy_env))
 						return (1);
 				if (actual->outfile != 1)
 				{
