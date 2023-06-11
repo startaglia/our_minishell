@@ -47,7 +47,14 @@ void ft_free_list(t_list *list)
 	t_list *tmp;
 
 	if (!list->next)
+	{
+		// free(((t_command *)list->content)->cmd);
+		// free(((t_command *)list->content)->heredoc);
+		// free(list->content);
+		// free(list);
+		// free(((t_command *)list->content)->split_cmd);
 		return ;
+	}
 	while (list)
 	{
 		tmp = list->next;

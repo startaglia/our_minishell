@@ -96,32 +96,6 @@ static int	exec(char **args, t_command *cmd, int fd, char **env, t_shell *shell)
 	return (0);
 }
 
-
-// static void	exp_env_value(char *str, char **env)
-// {
-// 	int		i;
-// 	char	*ret;
-
-// 	if (!str)
-// 		return ;
-// 	i = 0;
-// 	ret = ft_strtrim(str, "$");
-// 	while (env[i])
-// 	{
-	// 	// printf("%s\n", env[i]);
-	// 	// printf("%s\n", str);
-		// if (!ft_strncmp(ret, env[i] + (ft_strlen(ret) + 1), ft_strlen(env[i] - (ft_strlen(ret) + 1))))
-		// {
-			// int	len = ft_strlen(env[i]) - (ft_strlen(str) + 1);
-			// printf("%s\n", env[i] + ft_strlen(str) + 1);
-			// printf("%s\t%s\n", str, env[i]);
-			// ft_strlcpy(ret, env[i] + (ft_strlen(str) + 1), len);
-			// return ;
-		// }
-		// i++;
-	// }
-// }
-
 int executorprova(t_shell *shell)
 {
 	int			pid;
@@ -139,9 +113,9 @@ int executorprova(t_shell *shell)
             prev = shell->cmds_list;
 			shell->cmds_list = shell->cmds_list->next;
         }
-		if (((t_command *)shell->cmds_list->content)->split_cmd[0][0] == '$')
-		{
-			printf("%s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
+		// if (((t_command *)shell->cmds_list->content)->split_cmd[0][0] == '$')
+		// {
+			// printf("%s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
 			if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "$?"))
 			{
 				printf("minishell: %d: command not found\n", exit_status);
@@ -150,9 +124,9 @@ int executorprova(t_shell *shell)
 				return(1);
 			}
 			// else
-			// 	exp_env_value(((t_command *)shell->cmds_list->content)->split_cmd[0], shell->copy_env);
-		}
-		printf("POST: %s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
+				// ((t_command *)shell->cmds_list->content)->split_cmd[0] = ft_expand_env(((t_command *)shell->cmds_list->content)->split_cmd[0], shell->copy_env);
+		// }
+		// printf("POST: %s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
 		if (ft_is_builtin(((t_command *)shell->cmds_list->content)->split_cmd[0]))
 			exit_status = 0;
 		char	*first_path = ft_findpath(((t_command *)shell->cmds_list->content)->split_cmd[0]);
