@@ -46,6 +46,8 @@ void ft_free_list(t_list *list)
 {
 	t_list *tmp;
 
+	if (!list->next)
+		return ;
 	while (list)
 	{
 		tmp = list->next;

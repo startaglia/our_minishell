@@ -20,6 +20,8 @@ int ft_is_builtin(char *cmd)
         return (2);
     else if (!strcmp(cmd, "env"))
         return (3);
+    else if (!strcmp(cmd, "cd"))
+        return (777);
     return (0);
 }
 
@@ -85,7 +87,10 @@ void    ft_cd(t_shell *shell, t_list *node)
             exit_status = 127;
         }
         else
+        {
             update_cwd(shell);
+            exit_status = 0;
+        }
     }
     else
     {

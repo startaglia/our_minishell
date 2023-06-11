@@ -89,18 +89,45 @@ static int	exec(char **args, t_command *cmd, int fd, char **env, t_shell *shell)
 			execve(bin_path, trimmed, env);
 		free(bin_path);
 		free_matrix(trimmed);
+		// exit_status = 127;
 		return (error("error: cannot execute ", args[0]));
 	}
 	//execve(bin_path, args, env);
 	return (0);
 }
 
+
+// static void	exp_env_value(char *str, char **env)
+// {
+// 	int		i;
+// 	char	*ret;
+
+// 	if (!str)
+// 		return ;
+// 	i = 0;
+// 	ret = ft_strtrim(str, "$");
+// 	while (env[i])
+// 	{
+	// 	// printf("%s\n", env[i]);
+	// 	// printf("%s\n", str);
+		// if (!ft_strncmp(ret, env[i] + (ft_strlen(ret) + 1), ft_strlen(env[i] - (ft_strlen(ret) + 1))))
+		// {
+			// int	len = ft_strlen(env[i]) - (ft_strlen(str) + 1);
+			// printf("%s\n", env[i] + ft_strlen(str) + 1);
+			// printf("%s\t%s\n", str, env[i]);
+			// ft_strlcpy(ret, env[i] + (ft_strlen(str) + 1), len);
+			// return ;
+		// }
+		// i++;
+	// }
+// }
+
 int executorprova(t_shell *shell)
 {
-	int	pid;
-	int	tmp;
-	int	fd[2];
-    t_list *prev;
+	int			pid;
+	int			tmp;
+	int			fd[2];
+    t_list 		*prev;
 
 	pid = 0;
 	tmp = dup(0);
@@ -112,22 +139,31 @@ int executorprova(t_shell *shell)
             prev = shell->cmds_list;
 			shell->cmds_list = shell->cmds_list->next;
         }
-		if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "$?"))
+		if (((t_command *)shell->cmds_list->content)->split_cmd[0][0] == '$')
 		{
-			printf("minishell: %d: command not found\n", exit_status);
-			// shell->exit_status = 127;
-			exit_status = 127;
-			return(1);
+			printf("%s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
+			if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "$?"))
+			{
+				printf("minishell: %d: command not found\n", exit_status);
+				// shell->exit_status = 127;
+				exit_status = 127;
+				return(1);
+			}
+			// else
+			// 	exp_env_value(((t_command *)shell->cmds_list->content)->split_cmd[0], shell->copy_env);
 		}
+		printf("POST: %s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
+		if (ft_is_builtin(((t_command *)shell->cmds_list->content)->split_cmd[0]))
+			exit_status = 0;
+		char	*first_path = ft_findpath(((t_command *)shell->cmds_list->content)->split_cmd[0]);
+		if (!first_path)
+			exit_status = 127;
+		else
+			exit_status = 0;
 		if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "cd"))
 			ft_cd(shell, shell->cmds_list);
 		else if (shell->cmds_list->next == NULL)
 		{
-			char	*first_path = ft_findpath(((t_command *)shell->cmds_list->content)->split_cmd[0]);
-			if (!first_path)
-				exit_status = 127;
-			else
-				exit_status = 0;
 			pid = fork();
 			if (!pid)
 			{
