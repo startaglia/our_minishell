@@ -12,8 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-void    ft_exit()
+void    ft_exit(t_shell *shell)
 {
     printf("exit\n");
+    ft_free_shell(shell);
+    ft_free_execve(shell);
+    ft_free_list(shell->cmds_list);
     exit(0);
 }

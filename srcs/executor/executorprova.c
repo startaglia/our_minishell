@@ -121,8 +121,8 @@ int executorprova(t_shell *shell)
 			ft_export(shell, prev);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "unset"))
 			ft_unset(shell, prev);
-		// else if (!strcmp(actual->split_cmd[0], "exit"))
-		// 	ft_exit();
+		else if (!strcmp(actual->split_cmd[0], "exit"))
+			ft_exit(shell);
 		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();

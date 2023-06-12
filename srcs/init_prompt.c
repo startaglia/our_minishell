@@ -74,6 +74,7 @@ static void main_loop(t_shell *shell)
             start = shell->cmds_list;
             executorprova(shell);
             ft_free_list(start);
+            ft_free_execve(shell);
         }
         ft_free_shell(shell);
     }

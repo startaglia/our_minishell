@@ -31,10 +31,6 @@ void ft_free_shell(t_shell *shell)
 		free(shell->pipeline);
 	if (shell->line_to_split)
     	free(shell->line_to_split);
-	if (shell->cmds)
-		free_matrix(shell->cmds);
-	if (shell->pipe_words)
-    	free_matrix(shell->pipe_words);
 }
 
 void ft_free_list(t_list *list)
@@ -51,4 +47,12 @@ void ft_free_list(t_list *list)
 		free(list);
 		list = tmp;
 	}
+}
+
+void	ft_free_execve(t_shell *shell)
+{
+	if (shell->cmds)
+		free_matrix(shell->cmds);
+	if (shell->pipe_words)
+    	free_matrix(shell->pipe_words);
 }
