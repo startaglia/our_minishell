@@ -38,7 +38,7 @@ void    ft_echo(char **args)
         newline = 0;
     while (args[i])
     {
-        printf("%s", args[i]);
+        printf("%s ", args[i]);
         i++;
     }
     if (!newline)

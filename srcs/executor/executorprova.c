@@ -24,9 +24,9 @@ static char *ft_findpath(char *cmd, char **env)
     paths = ft_split(path, ':');
     while(paths[i])
     {
+		free(path);
         path = ft_strjoin(paths[i], "/");
         right_path = ft_strjoin(path, cmd);
-        free(path);
         if (access(right_path, F_OK) == 0)
         {
             free_matrix(paths);
@@ -35,7 +35,9 @@ static char *ft_findpath(char *cmd, char **env)
         free(right_path);
         i++;
     }
+	free(path);
     free_matrix(paths);
+	//free(path);
     return (NULL);
 }
 
@@ -80,7 +82,7 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	else
 	{
 		bin_path = ft_findpath(args[0], env);
-		if (cmd->infile >= 0 && bin_path != NULL)
+		if (bin_path != NULL && cmd->infile >= 0)
 			execve(bin_path, trimmed, env);
 		free(bin_path);
 		free_matrix(trimmed);
@@ -123,6 +125,11 @@ int executorprova(t_shell *shell)
 			ft_unset(shell, prev);
 		else if (!strcmp(actual->split_cmd[0], "exit"))
 			ft_exit(shell);
+		else if (!strcmp(actual->split_cmd[0], "$?"))
+		{
+			printf("minishell: %d: command not found\n", exit_status);
+			exit_status = 127;
+		}
 		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();
@@ -170,8 +177,14 @@ int executorprova(t_shell *shell)
 			else
 			{
 				close(tmp);
-				while (waitpid(-1, NULL, WUNTRACED) != -1)
+				// while (waitpid(-1, NULL, WUNTRACED) != -1)
+				// 	;
+				int child_status;
+
+				while(waitpid(-1, &child_status, WUNTRACED) != -1)
 					;
+				if (WIFEXITED(child_status))
+					exit_status = WEXITSTATUS(child_status);
 				tmp = dup(0);
 			}
             break;

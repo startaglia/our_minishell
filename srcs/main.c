@@ -12,6 +12,8 @@
 
 # include "../includes/minishell.h"
 
+int exit_status = 0;
+
 int	main(int argc, char **argv, char **envp)
 {
     t_shell shell;

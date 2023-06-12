@@ -51,6 +51,7 @@ typedef struct s_shell
 	struct s_list		*cmds_list;
 }	t_shell;
 
+extern int				exit_status;
 // Errors
 int				std_error(char *error);
 
