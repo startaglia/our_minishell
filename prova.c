@@ -1,5 +1,73 @@
 #include "includes/minishell.h"
 
+
+            // int i = 0;
+            // int j = 0;
+            // int k = 0;
+            // char *testa;
+
+            // testa = NULL;
+            // while (shell->pipe_words[i])
+            //     i++;
+            //  printf("****   I    %d*****\n", i);
+            // if (i == 1)
+            // {
+
+            //     while (shell->pipe_words[0][j])
+            //     {
+            //         // printf("****%c*****\n", shell->pipe_words[0][j]);
+            //         if (shell->pipe_words[0][j] == '$')
+            //         {
+            //             j++;
+            //             while (shell->pipe_words[0][j] != 'O')
+            //             {
+            //                 printf("****DENTRO %c*****\n", shell->pipe_words[0][j]);
+            //                 j++;
+            //                 k++;
+            //             }
+            //             testa = malloc(sizeof(char) * (k + 1));
+            //             k = j - k;
+            //             j = k;
+            //             while (shell->pipe_words[0][k])
+            //             {
+            //                 printf("****DO IL VALORE %c*****\n", shell->pipe_words[0][k]);
+            //                 testa[k] = shell->pipe_words[0][k];
+            //                 printf("\t****TESTA DI K %c*****\n", testa[k]);
+            //                 k++;
+            //             }
+            //             testa[k] = 0;
+            //             printf("****FINE DI TUTTO %s\n*****", testa);
+            //         }
+            //         j++;
+            //     }
+
+            // }
+            // while (shell->pipe_words[i])
+            // {
+            //     j = 0;
+            //     while (shell->pipe_words[i][j] && shell->pipe_words[i][j] != 32)
+            //     {
+            //         printf("****%c*****\n", shell->pipe_words[i][j]);
+            //         j++;
+            //     }
+
+            //     // printf("****%c*****\n", shell->pipe_words[i][j]);
+
+            //     if (shell->pipe_words[i][j] == '$')
+            //     {
+            //         printf("PRIMO CHAR--> %c", shell->pipe_words[i][j]);
+            //         while (shell->pipe_words[i][j] && shell->pipe_words[i][j] != 32)
+            //         {
+            //             printf("****%c*****\n", shell->pipe_words[i][j]);
+                        
+            //             j++;
+            //         }
+            //     }
+            //     printf("STRINGA--->%s\n", shell->pipe_words[i]);
+            //     i++;
+            // }
+            
+
 size_t ft_strlen(const char *str)
 {
     int i;
