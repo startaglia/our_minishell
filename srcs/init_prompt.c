@@ -72,6 +72,13 @@ static void main_loop(t_shell *shell)
             shell->cmds = ft_add_pipes(shell->pipe_words);
             create_cmd_list(shell);
             start = shell->cmds_list;
+            if (!((t_command *)shell->cmds_list->content)->split_cmd[0])
+            {
+                ft_free_list(start);
+                ft_free_execve(shell);
+                ft_free_shell(shell);
+                continue ;
+            }
             executorprova(shell);
             ft_free_list(start);
             ft_free_execve(shell);

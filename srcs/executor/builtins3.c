@@ -12,8 +12,10 @@
 
 #include "../../includes/minishell.h"
 
-void    ft_exit(t_shell *shell)
+void    ft_exit(t_shell *shell, t_list *first)
 {
+    if (ft_lstsize(first) > 2)
+        return ;
     printf("exit\n");
     ft_free_shell(shell);
     ft_free_execve(shell);

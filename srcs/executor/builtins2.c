@@ -36,6 +36,7 @@ void    update_cwd(t_shell *shell)
         }
         i++;
     }
+    exit_status = 0;
 }
 
 void    update_cwd_reverse(t_shell *shell)

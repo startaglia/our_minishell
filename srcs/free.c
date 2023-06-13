@@ -40,9 +40,10 @@ void ft_free_list(t_list *list)
 	while (list)
 	{
 		tmp = list->next;
+		if (((t_command *)list->content)->heredoc != NULL)
+			free(((t_command *)list->content)->heredoc);
 		free(((t_command *)list->content)->cmd);
 		free_matrix(((t_command *)list->content)->split_cmd);
-		free(((t_command *)list->content)->heredoc);
 		free(list->content);
 		free(list);
 		list = tmp;
