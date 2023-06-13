@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it >     +#+  +:+       +#+        */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:42:48 by startagl          #+#    #+#             */
-/*   Updated: 2023/06/08 11:47:06 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:57:51 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int add_space(char *tmp, int i, char *line, int j)
 		j++;
     	line[j] = tmp[i];
 	}
-    if (i != 0 && (tmp[i - 1] != 60 && tmp[i - 1] != 62))
+    if (tmp[i - 1] != 60 && tmp[i - 1] != 62)
     {
         line[j] = 32;
         j++;
@@ -91,7 +91,7 @@ int		count_in_out(char *str)
 	k = 0;
 	while (str[i])
 	{
-		if ((str[i] == 60 || str[i] == 62) && i != 0)
+		if (str[i] == 60 || str[i] == 62)
 		{
 			if (str[i - 1] != 60 && str[i - 1] != 62)
 				k++;
