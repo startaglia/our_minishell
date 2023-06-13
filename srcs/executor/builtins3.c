@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds2.c                                            :+:      :+:    :+:   */
+/*   builtins3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/06 21:40:11 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/11 12:02:19 by scastagn         ###   ########.fr       */
+/*   Created: 2023/06/09 22:27:42 by scastagn          #+#    #+#             */
+/*   Updated: 2023/06/09 22:32:01 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-char     *ft_find_heredoc(char **cmd)
+void    ft_exit(t_shell *shell, t_list *start)
 {
-    int i;
-
-    i = 0;
-    while (cmd[i])
-    {
-        if (!strcmp(cmd[i], "<<"))
-        {
-            if (cmd[i + 1])
-                return (cmd[i + 1]);
-            i++;
-        }
-        i++;
-    }
-    return (NULL);
+    if (ft_lstsize(start) > 2)
+        return ;
+    printf("exit\n");
+    ft_free_shell(shell);
+    ft_free_execve(shell);
+    ft_free_list(shell->cmds_list);
+    exit(0);
 }

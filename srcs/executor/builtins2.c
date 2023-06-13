@@ -6,84 +6,111 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:10:59 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 22:24:53 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/11 16:20:59 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void    print_env_value(char *str, char **env)
+void    update_cwd(t_shell *shell)
 {
     int     i;
-
-    if (!str)
-        return ;
-    i = 0;
-    while (env[i])
-    {
-        if (!ft_strncmp(str, env[i], ft_strlen(str)))
-            printf("%s", env[i]);
-        i++;
-    }
-    // printf("%s\n", ret[i]);
-}
-
-static int    ft_echo_dollar(char *str, char **env)
-{
-    size_t i;
+    char    cwd[1024];
+    char    *oldpwd;
 
     i = 0;
-    while (str[i])
+    oldpwd = NULL;
+    getcwd(cwd, sizeof(cwd));
+    while (shell->copy_env[i])
     {
-        if (str[i] == '$')
+        if (!ft_strncmp("PWD=", shell->copy_env[i], 4))
         {
-            if (str[i + 1])
-                break;
-            else
-                return (0);
+            oldpwd = ft_strdup(shell->copy_env[i]);
+            free(shell->copy_env[i]);
+            shell->copy_env[i] = ft_strjoin("PWD=", cwd);
+        }
+        else if (!ft_strncmp("OLDPWD=", shell->copy_env[i], 7))
+        {
+            free(shell->copy_env[i]);
+            shell->copy_env[i] = ft_strjoin("OLD", oldpwd);
+            free(oldpwd);
         }
         i++;
     }
-    if (i == ft_strlen(str))
-        return(0);
-    else
-    {
-        str++;
-        print_env_value(str, env);
-        return (1);
-    }
-    return (0);
 }
 
-void    ft_echo(char **args, char **env)
+void    update_cwd_reverse(t_shell *shell)
 {
-    int i;
-    int newline;
+    int     i;
+    char    *trimmed;
 
-    if (!args[1])
+    i = 0;
+    while (shell->copy_env[i])
     {
-        printf("\n");
-        return ;
-    }
-    i = 1;
-    if (!strcmp(args[1], "-n"))
-    {
-        newline = 1;
+        if (!ft_strncmp("OLDPWD=", shell->copy_env[i], 7))
+        {
+            trimmed = trim_def(shell->copy_env[i]);
+            chdir(trimmed);
+            update_cwd(shell);
+            printf("%s\n", trimmed);
+            free(trimmed);
+        }
         i++;
     }
-    else
-        newline = 0;
-    if (ft_echo_dollar(args[i], env))
-    {
-        if (!newline)
-            printf("\n");
+}
+
+void    ft_export(t_shell *shell, t_command *cmd)
+{
+    int     i;
+    char    **updated_env;
+
+    i = 0;
+    if (!cmd->split_cmd[1])
+        return (ft_env(shell->copy_env));
+    if (ft_check_var(shell->copy_env, cmd, 1))
         return ;
-    }
-    while (args[i])
+    if (ft_check_var(shell->copy_env, cmd, 2))
+        return ;
+    while (shell->copy_env[i])
+        i++;
+    updated_env = (char **)malloc(sizeof(char *) * (i + 2));
+    i = 0;
+    while (shell->copy_env[i])
     {
-        printf("%s", args[i]);
+        updated_env[i] = ft_strdup(shell->copy_env[i]);
         i++;
     }
-    if (!newline)
-            printf("\n");
+    updated_env[i] = ft_strdup(cmd->split_cmd[1]);
+    updated_env[++i] = NULL;
+    free_matrix(shell->copy_env);
+    shell->copy_env = updated_env; 
+}
+
+void    ft_unset(t_shell *shell, t_command *cmd)
+{
+    int     i;
+    int     toskip;
+    char    **updated_env;
+
+    toskip = ft_findvar(shell, cmd);
+    if (toskip != -1)
+    {
+        updated_env = (char **)malloc(sizeof(char *) * (get_matrix_lenght(shell->copy_env)));
+        i = 0;
+        while (shell->copy_env[i] && i < toskip)
+        {
+            updated_env[i] = ft_strdup(shell->copy_env[i]);
+            i++;
+        }
+        i++;
+        while (shell->copy_env[i])
+        {
+            updated_env[toskip] = ft_strdup(shell->copy_env[i]);
+            i++;
+            toskip++;
+        }
+        updated_env[toskip] = NULL;
+        free_matrix(shell->copy_env);
+        shell->copy_env = updated_env;
+    }
 }

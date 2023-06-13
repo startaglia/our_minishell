@@ -119,6 +119,7 @@ void create_cmd_list(t_shell *shell)
         element = malloc(sizeof(t_command));
         element->cmd = ft_strdup(shell->cmds[i]);
         element->split_cmd = ft_split_pipes(element->cmd, 32);
+        element->heredoc = NULL;
         element->infile = 1;
         element->outfile = 0;
         element->copy_stdout = dup(STDOUT_FILENO);

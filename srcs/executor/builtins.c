@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 21:02:37 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 22:43:28 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/11 10:53:10 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,29 @@ int ft_is_builtin(char *cmd)
         return (2);
     else if (!strcmp(cmd, "env"))
         return (3);
-    else if (!strcmp(cmd, "cd"))
-        return (777);
     return (0);
 }
 
-void    update_cwd(t_shell *shell)
+void    ft_echo(char **args)
 {
-    int     i;
-    char    cwd[1024];
+    int i;
+    int newline;
 
-    i = 0;
-    getcwd(cwd, sizeof(cwd));
-    while (shell->copy_env[i])
+    i = 1;
+    if (!strcmp(args[1], "-n"))
     {
-        if (!ft_strncmp("PWD=", shell->copy_env[i], 4))
-        {
-            free(shell->copy_env[i]);
-            shell->copy_env[i] = ft_strjoin("PWD=", cwd);
-        }
+        newline = 1;
         i++;
     }
+    else
+        newline = 0;
+    while (args[i])
+    {
+        printf("%s ", args[i]);
+        i++;
+    }
+    if (!newline)
+            printf("\n");
 }
 
 void    ft_pwd(char **env)
@@ -70,40 +72,17 @@ void    ft_env(char **env)
         printf("%s\n", env[i]);
 }
 
-void    ft_cd(t_shell *shell, t_list *node)
+void    ft_cd(t_shell *shell, t_command *cmd)
 {
-    t_command *cmd;
-    int i;
-    char *dir;
-
-    i = 0;
-    cmd = ((t_command *)node->content);
     if (cmd->split_cmd[1])
     {
-        if (chdir(cmd->split_cmd[1]) != 0)
-        {
+        if (!strcmp(cmd->split_cmd[1], "-"))
+            update_cwd_reverse(shell);
+        else if (chdir(cmd->split_cmd[1]) != 0)
             printf("minishell: cd: %s: No such file or directory\n", cmd->split_cmd[1]);
-            // shell->exit_status = 127;
-            exit_status = 127;
-        }
         else
-        {
             update_cwd(shell);
-            exit_status = 0;
-        }
     }
     else
-    {
-        while (shell->copy_env[i])
-        {
-            if (!ft_strncmp("HOME=", shell->copy_env[i], 5))
-            {
-                dir = trim_def(shell->copy_env[i]);
-                chdir(dir);
-                update_cwd(shell);
-                free(dir);
-            }
-            i++;
-        }
-    }
+        ft_back_home(shell);
 }

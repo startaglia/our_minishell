@@ -6,31 +6,29 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 21:54:15 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/11 15:41:54 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char *ft_findpath(char *cmd)
+static char *ft_findpath(char *cmd, char **env)
 {
     char *path;
-    //* QUESTA E' LA PATH CORRETTA DELL'ESEGUIBILE, SE VIENE TROVATO
     char *right_path;
-    //*QUESTA 'E MATRIX DELLA SPLIT FATTA SU PATH CON I :
     char **paths;
     int i;
 
     i = 0;
-    path = getenv("PATH");
+    path = getpath(env);
+	if (!path)
+		return (NULL);
     paths = ft_split(path, ':');
     while(paths[i])
     {
-        //*MI SERVE CREARE UNA STRINGA CHE ABBIA OGNI DIRECTORY CHE ERA NELLA VAR DI AMBIENTE PATH SEPARATA DAI : CON AGGIUNTO ALLA FINE /, PERCHE' SUBITO DOPO ANDRO' A CONTROLLARE SE IL COMMAND INSERITO HA GLI ACCESSI E QUINDI SE ESISTE. IN SOSTANZA CICLO SU OGNI DIRECTORY DEGLI ESEGUIBILI BIM E CONTROLLO SE IL COMANDO CHE HO SCRITTO E' UNO DI LORO.
+		free(path);
         path = ft_strjoin(paths[i], "/");
-        //* ALLA FINE DELLA PATH DEL MOMENTO, DOPO AVERCI MESSO IL / CI METTO ANCHE IL COMANDO CHE HO SCRITTO, SE LA DIR ESISTE CI ENTRA CON ACCESS E MI RITORNO LA PATH CHE CERCAVO.
         right_path = ft_strjoin(path, cmd);
-        free(path);
         if (access(right_path, F_OK) == 0)
         {
             free_matrix(paths);
@@ -39,6 +37,7 @@ static char *ft_findpath(char *cmd)
         free(right_path);
         i++;
     }
+	free(path);
     free_matrix(paths);
     return (NULL);
 }
@@ -55,13 +54,12 @@ static int	error(char *str, char *err)
 	return (1);
 }
 
-static int	exec(char **args, t_command *cmd, int fd, char **env, t_shell *shell)
+static int	exec(char **args, t_command *cmd, int fd, char **env)
 {
     char	*bin_path;
 	char	**trimmed;
 	int		builtin;
     
-	(void)shell;
 	builtin = ft_is_builtin(args[0]);
 	if (cmd->infile == 0)
 	{
@@ -73,7 +71,7 @@ static int	exec(char **args, t_command *cmd, int fd, char **env, t_shell *shell)
 	if (builtin)
 	{
 		if (builtin == 1)
-			ft_echo(trimmed, env);
+			ft_echo(trimmed);
 		else if (builtin == 2)
 			ft_pwd(env);
 		else if (builtin == 3)
@@ -84,12 +82,11 @@ static int	exec(char **args, t_command *cmd, int fd, char **env, t_shell *shell)
 	}
 	else
 	{
-		bin_path = ft_findpath(args[0]);
-		if (cmd->infile >= 0)
+		bin_path = ft_findpath(args[0], env);
+		if (bin_path != NULL && cmd->infile >= 0)
 			execve(bin_path, trimmed, env);
 		free(bin_path);
 		free_matrix(trimmed);
-		// exit_status = 127;
 		return (error("error: cannot execute ", args[0]));
 	}
 	//execve(bin_path, args, env);
@@ -98,93 +95,101 @@ static int	exec(char **args, t_command *cmd, int fd, char **env, t_shell *shell)
 
 int executorprova(t_shell *shell)
 {
-	int			pid;
-	int			tmp;
-	int			fd[2];
-    t_list 		*prev;
+	int	pid;
+	int	tmp;
+	int	fd[2];
+    t_command *prev;
+	t_command *actual;
+	t_list	*first;
 
 	pid = 0;
 	tmp = dup(0);
 	ft_set_redirs(shell);
+	first = shell->cmds_list;
 	while (shell->cmds_list)
 	{
 		while (shell->cmds_list->next && strcmp(((t_command *)shell->cmds_list->content)->cmd, "|"))
         {
-            prev = shell->cmds_list;
+            prev = (t_command *)shell->cmds_list->content;
 			shell->cmds_list = shell->cmds_list->next;
         }
-		// if (((t_command *)shell->cmds_list->content)->split_cmd[0][0] == '$')
-		// {
-			// printf("%s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
-			if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "$?"))
-			{
-				printf("minishell: %d: command not found\n", exit_status);
-				// shell->exit_status = 127;
-				exit_status = 127;
-				return(1);
-			}
-			// else
-				// ((t_command *)shell->cmds_list->content)->split_cmd[0] = ft_expand_env(((t_command *)shell->cmds_list->content)->split_cmd[0], shell->copy_env);
-		// }
-		// printf("POST: %s\n", ((t_command *)shell->cmds_list->content)->split_cmd[0]);
-		if (ft_is_builtin(((t_command *)shell->cmds_list->content)->split_cmd[0]))
-			exit_status = 0;
-		char	*first_path = ft_findpath(((t_command *)shell->cmds_list->content)->split_cmd[0]);
-		if (!first_path)
+		actual = (t_command *)shell->cmds_list->content;
+		if (!strcmp(actual->split_cmd[0], "cd"))
+			ft_cd(shell, actual);
+		else if(!strcmp(actual->split_cmd[0], "export"))
+			ft_export(shell, actual);
+		else if(!strcmp(actual->split_cmd[0], "unset"))
+			ft_unset(shell, actual);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "cd"))
+			ft_cd(shell, prev);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "export"))
+			ft_export(shell, prev);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "unset"))
+			ft_unset(shell, prev);
+		else if (!strcmp(actual->split_cmd[0], "exit"))
+			ft_exit(shell, first);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "exit"))
+			ft_exit(shell, first);
+		else if (!strcmp(actual->split_cmd[0], "$?"))
+		{
+			printf("minishell: %d: command not found\n", exit_status);
 			exit_status = 127;
-		else
-			exit_status = 0;
-		if (!strcmp(((t_command *)shell->cmds_list->content)->split_cmd[0], "cd"))
-			ft_cd(shell, shell->cmds_list);
+		}
 		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();
 			if (!pid)
 			{
-				if (((t_command *)shell->cmds_list->content)->outfile != 1)
+				if (actual->outfile != 1)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->outfile, STDOUT_FILENO);
-					close(((t_command *)shell->cmds_list->content)->outfile);
+					dup2(actual->outfile, STDOUT_FILENO);
+					close(actual->outfile);
 				}
-				if (((t_command *)shell->cmds_list->content)->infile != 0)
+				if (actual->infile != 0)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->infile, STDIN_FILENO);
-					close(((t_command *)shell->cmds_list->content)->infile);
+					dup2(actual->infile, STDIN_FILENO);
+					close(actual->infile);
 				}
-				if (((t_command *)shell->cmds_list->content)->heredoc)
+				if (actual->heredoc)
 				{
 					char *line;
 					while(1)
 					{
 						line = readline("> ");
-						if (!line || !strcmp(line, ((t_command *)shell->cmds_list->content)->heredoc))
+						if (!line || !strcmp(line, actual->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env, shell))
+							if (exec((actual->split_cmd), actual, tmp, shell->copy_env))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)shell->cmds_list->content)->split_cmd), (t_command *)shell->cmds_list->content, tmp, shell->copy_env, shell))
+					if (exec((actual->split_cmd), actual, tmp, shell->copy_env))
 						return (1);
-				if (((t_command *)shell->cmds_list->content)->outfile != 1)
+				if (actual->outfile != 1)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->copy_stdout, STDOUT_FILENO);
-					close(((t_command *)shell->cmds_list->content)->copy_stdout);
+					dup2(actual->copy_stdout, STDOUT_FILENO);
+					close(actual->copy_stdout);
 				}
-				if (((t_command *)shell->cmds_list->content)->infile != 0)
+				if (actual->infile != 0)
 				{
-					dup2(((t_command *)shell->cmds_list->content)->copy_stdin, STDIN_FILENO);
-					close(((t_command *)shell->cmds_list->content)->copy_stdin);
+					dup2(actual->copy_stdin, STDIN_FILENO);
+					close(actual->copy_stdin);
 				}
 			}
 			else
 			{
 				close(tmp);
-				while (waitpid(-1, NULL, WUNTRACED) != -1)
+				// while (waitpid(-1, NULL, WUNTRACED) != -1)
+				// 	;
+				int child_status;
+
+				while(waitpid(-1, &child_status, WUNTRACED) != -1)
 					;
+				if (WIFEXITED(child_status))
+					exit_status = WEXITSTATUS(child_status);
 				tmp = dup(0);
 			}
             break;
@@ -198,43 +203,43 @@ int executorprova(t_shell *shell)
 				dup2(fd[1], 1);
 				close(fd[1]);
 				close(fd[0]);
-				if (((t_command *)prev->content)->outfile != 1)
+				if (prev->outfile != 1)
 				{
-					dup2(((t_command *)prev->content)->outfile, STDOUT_FILENO);
-					close(((t_command *)prev->content)->outfile);
+					dup2(prev->outfile, STDOUT_FILENO);
+					close(prev->outfile);
 				}
-				if (((t_command *)prev->content)->infile != 0)
+				if (prev->infile != 0)
 				{
-					dup2(((t_command *)prev->content)->infile, STDIN_FILENO);
-					close(((t_command *)prev->content)->infile);
+					dup2(prev->infile, STDIN_FILENO);
+					close(prev->infile);
 				}
-				if (((t_command *)prev->content)->heredoc)
+				if (prev->heredoc)
 				{
 					char *line;
 					while(1)
 					{
 						line = readline("> ");
-						if (!line || !strcmp(line, ((t_command *)prev->content)->heredoc))
+						if (!line || !strcmp(line, prev->heredoc))
 						{
 							free(line);
-							if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env, shell))
+							if (exec((prev->split_cmd), prev, tmp, shell->copy_env))
 								return (1);
 							break;
 						}
 					}
 				}
 				else
-					if (exec((((t_command *)prev->content)->split_cmd), (t_command *)prev->content, tmp, shell->copy_env, shell))
+					if (exec(prev->split_cmd, prev, tmp, shell->copy_env))
 						return (1);
-				if (((t_command *)prev->content)->outfile != 1)
+				if (prev->outfile != 1)
 				{
-					dup2(((t_command *)prev->content)->copy_stdout, STDOUT_FILENO);
-					close(((t_command *)prev->content)->copy_stdout);
+					dup2(prev->copy_stdout, STDOUT_FILENO);
+					close(prev->copy_stdout);
 				}
-				if (((t_command *)prev->content)->infile != 0)
+				if (prev->infile != 0)
 				{
-					dup2(((t_command *)prev->content)->copy_stdin, STDIN_FILENO);
-					close(((t_command *)prev->content)->copy_stdin);
+					dup2(prev->copy_stdin, STDIN_FILENO);
+					close(prev->copy_stdin);
 				}
 			}
 			else

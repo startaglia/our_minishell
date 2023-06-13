@@ -31,38 +31,29 @@ void ft_free_shell(t_shell *shell)
 		free(shell->pipeline);
 	if (shell->line_to_split)
     	free(shell->line_to_split);
-
-}
-
-void	ft_free_execve(t_shell *shell)
-{
-	if (shell->pipe_words)
-    	free_matrix(shell->pipe_words);
-	if (shell->cmds)
-		free_matrix(shell->cmds);
 }
 
 void ft_free_list(t_list *list)
 {
 	t_list *tmp;
 
-	if (!list->next)
-	{
-		// free(((t_command *)list->content)->cmd);
-		// free(((t_command *)list->content)->heredoc);
-		// free(list->content);
-		// free(list);
-		// free(((t_command *)list->content)->split_cmd);
-		return ;
-	}
 	while (list)
 	{
 		tmp = list->next;
 		free(((t_command *)list->content)->cmd);
 		free_matrix(((t_command *)list->content)->split_cmd);
-		free(((t_command *)list->content)->heredoc);
+		if (((t_command *)list->content)->heredoc != NULL)
+			free(((t_command *)list->content)->heredoc);
 		free(list->content);
 		free(list);
 		list = tmp;
 	}
+}
+
+void	ft_free_execve(t_shell *shell)
+{
+	if (shell->cmds)
+		free_matrix(shell->cmds);
+	if (shell->pipe_words)
+    	free_matrix(shell->pipe_words);
 }
