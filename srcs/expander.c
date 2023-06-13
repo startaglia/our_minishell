@@ -110,11 +110,11 @@ void    expander(t_shell *shell)
     {
         if (get_var_values(shell))
         {
+            free(shell->expand_var);
             // shell->line_to_split_expand = malloc(sizeof(char) * (ft_strlen(shell->expand_value) + ft_strlen(shell->line_to_split) + 1));
             shell->line_to_split_expand = malloc(1024);
             ft_line_to_split_expand(shell);
             free(shell->expand_value);
         }
-        free(shell->expand_var);
     }
 }
