@@ -31,6 +31,8 @@ void ft_free_shell(t_shell *shell)
 		free(shell->pipeline);
 	if (shell->line_to_split)
     	free(shell->line_to_split);
+	if (shell->line_to_split_expand != NULL)
+		free(shell->line_to_split_expand);
 }
 
 void ft_free_list(t_list *list)

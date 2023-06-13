@@ -36,5 +36,6 @@ int	init_values(t_shell **shell)
 	(*shell)->line_to_split = NULL;
 	(*shell)->pipe_words = NULL;
 	(*shell)->copy_env = NULL;
+	(*shell)->cmds = NULL;
 	return (0);
 }

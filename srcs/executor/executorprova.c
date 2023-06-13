@@ -130,11 +130,11 @@ int executorprova(t_shell *shell)
 			ft_exit(shell, first);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "exit"))
 			ft_exit(shell, first);
-		else if (!strcmp(actual->split_cmd[0], "$?"))
-		{
-			printf("minishell: %d: command not found\n", exit_status);
-			exit_status = 127;
-		}
+		// else if (!strcmp(actual->split_cmd[0], "$?"))
+		// {
+		// 	printf("minishell: %d: command not found\n", exit_status);
+		// 	exit_status = 127;
+		// }
 		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();
