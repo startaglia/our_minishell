@@ -41,19 +41,52 @@ void    ft_setenv(t_shell *shell, char **envp)
     while (envp[i])
     {
         shell->copy_env[i] = ft_strdup(envp[i]);
+        // printf("%s\n", shell->copy_env[i]);
         i++;
     }
     shell->copy_env[i] = NULL;
 }
 
+void    line_to_split_expand(t_shell *shell)
+{
+    int i;
+    int j;
+    int k;
+
+    i = 0; // contatore di line to split
+    j = 0; // contatore di line to split expand
+    k = 0; // contatore di expand_value
+    while(shell->line_to_split[i])
+    {
+        shell->line_to_split_expand[j] = shell->line_to_split[i];
+        if (shell->line_to_split[i] == '$')
+        {
+            i++;
+            while(shell->expand_value[k])
+            {
+                shell->line_to_split_expand[j] = shell->expand_value[k];
+                j++;
+                k++;
+            }
+            i = i + ft_strlen(shell->expand_var) + 1;
+            j++;
+            k = 0;
+        }
+        i++;
+        j++;
+    }
+}
+
 static void main_loop(t_shell *shell)
 {
     t_list  *start;
-    char    *expand_var;
-    char    *expand_value;
 
     while (1)
     {
+        shell->expand_var = NULL;
+        shell->expand_value = NULL;
+        shell->line_to_split_expand = NULL;
+
         signal(SIGINT, handle_siginit);
         signal(SIGQUIT, handle_sigquit);
         shell->pipeline = readline(shell->prompt);
@@ -65,17 +98,32 @@ static void main_loop(t_shell *shell)
             continue ;
         }
         shell->line_to_split = parsing(shell);
+        if (filter_expand(shell))
+        {
+            if (get_var_values(shell))
+            {
+                shell->line_to_split_expand = malloc(sizeof(char) * (ft_strlen(shell->expand_value) + ft_strlen(shell->line_to_split) + 1));
+                line_to_split_expand(shell);
+            }
+
+        }
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             // int i = -1;
             add_history(shell->pipeline);
             if (shell->line_to_split == NULL)
                 break ;
-            expand_var = filter_expand(shell);
-            expand_value = get_var_value(shell, expand_var);
-            printf("expand value = %s\n", shell->expand_value);
-            
-            shell->pipe_words = ft_split_pipes(shell->line_to_split, 124);
+            // shell->expand_value = NULL;
+            // shell->expand_var = NULL;
+
+            // printf("\tLINE_TO_SPLIT = %s\n", shell->line_to_split);
+            // printf("\tLINE_TO_SPLIT_EXPAND = %s\n", shell->line_to_split_expand);
+            // printf("expand value = %s\n", shell->expand_value);
+
+            if (shell->line_to_split_expand != NULL)
+                shell->pipe_words = ft_split_pipes(shell->line_to_split_expand, 124);
+            else
+                shell->pipe_words = ft_split_pipes(shell->line_to_split, 124);
             // while(shell->pipe_words[++i])
                 // printf("VALUE--> %s\n", shell->pipe_words[i]);
             ///filter_expand;
@@ -84,6 +132,8 @@ static void main_loop(t_shell *shell)
             create_cmd_list(shell);
             start = shell->cmds_list;
             executorprova(shell);
+            free(shell->expand_var);
+            free(shell->expand_value);
             ft_free_list(start);
             ft_free_execve(shell);
         }
@@ -91,12 +141,12 @@ static void main_loop(t_shell *shell)
     }
 }
 
-char    *filter_expand(t_shell *shell)
+int    filter_expand(t_shell *shell)
 {
     int     i;
     int     j;
-    char    *str;
-    
+    int     f;
+
     i = 0;
     j = 0;
     while (shell->line_to_split[i])
@@ -104,53 +154,54 @@ char    *filter_expand(t_shell *shell)
         j = 0;
         if (shell->line_to_split[i] == '$')
         {
+            f = 1;
             i++;
             while(shell->line_to_split[i] && shell->line_to_split[i] != 32)
             {
-                //allocare
-                //str[j] = shell->pipe_words[i];
                 i++;
                 j++;
             }
-            str = malloc(sizeof(char) * (j + 1));
+            shell->expand_var = malloc(sizeof(char) * (j + 1));
             i = i - j;
             j = 0;
             while(shell->line_to_split[i] && shell->line_to_split[i] != 32)
             {
-                //allocare
-                //printf("trovato $, %d, line to_split = %c\n", j, shell->line_to_split[i]);
-                str[j] = shell->line_to_split[i];
+                shell->expand_var[j] = shell->line_to_split[i];
                 i++;
                 j++;
             }
-            str[j] = '\0';
-            
+            shell->expand_var[j] = '\0';
         }
         i++;
     }
-    // printf("str = %s, i = %d, j = %d\n", str, i, j);
-    return(str);
+    return (f);
 }
 
-char    *get_var_value(t_shell *shell, char   *var)
+int    get_var_values(t_shell *shell)
 {
     int     i;
     int     j;
-    char    *str = NULL;
+    int     ret;
 
-    (void)str;
     i = 0;
     j = 0;
+    ret = 0;
+    // printf("XPANDVAR %s\n", shell->expand_var);
     while(shell->copy_env[i])
     {
-        if (!strncmp (shell->copy_env[i], var, ft_strlen(var)))
+        // printf("SHELL_COPY_ENV = %s\n", shell->copy_env[i]);
+
+        if (!strncmp(shell->copy_env[i], shell->expand_var, strlen(shell->expand_var)))
         {
+            // printf("VALORE = %s\n", shell->copy_env[i]);
+            ret = 1;
             shell->expand_value = strdup(trim_def(shell->copy_env[i]));
-            // printf("var = %s\n", (shell->expand_value));
         }
+        // printf("VAR FUORI = %s\n", (shell->expand_value));
+
         i++;
     }
-    return(str);
+    return (ret);
 }
 
 
