@@ -12,9 +12,9 @@
 
 #include "../../includes/minishell.h"
 
-void    ft_exit(t_shell *shell, t_list *first)
+void    ft_exit(t_shell *shell, t_list *start)
 {
-    if (ft_lstsize(first) > 2)
+    if (ft_lstsize(start) > 2)
         return ;
     printf("exit\n");
     ft_free_shell(shell);

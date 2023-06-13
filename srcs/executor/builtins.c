@@ -79,10 +79,7 @@ void    ft_cd(t_shell *shell, t_command *cmd)
         if (!strcmp(cmd->split_cmd[1], "-"))
             update_cwd_reverse(shell);
         else if (chdir(cmd->split_cmd[1]) != 0)
-        {
             printf("minishell: cd: %s: No such file or directory\n", cmd->split_cmd[1]);
-            exit_status = 1;
-        }
         else
             update_cwd(shell);
     }

@@ -80,6 +80,7 @@ char			*ft_find_heredoc(char **cmd);
 char			*trim_def(char *full);
 char			*getpath(char **env);
 int				ft_findvar(t_shell *shell, t_command *cmd);
+int				get_matrix_lenght(char **matrix);
 
 //executor
 int				executor(t_shell *shell);
@@ -96,7 +97,7 @@ void			ft_export(t_shell *shell, t_command *cmd);
 int				ft_check_var(char **copy_env, t_command *cmd, int mode);
 int				ft_changevalue(char **copy_env, t_command *cmd, int	i);
 void			ft_unset(t_shell *shell, t_command *cmd);
-void			ft_exit(t_shell *shell, t_list *first);
+void			ft_exit(t_shell *shell, t_list *start);
 
 //free
 int				free_matrix(char **matrix);

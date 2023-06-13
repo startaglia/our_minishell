@@ -33,3 +33,13 @@ int ft_findvar(t_shell *shell, t_command *cmd)
     free_matrix(tounset);
     return(toskip);
 }
+
+int get_matrix_lenght(char **matrix)
+{
+    int i;
+
+    i = 0;
+    while(matrix[i])
+        i++;
+    return (i);
+}

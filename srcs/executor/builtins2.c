@@ -19,6 +19,7 @@ void    update_cwd(t_shell *shell)
     char    *oldpwd;
 
     i = 0;
+    oldpwd = NULL;
     getcwd(cwd, sizeof(cwd));
     while (shell->copy_env[i])
     {
@@ -36,7 +37,6 @@ void    update_cwd(t_shell *shell)
         }
         i++;
     }
-    exit_status = 0;
 }
 
 void    update_cwd_reverse(t_shell *shell)
@@ -95,7 +95,7 @@ void    ft_unset(t_shell *shell, t_command *cmd)
     toskip = ft_findvar(shell, cmd);
     if (toskip != -1)
     {
-        updated_env = (char **) malloc(sizeof(char *) * (toskip + 1));
+        updated_env = (char **)malloc(sizeof(char *) * (get_matrix_lenght(shell->copy_env)));
         i = 0;
         while (shell->copy_env[i] && i < toskip)
         {

@@ -21,6 +21,8 @@ static char *ft_findpath(char *cmd, char **env)
 
     i = 0;
     path = getpath(env);
+	if (!path)
+		return (NULL);
     paths = ft_split(path, ':');
     while(paths[i])
     {
@@ -37,7 +39,6 @@ static char *ft_findpath(char *cmd, char **env)
     }
 	free(path);
     free_matrix(paths);
-	//free(path);
     return (NULL);
 }
 
@@ -99,14 +100,14 @@ int executorprova(t_shell *shell)
 	int	fd[2];
     t_command *prev;
 	t_command *actual;
-	t_list		*first;
+	t_list	*first;
 
 	pid = 0;
 	tmp = dup(0);
 	ft_set_redirs(shell);
 	first = shell->cmds_list;
 	while (shell->cmds_list)
-	{	
+	{
 		while (shell->cmds_list->next && strcmp(((t_command *)shell->cmds_list->content)->cmd, "|"))
         {
             prev = (t_command *)shell->cmds_list->content;
@@ -125,9 +126,9 @@ int executorprova(t_shell *shell)
 			ft_export(shell, prev);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "unset"))
 			ft_unset(shell, prev);
-		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "exit"))
-			ft_exit(shell, first);
 		else if (!strcmp(actual->split_cmd[0], "exit"))
+			ft_exit(shell, first);
+		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "exit"))
 			ft_exit(shell, first);
 		else if (!strcmp(actual->split_cmd[0], "$?"))
 		{
@@ -157,12 +158,11 @@ int executorprova(t_shell *shell)
 						line = readline("> ");
 						if (!line || !strcmp(line, actual->heredoc))
 						{
+							free(line);
 							if (exec((actual->split_cmd), actual, tmp, shell->copy_env))
 								return (1);
 							break;
 						}
-						else
-							free(line);
 					}
 				}
 				else
@@ -226,8 +226,6 @@ int executorprova(t_shell *shell)
 								return (1);
 							break;
 						}
-						else
-							free(line);
 					}
 				}
 				else
