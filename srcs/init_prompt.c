@@ -16,16 +16,17 @@ static void	handle_siginit(int sig)
 {
 	if (sig == SIGINT)
 	{
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		// ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		printf("\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
 static void	handle_sigquit(int sig)
 {
-	if (sig == SIGQUIT)
-		return ;
+	(void)sig;
 	rl_on_new_line();
 	rl_redisplay();
 }
