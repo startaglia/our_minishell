@@ -81,6 +81,7 @@ void    ft_export(t_shell *shell, t_command *cmd)
         i++;
     }
     updated_env[i] = ft_strdup(cmd->split_cmd[1]);
+    shell->n_local_vars++;
     updated_env[++i] = NULL;
     free_matrix(shell->copy_env);
     shell->copy_env = updated_env; 
@@ -109,8 +110,9 @@ void    ft_unset(t_shell *shell, t_command *cmd)
             i++;
             toskip++;
         }
-        updated_env[toskip] = NULL;
+        updated_env[toskip] = 0;
         free_matrix(shell->copy_env);
+        shell->n_local_vars--;
         shell->copy_env = updated_env;
     }
 }

@@ -31,11 +31,13 @@ int	init_values(t_shell **shell)
 {
 	if (!init_mem(shell))
 		return (1);
-	(*shell)->expand_var = NULL;
-	(*shell)->expand_value = NULL;
 	(*shell)->line_to_split_expand = NULL;
 	(*shell)->prompt = NULL;
 	(*shell)->pipeline = NULL;
+	(*shell)->exp_values = NULL;
+	(*shell)->exp_vars = NULL;
+	(*shell)->n_exp_values = 0;
+	(*shell)->n_local_vars = 0;
 	(*shell)->line_to_split = NULL;
 	(*shell)->pipe_words = NULL;
 	(*shell)->copy_env = NULL;

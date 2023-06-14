@@ -42,12 +42,16 @@ void ft_free_list(t_list *list)
 	while (list)
 	{
 		tmp = list->next;
-		free(((t_command *)list->content)->cmd);
-		free_matrix(((t_command *)list->content)->split_cmd);
-		if (((t_command *)list->content)->heredoc != NULL)
-			free(((t_command *)list->content)->heredoc);
-		free(list->content);
-		free(list);
+		// if (list->content != NULL)
+		// 	free(list->content);
+		// if (list != NULL)
+		// 	free(list);
+		// if (((t_command *)list->content)->cmd != NULL)
+		// 	free(((t_command *)list->content)->cmd);
+		// if (((t_command *)list->content)->split_cmd != NULL)
+		// 	free_matrix(((t_command *)list->content)->split_cmd);
+		// if (((t_command *)list->content)->heredoc != NULL)
+		// 	free(((t_command *)list->content)->heredoc);
 		list = tmp;
 	}
 }
