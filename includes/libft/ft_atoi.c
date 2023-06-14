@@ -3,58 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/21 17:01:07 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/01/21 17:06:20 by dcarassi         ###   ########.fr       */
+/*   Created: 2023/01/20 10:58:23 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 10:26:51 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	int	ft_whitespaces(const char *nptr, int *ptr_i)
+static int	long_max(int j, int x)
 {
-	int	i;
+	int	y;
 
-	i = 0;
-	while ((nptr[i] >= 9 && nptr[i] <= 13) || nptr[i] == 32)
-		i = i + 1;
-	if (nptr[i] == 45)
-	{
-		i = i + 1;
-		*ptr_i = i;
-		return (-1);
-	}
-	else if (nptr[i] == 43)
-	{
-		i = i + 1;
-		*ptr_i = i;
-		return (1);
-	}
-	else if (!(nptr[i] >= 48 && nptr[i] <= 57))
-	{
-		*ptr_i = i;
-		return (0);
-	}
-	*ptr_i = i;
-	return (1);
+	y = 0;
+	if (j >= 19 && x == 1)
+		y = -1;
+	if (j >= 19 && x == -1)
+		y = 0;
+	return (y);
 }
 
-int	ft_atoi(const char *nptr)
+static int	check_sign(char c)
 {
-	int	i;
-	int	result;
-	int	j;
+	int	sign;
 
-	result = 0;
-	i = 0;
-	j = ft_whitespaces(nptr, &i);
-	while (nptr[i] && (nptr[i] >= 48 && nptr[i] <= 57))
+	sign = 1;
+	if (c == '-')
+			sign *= -1;
+	return (sign);
+}
+
+int	ft_atoi(char *str)
+{
+	int	sign;
+	int	res;
+	int	counter;
+
+	sign = 1;
+	res = 0;
+	counter = 0;
+	while ((*str >= 9 && *str <= 13) || *str == 32)
+		str++;
+	if (*str == '+' || *str == '-')
 	{
-		result = result * 10;
-		result += nptr[i] - 48;
-		i = i + 1;
+		sign = check_sign(*str);
+		str++;
 	}
-	result = result * j;
-	return (result);
+	while (*str >= '0' && *str <= '9')
+	{
+		res *= 10;
+		res += *str - 48;
+		counter++;
+		str++;
+	}
+	if (counter >= 19)
+		return (long_max(counter, sign));
+	return (sign * res);
 }

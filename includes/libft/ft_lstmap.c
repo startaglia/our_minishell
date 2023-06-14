@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <dcarassi@42.fr>                  +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/22 22:29:26 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/01/22 22:36:00 by dcarassi         ###   ########.fr       */
+/*   Created: 2023/01/24 10:08:01 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 10:09:46 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "libft.h"
+#include "libft.h"
 
-// t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
-// {
-// 	t_list	*new_list;
-// 	t_list	*tmp;
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+{
+	t_list	*newnode;
+	t_list	*newlist;
 
-// 	if (lst == NULL)
-// 		return (0);
-// 	new_list = 0;
-// 	while (lst)
-// 	{
-// 		tmp = ft_lstnew(f(lst->content));
-// 		if (tmp == NULL)
-// 		{
-// 			ft_lstclear(&tmp, *del);
-// 			return (0);
-// 		}
-// 		ft_lstadd_back(&new_list, tmp);
-// 		lst = lst->next;
-// 	}
-// 	return (new_list);
-// }
+	if (!f || !lst)
+		return (NULL);
+	newlist = NULL;
+	while (lst)
+	{
+		newnode = ft_lstnew(f(lst -> content));
+		if (!newnode)
+		{
+			ft_lstclear(&newlist, (*del));
+			return (NULL);
+		}
+		ft_lstadd_back(&newlist, newnode);
+		lst = lst -> next;
+	}
+	return (newlist);
+}

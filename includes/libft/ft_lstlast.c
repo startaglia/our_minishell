@@ -1,42 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim2.c                                      :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/16 09:17:48 by scastagn          #+#    #+#             */
-/*   Updated: 2023/05/16 10:38:30 by scastagn         ###   ########.fr       */
+/*   Created: 2023/01/24 09:57:22 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 09:58:17 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "libft.h"
 
-char	*ft_strtrim2(char *str, char del)
+t_list	*ft_lstlast(t_list *lst)
 {
-	int		i;
-	int		j;
-	int		count;
-	char	*rtr;
-
-	i = -1;
-	count = 0;
-	while (str[++i])
+	while (lst != NULL)
 	{
-		if (str[i] == del)
-			count++;
+		if (lst -> next == NULL)
+			return (lst);
+		lst = lst -> next;
 	}
-	rtr = (char *)malloc(sizeof(char) * (ft_strlen(str) - count + 1));
-	if (!rtr)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] != del)
-			rtr[j++] = str[i];
-		i++;
-	}
-	rtr[j++] = '\0';
-	return (rtr);
+	return (lst);
 }

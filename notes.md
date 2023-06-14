@@ -1,32 +1,39 @@
-# STEPS
-   1. GESTIRE LA SINTASSI DEI SIMBOLI                                             OK
-     1. DOPPI APICI     " 			                                                OK
-         1. devono essere un numero pari                                         OK
-     2. SINGOLO APICE 	'                                                        OK
-         1. devono essere un numero pari                                         OK
-     3. IN 				   <                                                        OK
-         1. devono esserer minimo uno massimo due                                OK
-     4. OUT				   >                                                        OK
-         1. minimo uno massimo due                                               OK
-     5. APPEND			   >>                                                       OK
-         1. minimo uno massimo due                                               OK
-     6. HEREDOC			<<                                                       OK
-         1. minimo uno massimo due                                               OK
-     7. PIPE				|                                                        OK
-         1. minimo uno massimo due                                               OK
-     8.  OR				   ||                                  (BONUS PART)         OK
-         1. minimo uno massimo due                          (BONUS PART)         OK
-     9.  AND				&&                                  (BONUS PART)                     
-          1.  possono essere solo due                       (BONUS PART) 
-     10. WILDCARD			*                                   (BONUS PART) 
-          1.  puó essere solo uno                           (BONUS PART) 
-     11. DOLLARO			$                                   (BONUS PART) 
-          1.  puó essere solo uno                           (BONUS PART) 
-     12. BRACKETS		   ()                                  (BONUS PART) 
-          1.  aperta e chiusa correttamente                 (BONUS PART)
-   
-   2. INIZIALIZZARE I VALORI E CREARE LE GIUSTE LOCAZIONI DI MEMORIA
-   3. CREARE LE FUNZIONI DI FREE MEM
-   4. CONTROLLARE SPAZI DOPO OPERATORI LOGICI
-     1. SE NON CI SONO METTERLI
-   5. SPLITTARE LA STRINGA CON TUTTE LE PAROLE SEPARATE DA SPAZIO
+// COME RIDIREZIONARE L'OUT: PER APPEND FLAG (O_APPEND) INVECE DI (O_TRUNC)
+
+fd = open("file.txt", O_WRONLY | O_CREAT | O_APPEND, 0777);
+copy_stdout = dup(STDOUT_FILENO);
+dup2(fd, STDOUT_FILENO);
+close(fd);
+executor(shell);
+dup2(copy_stdout, STDOUT_FILENO);
+close(copy_stdout);
+
+
+// COME RIDIREZIONARE L'IN
+
+if (access("file.txt", F_OK) == 0)
+            {
+                fd = open("file.txt", O_RDONLY);
+                copy_stdin = dup(STDIN_FILENO);
+                dup2(fd, STDIN_FILENO);
+                close(fd);
+                executor(shell);
+                dup2(copy_stdin, STDIN_FILENO);
+                close(copy_stdin);
+            }
+
+
+// COME FARE L'HEREDOC
+
+char *limiter = "limiter";
+            char *line;
+            while(1)
+            {
+                line = readline("> ");
+                if (!line || !strcmp(line, limiter))
+                {
+                    free(line);
+                    executor(shell);
+                    break;
+                }
+            }

@@ -1,75 +1,105 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_prompt.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
+/*   Updated: 2023/06/14 21:40:23 by scastagn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static void handle_siginit(int sig)
 {
     if (sig == SIGINT)
     {
-        //* AL RICEVIMENTO DEL SEGNATE SIGINT CON IOCTL MANDO INVIO UN CARATTERE DI NUOVA RIGA \n SULLO STANDARD INPUT (STDIN_FILENO); TIOCISTI SERVE A SIMULARE L'EFFETTO IMMEDIATO DI UNA NUOVA RIGA DOPO AVER PREMUTO CTRL +C (SEGNALE SIGINT)
         ioctl(STDIN_FILENO, TIOCSTI, "\n");
-        //* REPLACE LINE SOSTITUISCE LA LINEA CORRENTE CON UNA STRINGA VUOTA IN QUESTO CASO, IN PRATICA OGNI VOLTA CHE PREMO CTRL+C MI COMPARE QUELLO CHE C'E' SU REPLACE LINE
         rl_replace_line("", 0);
-        //* PIU O MENO FA LA STESSA COSA DI IOCTL, NELLO SPECIFICO SPOSTA IL CURSORE SU UNA NUOVA LINEA DEL TERMINALE
         rl_on_new_line();
     }
 }
 
 static void	handle_sigquit(int sig)
 {
-	(void)sig;
+	if (sig == SIGQUIT)
+        return ;
 	rl_on_new_line();
-    //*QUESTA PUNTA LA RIGA DI COMANDO ALLA POSIZIONE CORRENTE DEL CURSORE
 	rl_redisplay();
 }
 
-int main_loop(t_shell *shell, char **env)
+void    ft_setenv(t_shell *shell, char **envp)
 {
-    while (1)
-    {
-        //!PER TUTTI E DUE I SEGNALI NON HO BEN CAPITO L' UTILITA' DI ALCUNE CHIAMATE ALLE FUNZIONI. VANNO ACCETTATE COSI E BASTA. TIPO SE SIGQUIT LA COMMENTO FUNZIONE TUTTO ALLO STESSO MODO
-        //*CRTL+C
-        signal(SIGINT, handle_siginit);
-        //*CRTL+\*
-        signal(SIGQUIT, handle_sigquit);
-        shell->pipeline = readline(shell->prompt);
-        if (shell->pipeline == NULL)
-            exit (1);
-        if (check_syntax(shell))
-            continue ;
-        init_values(shell, env);
-        //! CHECK SINTAX MODIFICA IL VALORE DI SHELL->PIPE SE LA TROVA, PERO' INIT VALUE LO METTE UGUALE A 0 DI DEFAULT, CAPIRE SE SERVE TOGLIERLO DA CHECKSINTAX
+    int i;
 
-        //* SE NON C'È UNA PIPE VUOL DIRE CHE C'È SOLO UN COMANDO QUINDI NON SERVE PROPRIO ENTRARE DENTRO LA CONDIZIONE SUCCESSIVA. 
-        if (!shell->sng_pipe)
-            exec_single_cmd(shell);
-        else if (ft_strncmp(shell->pipeline, "", 1))
-        {
-            add_history(shell->pipeline);
-            shell->line_to_split = parsing(shell);
-            if (shell->line_to_split == NULL)
-                return (1);
-            shell->pipe_words = ft_split(shell->line_to_split, 32);
-            //printf("PARSING %s\n", shell->line_to_split);
-            // int i = -1;
-            // while (shell->pipe_words[++i])
-            //     printf("SPLIT: %s\n", shell->pipe_words[i]);
-            create_instruction_list(shell);
-            free(shell->pipe_words);
-            free(shell->line_to_split);
-        }
-        //free(shell->pipeline);
+    i = 0;
+    while (envp[i])
+        i++;
+    shell->copy_env = malloc (sizeof(char *) * (i + 1));
+    i = 0;
+    while (envp[i])
+    {
+        shell->copy_env[i] = ft_strdup(envp[i]);
+        i++;
     }
-    return (0);
+    shell->copy_env[i] = NULL;
 }
 
-int     init_prompt(t_shell *shell, char **env)
+static void main_loop(t_shell *shell)
+{
+    t_list  *start;
+
+    while (1)
+    {
+        signal(SIGINT, handle_siginit);
+        signal(SIGQUIT, handle_sigquit);
+        shell->pipeline = readline(shell->prompt);
+        if (!shell->pipeline)
+            break ;
+        if (check_syntax(shell->pipeline))
+        {
+            free(shell->pipeline);
+            continue ;
+        }
+        shell->line_to_split = parsing(shell);
+        if (ft_strncmp(shell->pipeline, "", 1))
+        {
+            add_history(shell->pipeline);
+            if (shell->line_to_split == NULL)
+                break ;
+            shell->pipe_words = ft_split_pipes(shell->line_to_split, 124);
+            shell->cmds = ft_add_pipes(shell->pipe_words);
+            create_cmd_list(shell);
+            start = shell->cmds_list;
+            if (!((t_command *)shell->cmds_list->content)->split_cmd[0])
+			{
+				ft_free_list(start);
+				ft_free_execve(shell);
+				ft_free_shell(shell);
+				continue ;
+			}
+            executorprova(shell);
+            ft_free_list(start);
+            ft_free_execve(shell);
+        }
+        ft_free_shell(shell);
+    }
+}
+
+void init_prompt(t_shell *shell, char **envp)
 {
     char    *user;
-    //* LA FUNZIONE GET ENV OTTIENE IL VALORE DELLE VARIABILI DI AMBIENTE, IN QUESTO CASO STO PRENDENDO IL VALORE DELLA VARIABILE USER CHE CONTIENE IL NOME DELL' UTENTE CORRENTE.
+
     user = getenv("USER");
     if (!user)
         user = "guest";
+    init_values(&shell);
     shell->prompt = ft_strjoin(user, "@minishell$ ");
-    main_loop(shell, env);
+    ft_setenv(shell, envp);
+    main_loop(shell);
     free(shell->prompt);
-    return (0);
+    free_matrix(shell->copy_env);
+    free(shell);
 }

@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   builtins3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:55:01 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/14 22:19:25 by scastagn         ###   ########.fr       */
+/*   Created: 2023/06/09 22:27:42 by scastagn          #+#    #+#             */
+/*   Updated: 2023/06/14 22:18:36 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int exit_status = 0;
-
-int	main(int argc, char **argv, char **envp)
+void    ft_exit(t_shell *shell, t_list *start)
 {
-    t_shell shell;
-
-    (void)argc;
-    (void)argv;
-    (void)envp;
-    init_prompt(&shell, envp);
+    if (ft_lstsize(start) > 2)
+        return ;
     printf("exit\n");
-    return (0);
+    ft_free_shell(shell);
+    ft_free_execve(shell);
+    ft_free_list(shell->cmds_list);
+    exit(0);
 }

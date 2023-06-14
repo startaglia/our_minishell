@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: startagl <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
-#    Updated: 2023/05/11 11:15:43 by startagl         ###   ########.fr        #
+#    Updated: 2023/06/14 21:35:58 by scastagn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME        	= minishell
 
 CC          	= cc
 
-CFLAGS      	= -Wall -Wextra -Werror -g
+CFLAGS      	= -Wall -Wextra -Werror -g -fcommon -fsanitize=address
 
 INCLUDE     	= includes/
 
@@ -25,6 +25,7 @@ EXECUTOR_DIR	= srcs/executor
 LIBFT_DIR		= includes/libft
 OBJ_DIR     	= objs
 
+PRINTF			= printf
 SRCS        	= $(wildcard $(SRC_DIR)/*.c)
 OBJS        	= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
@@ -47,29 +48,29 @@ RM          	= rm -rf
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(SYNTAX_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(PARSING_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(EXECUTOR_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(LIBFT_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT)
 	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
 	@echo "[+] $(NAME) compiled"
 
-all: $(NAME)
+all:	$(NAME)
 
 clean:
 	@$(RM) $(OBJ_DIR)

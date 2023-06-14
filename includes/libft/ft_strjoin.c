@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: scastagn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/20 12:42:59 by dcarassi          #+#    #+#             */
-/*   Updated: 2023/01/20 12:50:29 by dcarassi         ###   ########.fr       */
+/*   Created: 2023/01/24 09:44:31 by scastagn          #+#    #+#             */
+/*   Updated: 2023/01/24 09:47:11 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,26 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*d;
-	int		i;
+	int		k;
+	int		j;
+	size_t	joinsize;
+	char	*join;
 
 	if (!s1 || !s2)
 		return (NULL);
-	d = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!d)
+	joinsize = ft_strlen(s1) + ft_strlen(s2) + 1;
+	join = malloc(sizeof (char) * joinsize);
+	if (!join)
 		return (NULL);
-	i = 0;
-	while (s1[i])
+	k = 0;
+	while (s1[k])
 	{
-		d[i] = s1[i];
-		i++;
+		join[k] = s1[k];
+		k++;
 	}
-	i = 0;
-	while (s2[i])
-	{
-		d[i + ft_strlen(s1)] = s2[i];
-		i++;
-	}
-	d[i + ft_strlen(s1)] = '\0';
-	return (d);
+	j = 0;
+	while (s2[j])
+		join[k++] = s2[j++];
+	join [k] = 0;
+	return (join);
 }
