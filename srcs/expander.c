@@ -13,6 +13,12 @@ static void    ft_line_to_split_expand(t_shell *shell)
     g = 0; // contatore di exp_values
     while(shell->line_to_split[i])
     {
+        if (shell->line_to_split[i] == 39)
+        {
+            i++;
+            while (shell->line_to_split[i + 1] && shell->line_to_split[i] != 39)
+                i++;
+        }
         if (shell->line_to_split[i] == '$')
         {
             i++;
@@ -46,6 +52,12 @@ static void  count_exp_vars(t_shell *shell)
     cont = 0;
     while (shell->line_to_split[i])
     {
+        if (shell->line_to_split[i] == 39)
+        {
+            i++;
+            while (shell->line_to_split[i + 1] && shell->line_to_split[i] != 39)
+                i++;
+        }
         if (shell->line_to_split[i] == '$')
         {
             i++;
@@ -56,9 +68,13 @@ static void  count_exp_vars(t_shell *shell)
         else
             i++;
     }
-    shell->n_exp_values = cont;    
-    shell->exp_vars = malloc(sizeof(char *) * cont + 1);
-    shell->exp_values = malloc(sizeof(char *) * cont + 1);
+    shell->n_exp_values = cont; 
+    // printf("CONT: %d\n", cont);
+    if (shell->n_exp_values > 0)
+    {
+        shell->exp_vars = malloc(sizeof(char *) * cont + 1);
+        shell->exp_values = malloc(sizeof(char *) * cont + 1);
+    }
 }
 
 static int    filter_expand(t_shell *shell)
@@ -81,11 +97,17 @@ static int    filter_expand(t_shell *shell)
         //     while (shell->line_to_split[i] != 39)
         //         i++;
         // }
+        if (shell->line_to_split[i] == 39)
+        {
+            i++;
+            while (shell->line_to_split[i + 1] && shell->line_to_split[i] != 39)
+                i++;
+        }
         if (shell->line_to_split[i] == '$')
         {
             f = 1;
             i++;
-            while(shell->line_to_split[i] && shell->line_to_split[i] != 32)
+            while(shell->line_to_split[i] != 34 && shell->line_to_split[i] && shell->line_to_split[i] != 32)
             {
                 i++;
                 j++;
@@ -105,7 +127,8 @@ static int    filter_expand(t_shell *shell)
         else
             i++;
     }
-    shell->exp_vars[g] = NULL;
+    if (g)
+        shell->exp_vars[g] = NULL;
     return (f);
 }
 
@@ -130,6 +153,12 @@ static int    get_var_values(t_shell *shell)
     // }
     while (g < shell->n_exp_values)
     {
+        if (shell->line_to_split[i] == 39)
+        {
+            i++;
+            while (shell->line_to_split[i + 1] && shell->line_to_split[i] != 39)
+                i++;
+        }
         if (shell->exp_vars[g][0] == '?')
         {
             ret = 1;
@@ -216,11 +245,11 @@ int    expander(t_shell *shell)
         while(shell->line_to_split_expand[i] == 32)
             i++;
         if (i == ft_strlen(shell->line_to_split_expand))
-            {
-                free(shell->line_to_split_expand);
-                shell->line_to_split_expand = strdup("");
-                return (0);
-            }
+        {
+            free(shell->line_to_split_expand);
+            shell->line_to_split_expand = strdup("");
+            return (0);
+        }
     }
     return (1);
 }
