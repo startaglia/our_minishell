@@ -46,6 +46,12 @@ static int    filter_expand(t_shell *shell)
     while (shell->line_to_split[i])
     {
         j = 0;
+        // if (shell->line_to_split[i] == 39)
+        // {
+        //     i++;
+        //     while (shell->line_to_split[i] != 39)
+        //         i++;
+        // }
         if (shell->line_to_split[i] == '$')
         {
             f = 1;
@@ -103,16 +109,14 @@ static int    get_var_values(t_shell *shell)
 
 void    expander(t_shell *shell)
 {
-    shell->expand_var = NULL;
-    shell->expand_value = NULL;
     shell->line_to_split_expand = NULL;
     if (filter_expand(shell))
     {
         if (get_var_values(shell))
         {
+            
+            shell->line_to_split_expand = malloc(sizeof(char) * (ft_strlen(shell->line_to_split) - ft_strlen(shell->expand_var) + ft_strlen(shell->expand_value) + 1));
             free(shell->expand_var);
-            // shell->line_to_split_expand = malloc(sizeof(char) * (ft_strlen(shell->expand_value) + ft_strlen(shell->line_to_split) + 1));
-            shell->line_to_split_expand = malloc(1024);
             ft_line_to_split_expand(shell);
             free(shell->expand_value);
         }
