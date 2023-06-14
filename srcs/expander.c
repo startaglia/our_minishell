@@ -190,9 +190,10 @@ static int  get_exp_line_length(t_shell *shell)
     return (ret);
 }
 
-void    expander(t_shell *shell)
+int    expander(t_shell *shell)
 {
     int exp_line_length; // lunghezza della linea espansia
+    size_t i;
 
     exp_line_length = 0;
     shell->line_to_split_expand = NULL;
@@ -209,4 +210,17 @@ void    expander(t_shell *shell)
             free_matrix(shell->exp_values);
         }
     }
+    if (shell->line_to_split_expand != NULL)
+    {
+        i = 0;
+        while(shell->line_to_split_expand[i] == 32)
+            i++;
+        if (i == ft_strlen(shell->line_to_split_expand))
+            {
+                free(shell->line_to_split_expand);
+                shell->line_to_split_expand = strdup("");
+                return (0);
+            }
+    }
+    return (1);
 }

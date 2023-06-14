@@ -64,8 +64,8 @@ static void	main_loop(t_shell *shell)
 			continue ;
 		}
 		shell->line_to_split = parsing(shell);
-		expander(shell);
-		if (ft_strncmp(shell->pipeline, "", 1))
+		int i = expander(shell);
+		if (ft_strncmp(shell->pipeline, "", 1) && i)
 		{
 			add_history(shell->pipeline);
 			if (shell->line_to_split == NULL)

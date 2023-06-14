@@ -105,7 +105,7 @@ void			ft_unset(t_shell *shell, t_command *cmd);
 void			ft_exit(t_shell *shell, t_list *start);
 
 //expander
-void	   		expander(t_shell *shell);
+int		   		expander(t_shell *shell);
 
 //free
 int				free_matrix(char **matrix);
