@@ -110,11 +110,11 @@ static int    get_var_values(t_shell *shell)
 void    expander(t_shell *shell)
 {
     shell->line_to_split_expand = NULL;
+    shell->expand_var = NULL;
     if (filter_expand(shell))
     {
         if (get_var_values(shell))
         {
-            
             shell->line_to_split_expand = malloc(sizeof(char) * (ft_strlen(shell->line_to_split) - ft_strlen(shell->expand_var) + ft_strlen(shell->expand_value) + 1));
             free(shell->expand_var);
             ft_line_to_split_expand(shell);
