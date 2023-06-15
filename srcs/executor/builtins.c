@@ -26,6 +26,7 @@ int ft_is_builtin(char *cmd)
 void    ft_echo(char **args)
 {
     int i;
+    int j = 0;
     int newline;
 
     i = 1;
@@ -38,7 +39,15 @@ void    ft_echo(char **args)
         newline = 0;
     while (args[i])
     {
-        printf("%s ", args[i]);
+        j = 0;
+        while (args[i][j])
+        {
+            if (args[i][j] == 34)
+                j++;
+            printf("%c", args[i][j]);
+            j++;
+        }
+        printf("\n");
         i++;
     }
     if (!newline)

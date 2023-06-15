@@ -123,6 +123,7 @@ static int    filter_expand(t_shell *shell)
                     i++;
                     j++;
                 }
+                // printf("%s\n", shell->line_to_split);
                 shell->exp_vars[g] = malloc(sizeof(char) * (j + 1));
                 // printf("J %d\n", j);
                 // printf("I %d\n", i);
@@ -135,15 +136,11 @@ static int    filter_expand(t_shell *shell)
                     j++;
                 }
                 shell->exp_vars[g][j] = '\0';
-                // printf("cars %s\n", shell->exp_vars[0]);
-                // printf("cars %s\n", shell->exp_vars[1]);
-
-
-                    // shell->exp_vars[g][j ] = '\0';
                 g++;
             }
             else
             {
+                
                 i++;
                 while(shell->line_to_split[i] != 34 && shell->line_to_split[i] && shell->line_to_split[i] != 32)
                 {
@@ -182,23 +179,8 @@ static int    get_var_values(t_shell *shell)
     ret = 0;
     g = 0;
     temp = NULL;
-    // if (!shell->exp_vars)
-        // return (ret);
-    // if (shell->exp_vars[g][0] == '?')
-    // {
-    //     shell->exp_values[g] = ft_itoa(exit_status);
-    //     g++;
-    //     return (1);
-    // }
-    // printf("LINE_TO_SPLIT:::::%s\n", shell->line_to_split);
-
     while (g < shell->n_exp_values)
     {
-        // if (shell->line_to_split[i] == 34 && shell->line_to_split[i])
-        // {
-        //     i++;
-        //     printf("VALUE IN GET_VAR_VALUE %c\n", shell->line_to_split[i]);
-        // }
         if (shell->line_to_split[i] == 39)
         {
             i++;
@@ -214,16 +196,22 @@ static int    get_var_values(t_shell *shell)
         }
         else
         {
+            // printf("%c\n", shell->line_to_split[i]);
+
             while(shell->copy_env[i])
             {
                 // printf("COPY_ENV_I %s\n", shell->copy_env[i]);
                 temp = trim_def(shell->copy_env[i]);
+                // printf("TEMP---->%s\n", temp);
+
                 if (!strncmp(shell->copy_env[i], shell->exp_vars[g], strlen(shell->exp_vars[g])))
                 {
+                    // printf("%c\n", shell->line_to_split[i]);
                     // printf("EXPVAR:::::%s\n", shell->exp_vars[g]);
                     ret = 1;
                     // temp = trim_def(shell->copy_env[i]);
                     shell->exp_values[g] = strdup(temp);
+
                     free(temp);
                     break ;
                     // g++;
@@ -279,12 +267,13 @@ int    expander(t_shell *shell)
     shell->line_to_split_expand = NULL;
     count_exp_vars(shell);
 
-    // printf("%s\n", shell->line_to_split);
     if (filter_expand(shell))
     {
         if (get_var_values(shell))
         {
             exp_line_length = get_exp_line_length(shell);
+            printf("LUNGHEZZA LINEA %d\n", exp_line_length);
+            printf("EXPVALUES---->      %s\n", shell->exp_values[0]);
             shell->line_to_split_expand = malloc(sizeof(char) * (exp_line_length + 1));
             // free(shell->expand_var);
             free_matrix(shell->exp_vars);
