@@ -73,7 +73,7 @@ static void  count_exp_vars(t_shell *shell)
             i++;
     }
     shell->n_exp_values = cont; 
-    if (shell->n_exp_values > 0)
+    if (cont)
     {
         shell->exp_vars = malloc(sizeof(char *) * cont + 1);
         shell->exp_values = malloc(sizeof(char *) * cont + 1);
@@ -149,8 +149,8 @@ static int    filter_expand(t_shell *shell)
         else
             i++;
     }
-    // if (g)
-    // shell->exp_vars[g] = NULL;
+    if (g)
+        shell->exp_vars[g] = NULL;
     return (f);
 }
 
@@ -204,7 +204,8 @@ static int    get_var_values(t_shell *shell)
         i = 0;
         g++;
     }
-    // shell->exp_values[g] = 0;
+    if (g)
+        shell->exp_values[g] = NULL;
     return (ret);
 }
 
@@ -246,8 +247,8 @@ int    expander(t_shell *shell)
             exp_line_length = get_exp_line_length(shell);
             shell->line_to_split_expand = malloc(sizeof(char) * (exp_line_length + 1));
             ft_line_to_split_expand(shell);
-            // free_matrix(shell->exp_vars);
-            // free_matrix(shell->exp_values);
+            free_matrix(shell->exp_vars);
+            free_matrix(shell->exp_values);
         }
     }
     if (shell->line_to_split_expand != NULL)

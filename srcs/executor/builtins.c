@@ -44,9 +44,10 @@ void    ft_echo(char **args)
         {
             if (args[i][j] == 34)
                 j++;
-            printf("%c", args[i][j]);
+            write(1, &args[i][j], 1);
             j++;
         }
+        write(1, " ", 1);
         i++;
     }
     if (!newline)

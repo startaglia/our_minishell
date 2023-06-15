@@ -14,7 +14,7 @@ NAME        	= minishell
 
 CC          	= cc
 
-CFLAGS      	= -Wall -Wextra -Werror -g -fcommon -fsanitize=address
+CFLAGS      	= -Wall -Wextra -Werror -g #-fcommon -fsanitize=address
 
 INCLUDE     	= includes/
 

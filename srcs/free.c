@@ -33,10 +33,6 @@ void ft_free_shell(t_shell *shell)
     	free(shell->line_to_split);
 	if (shell->line_to_split_expand != NULL)
 		free(shell->line_to_split_expand);
-    // if (shell->exp_vars != NULL)
-		// free_matrix(shell->exp_vars);
-    // if (shell->exp_vars != NULL)
-		// free_matrix(shell->exp_values);
 }
 
 void ft_free_list(t_list *list)
@@ -46,16 +42,16 @@ void ft_free_list(t_list *list)
 	while (list)
 	{
 		tmp = list->next;
-		// if (list->content != NULL)
-			// free(list->content);
+		if (((t_command *)list->content)->cmd != NULL)
+			free(((t_command *)list->content)->cmd);
+		if (((t_command *)list->content)->split_cmd != NULL)
+			free_matrix(((t_command *)list->content)->split_cmd);
+		if (((t_command *)list->content)->heredoc != NULL)
+			free(((t_command *)list->content)->heredoc);
+		if (list->content != NULL)
+			free(list->content);
 		if (list != NULL)
 			free(list);
-		// if (((t_command *)list->content)->cmd != NULL)
-			// free(((t_command *)list->content)->cmd);
-		// if (((t_command *)list->content)->split_cmd != NULL)
-			// free_matrix(((t_command *)list->content)->split_cmd);
-		// if (((t_command *)list->content)->heredoc != NULL)
-			// free(((t_command *)list->content)->heredoc);
 		list = tmp;
 	}
 }
