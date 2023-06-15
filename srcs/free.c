@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:57:08 by startagl          #+#    #+#             */
-/*   Updated: 2023/06/14 21:31:00 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/16 00:41:36 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void ft_free_shell(t_shell *shell)
 		free(shell->pipeline);
 	if (shell->line_to_split)
     	free(shell->line_to_split);
+	if (shell->line_to_split_exp)
+		free(shell->line_to_split_exp);
 }
 
 void ft_free_execve(t_shell *shell)

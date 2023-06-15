@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 21:37:44 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/15 23:30:06 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/16 00:51:48 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char    *expander(char *line, t_shell *shell)
     int k;
     int start;
 
-    expanded = malloc(sizeof(char) * 100000);
+    expanded = malloc(sizeof(char) * 1024);
     i = 0;
     k = 0;
     start = 0;
@@ -62,8 +62,13 @@ char    *expander(char *line, t_shell *shell)
         if (line[i] == 36)
         {
             i++;
+            if (line[i] == 63)
+            {
+                printf("vez fai qualcosa qui\n");
+                //itoa exit_status ecc...
+            }
             start = i;
-            while (ft_isalpha(line[i]) && line[i + 1])
+            while (ft_isalpha(line[i]) && line[i])
                 i++;
             varname = ft_strdupfrom(line, start, i);
             varvalue = ft_findvalue(varname, shell->copy_env);
@@ -71,7 +76,8 @@ char    *expander(char *line, t_shell *shell)
             if (!varvalue)
                 continue ;
             expanded = strcat(expanded, varvalue);
-            k = start + ft_strlen(varvalue);
+            //k = start + ft_strlen(varvalue) -1 ;
+            k = ft_strlen(expanded);
         }
         else
         {
@@ -81,7 +87,7 @@ char    *expander(char *line, t_shell *shell)
         }
         if (varvalue)
             free(varvalue);
-        printf("expanded vale : %s\n", expanded);
+        expanded[k] = 0;
     }
     return (expanded);
 }
