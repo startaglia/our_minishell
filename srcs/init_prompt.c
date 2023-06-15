@@ -43,6 +43,7 @@ void	ft_setenv(t_shell *shell, char **envp)
 	while (envp[i])
 	{
 		shell->copy_env[i] = ft_strdup(envp[i]);
+		shell->n_env++;
 		i++;
 	}
 	shell->copy_env[i] = NULL;
@@ -65,6 +66,7 @@ static void	main_loop(t_shell *shell)
 			continue ;
 		}
 		shell->line_to_split = parsing(shell);
+		// printf("%s\n", shell->line_to_split);
 		int i = expander(shell);
 		if (ft_strncmp(shell->pipeline, "", 1) && i)
 		{

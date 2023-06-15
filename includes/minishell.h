@@ -42,6 +42,7 @@ typedef struct s_command
 
 typedef struct s_shell
 {
+	int					n_env;
 	char				*prompt;
 	char				*pipeline;
 	char				*line_to_split;

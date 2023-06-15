@@ -31,6 +31,7 @@ int	init_values(t_shell **shell)
 {
 	if (!init_mem(shell))
 		return (1);
+	(*shell)->n_env = 0;
 	(*shell)->line_to_split_expand = NULL;
 	(*shell)->prompt = NULL;
 	(*shell)->pipeline = NULL;
