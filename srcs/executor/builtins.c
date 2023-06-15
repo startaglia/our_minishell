@@ -47,7 +47,7 @@ void    ft_echo(char **args)
             printf("%c", args[i][j]);
             j++;
         }
-        printf("\n");
+        printf(" ");
         i++;
     }
     if (!newline)
