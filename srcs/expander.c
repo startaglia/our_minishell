@@ -6,9 +6,7 @@ static void    ft_line_to_split_expand(t_shell *shell)
     int j;
     int k;
     int g;
-    int z;
-    
-    z = 0;
+
     i = 0; // contatore di line to split
     j = 0; // contatore di line to split expand
     k = 0; // contatore di expand_value
@@ -21,12 +19,12 @@ static void    ft_line_to_split_expand(t_shell *shell)
             while (shell->line_to_split[i + 1] && shell->line_to_split[i] != 39)
                 i++;
         }
+        if (shell->line_to_split[i] == 34 && shell->line_to_split[i + 1] == '$')
+            i++;
         if (shell->line_to_split[i] == '$')
         {
-            // if (shell->line_to_split[i - 1] == 34)
-            
             i++;
-            while(shell->line_to_split[i] && (shell->line_to_split[i] != ' ' && shell->line_to_split[i] != 34))
+            while(shell->line_to_split[i] && (shell->line_to_split[i] != ' '))
                 i++;
             while(shell->exp_values[g][k])
             {
@@ -37,6 +35,8 @@ static void    ft_line_to_split_expand(t_shell *shell)
             g++;
             k = 0;
         }
+        if (shell->line_to_split[i] == '"' && shell->line_to_split[i + 1] == '$')
+            i++;
         if (shell->line_to_split[i])
         {
             shell->line_to_split_expand[j] = shell->line_to_split[i];
@@ -56,11 +56,6 @@ static void  count_exp_vars(t_shell *shell)
     cont = 0;
     while (shell->line_to_split[i])
     {
-        // if (shell->line_to_split[i] == 34 && shell->line_to_split[i])
-        // {
-        //     i++;
-        //     printf("value %c\n", shell->line_to_split[i]);
-        // }
         if (shell->line_to_split[i] == 39)
         {
             i++;
@@ -78,7 +73,6 @@ static void  count_exp_vars(t_shell *shell)
             i++;
     }
     shell->n_exp_values = cont; 
-    // printf("CONT: %d\n", cont);
     if (shell->n_exp_values > 0)
     {
         shell->exp_vars = malloc(sizeof(char *) * cont + 1);
@@ -92,9 +86,7 @@ static int    filter_expand(t_shell *shell)
     int     j;
     int     f;
     int     g;
-    int     k;
 
-    k = 0;
     i = 0; // contatore di line to split
     j = 0; // contatore di expand var
     f = 0; // valore di ritorno
@@ -113,19 +105,15 @@ static int    filter_expand(t_shell *shell)
             f = 1;
             if (shell->line_to_split[i - 1] == 34 && shell->line_to_split[i])
             {
-                k = 1;
                 i++;
                 while(shell->line_to_split[i] != 34 && shell->line_to_split[i])
                 {
                     if (shell->line_to_split[i] == 32)
                         break ;
-                    // printf("VALUE %c\n", shell->line_to_split[i]);
                     i++;
                     j++;
                 }
                 shell->exp_vars[g] = malloc(sizeof(char) * (j + 1));
-                // printf("J %d\n", j);
-                // printf("I %d\n", i);
                 i = i - j;
                 j = 0;
                 while(shell->line_to_split[i + 1] && shell->line_to_split[i] != 34)
@@ -135,11 +123,6 @@ static int    filter_expand(t_shell *shell)
                     j++;
                 }
                 shell->exp_vars[g][j] = '\0';
-                // printf("cars %s\n", shell->exp_vars[0]);
-                // printf("cars %s\n", shell->exp_vars[1]);
-
-
-                    // shell->exp_vars[g][j ] = '\0';
                 g++;
             }
             else
@@ -182,23 +165,8 @@ static int    get_var_values(t_shell *shell)
     ret = 0;
     g = 0;
     temp = NULL;
-    // if (!shell->exp_vars)
-        // return (ret);
-    // if (shell->exp_vars[g][0] == '?')
-    // {
-    //     shell->exp_values[g] = ft_itoa(exit_status);
-    //     g++;
-    //     return (1);
-    // }
-    // printf("LINE_TO_SPLIT:::::%s\n", shell->line_to_split);
-
     while (g < shell->n_exp_values)
     {
-        // if (shell->line_to_split[i] == 34 && shell->line_to_split[i])
-        // {
-        //     i++;
-        //     printf("VALUE IN GET_VAR_VALUE %c\n", shell->line_to_split[i]);
-        // }
         if (shell->line_to_split[i] == 39)
         {
             i++;
@@ -216,33 +184,26 @@ static int    get_var_values(t_shell *shell)
         {
             while(shell->copy_env[i])
             {
-                // printf("COPY_ENV_I %s\n", shell->copy_env[i]);
                 temp = trim_def(shell->copy_env[i]);
                 if (!strncmp(shell->copy_env[i], shell->exp_vars[g], strlen(shell->exp_vars[g])))
                 {
-                    // printf("EXPVAR:::::%s\n", shell->exp_vars[g]);
                     ret = 1;
-                    // temp = trim_def(shell->copy_env[i]);
                     shell->exp_values[g] = strdup(temp);
                     free(temp);
                     break ;
-                    // g++;
                 }
                 free(temp);
                 i++;
             }
-            // printf("SONO QUA %d\n", ret);
             if (!ret)
             {
                 ret = 1;
-                // printf("SONO QUA\n");
                 shell->exp_values[g] = strdup("");
             }
         }
         i = 0;
         g++;
     }
-    // printf("#env[i]: %d\n", i);
     shell->exp_values[g] = 0;
     return (ret);
 }
@@ -272,24 +233,19 @@ static int  get_exp_line_length(t_shell *shell)
 int    expander(t_shell *shell)
 {
     int exp_line_length; // lunghezza della linea espansia
-    size_t i;
+    size_t i;   // check valore di ritorno
 
     i = 0;
     exp_line_length = 0;
     shell->line_to_split_expand = NULL;
     count_exp_vars(shell);
-
-    // printf("%s\n", shell->line_to_split);
     if (filter_expand(shell))
     {
         if (get_var_values(shell))
         {
             exp_line_length = get_exp_line_length(shell);
             shell->line_to_split_expand = malloc(sizeof(char) * (exp_line_length + 1));
-            // free(shell->expand_var);
             free_matrix(shell->exp_vars);
-            // if (shell->line_to_split[i])
-            // while(shell->line_to_split);
             ft_line_to_split_expand(shell);
             free_matrix(shell->exp_values);
         }
