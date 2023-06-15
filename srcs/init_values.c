@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:30:10 by startagl          #+#    #+#             */
-/*   Updated: 2023/06/14 21:22:45 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/15 21:47:35 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	init_values(t_shell **shell)
 	(*shell)->prompt = NULL;
 	(*shell)->pipeline = NULL;
 	(*shell)->line_to_split = NULL;
+	(*shell)->line_to_split_exp = NULL;
 	(*shell)->pipe_words = NULL;
 	(*shell)->copy_env = NULL;
 	return (0);

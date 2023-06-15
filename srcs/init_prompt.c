@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/14 21:40:23 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/15 22:21:23 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static void handle_siginit(int sig)
 static void	handle_sigquit(int sig)
 {
 	if (sig == SIGQUIT)
-        return ;
+         return ;
+    (void)sig;
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -64,6 +65,9 @@ static void main_loop(t_shell *shell)
             continue ;
         }
         shell->line_to_split = parsing(shell);
+        shell->line_to_split_exp = expander(shell->line_to_split, shell);
+        printf("line expanded : %s\n", shell->line_to_split_exp);
+        free(shell->line_to_split_exp);
         if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);

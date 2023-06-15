@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/14 21:45:14 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/15 21:48:30 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_shell
 	char				*prompt;
 	char				*pipeline;
 	char				*line_to_split;
+	char				*line_to_split_exp;
 	char				**pipe_words;
 	char				**cmds;
 	char				**copy_env;
@@ -71,6 +72,7 @@ int				check_pipes(char *str);
 
 // parser
 char			*parsing(t_shell *shell);
+char			*expander(char *line, t_shell *shell);
 char			**ft_split_pipes(char const *s, char c);
 char			**ft_add_pipes(char **pipe_words);
 void			create_cmd_list(t_shell *shell);
