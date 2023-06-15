@@ -21,6 +21,8 @@ static void	handle_siginit(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		// return ;
+		(void)sig;
 	}
 }
 
@@ -29,6 +31,7 @@ static void	handle_sigquit(int sig)
 	(void)sig;
 	rl_on_new_line();
 	rl_redisplay();
+	// return ;
 }
 
 void	ft_setenv(t_shell *shell, char **envp)
@@ -88,8 +91,8 @@ static void	main_loop(t_shell *shell)
 				continue ;
 			}
 			executorprova(shell);
-			ft_free_list(start);
 			ft_free_execve(shell);
+			ft_free_list(start);
 		}
 		ft_free_shell(shell);
 	}
