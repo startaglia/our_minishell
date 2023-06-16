@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 21:37:44 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/16 00:51:48 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/15 23:30:06 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char    *ft_findvalue(char *name, char **env)
             return (trim_def(env[i]));
         i++;
     }
-    return (NULL);
+    return (strdup(""));
 }
 
 char    *expander(char *line, t_shell *shell)
@@ -52,42 +52,75 @@ char    *expander(char *line, t_shell *shell)
     int k;
     int start;
 
-    expanded = malloc(sizeof(char) * 1024);
+    expanded = malloc(sizeof(char) * 512);
     i = 0;
     k = 0;
     start = 0;
     while (line[i])
     {
-        varvalue = NULL;
+        if (line[i] == 34 && line[i + 1] == 36)
+            i++;
+        if (line[i] == 39)
+        {
+            while (line[i] && line[i] != 39)
+                i++;
+        }
         if (line[i] == 36)
         {
-            i++;
-            if (line[i] == 63)
+            if (line[i + 1] == '?')
             {
-                printf("vez fai qualcosa qui\n");
-                //itoa exit_status ecc...
+                if (line[i + 2] == 34 || line[i + 2] == ' ' || !line[i + 2])
+                {
+                    varvalue = ft_itoa(exit_status);
+                    expanded = strcat(expanded, varvalue);
+                    free(varvalue);
+                    i = i + 2;
+                    if (line[i] == 34)
+                        i++;
+                    k = k + 1;
+                    continue ;
+                }
             }
+            else
+            {
+            varname = NULL;
+            varvalue = NULL;
+            i++;
             start = i;
-            while (ft_isalpha(line[i]) && line[i])
+            while (line[i] && line[i + 1] != ' ')
                 i++;
+            if (line[i - 1] == 34)
+                i--;
+            // if (line[i - 1] == 34)
+                // i++;
             varname = ft_strdupfrom(line, start, i);
+            if (varname)
+                i++;
             varvalue = ft_findvalue(varname, shell->copy_env);
+            // if (varvalue)
+                // i--;
             free (varname);
-            if (!varvalue)
-                continue ;
             expanded = strcat(expanded, varvalue);
-            //k = start + ft_strlen(varvalue) -1 ;
+            if (line[i] == 34)
+                i++;
+            free(varvalue);
+            // k = start + ft_strlen(varvalue);
             k = ft_strlen(expanded);
+            }
         }
         else
         {
-            expanded[k] = line[i];
-            i++;
-            k++;
+            while (line [i] && line[i] != 36)
+            {
+                if (line[i] == 34)
+                    break ;
+                expanded[k] = line[i];
+                i++;
+                k++;
+            }
         }
-        if (varvalue)
-            free(varvalue);
-        expanded[k] = 0;
+        expanded[k] = '\0';
+        // printf("expanded vale : %s\n", expanded);
     }
     return (expanded);
 }

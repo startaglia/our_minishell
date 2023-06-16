@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/16 00:57:37 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/14 22:18:15 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,6 @@ int executorprova(t_shell *shell)
 			ft_export(shell, actual);
 		else if(!strcmp(actual->split_cmd[0], "unset"))
 			ft_unset(shell, actual);
-		else if(!strcmp(actual->split_cmd[0], "$?"))
-		{
-			printf("%d: command not found\n", exit_status);
-			exit_status = 127;
-		}
 		else if (!strcmp(actual->split_cmd[0], "exit"))
 			ft_exit(shell, first);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "cd"))
