@@ -60,7 +60,7 @@ char    *expander(char *line, t_shell *shell)
     start = 0;
     while (line[i])
     {
-        if (line[i] == 34 && line[i + 1] == 36)
+        if (line[i] == 34)
             i++;
         if (line[i] == 39)
         {
@@ -85,42 +85,47 @@ char    *expander(char *line, t_shell *shell)
             }
             else
             {
-            i++;
-            start = i;
-            while (line[i] && line[i + 1] != ' ')
                 i++;
-            if (line[i - 1] == 34)
-                i--;
-            // if (line[i - 1] == 34)
-                // i++;
-            varname = ft_strdupfrom(line, start, i);
-            if (varname)
-                i++;
-            varvalue = ft_findvalue(varname, shell->copy_env);
-            // if (varvalue)
-                // i--;
-            free (varname);
-            expanded = strcat(expanded, varvalue);
-            if (line[i] && line[i] == 34)
-                i++;
-            free(varvalue);
-            // k = start + ft_strlen(varvalue);
-            k = ft_strlen(expanded);
+                start = i;
+                while (line[i] && line[i + 1] != ' ')
+                    i++;
+                if (line[i - 1] == 34)
+                    i--;
+                varname = ft_strdupfrom(line, start, i);
+                if (varname)
+                    i++;
+                varvalue = ft_findvalue(varname, shell->copy_env);
+                free (varname);
+                expanded = strcat(expanded, varvalue);
+                if (line[i] && line[i] == 34)
+                    i++;
+                free(varvalue);
+                k = ft_strlen(expanded);
             }
         }
         else
         {
             while (line[i] && line[i] != 36)
             {
-                if (line[i] == 34)
+                if (line[i] == 34 || line[i] == '~')
                     break ;
                 expanded[k] = line[i];
                 i++;
                 k++;
             }
         }
+        if (line[i] == '~')
+        {
+            if (line[i + 1] == 34 || !line[i + 1] || line[i + 1] != '~')
+            {
+                varvalue = ft_findvalue("HOME", shell->copy_env);
+                expanded = strcat(expanded, varvalue);
+                k = ft_strlen(expanded);
+                free(varvalue);
+                i++;
+            }
+        }
         expanded[k] = '\0';
-        // printf("expanded vale : %s\n", expanded);
     }
     k = 0;
     size_t check = 0;
