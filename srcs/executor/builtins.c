@@ -42,7 +42,7 @@ void    ft_echo(char **args)
         j = 0;
         while (args[i][j])
         {
-            if (args[i][j] == 34)
+            if (args[i][j] == 34 || args[i][j] == 39)
                 j++;
             printf("%c", args[i][j]);
             j++;

@@ -104,6 +104,7 @@ static int    filter_expand(t_shell *shell)
         j = 0;
         if (shell->line_to_split[i] == 39)
         {
+            printf("qui\n");
             i++;
             while (shell->line_to_split[i + 1] && shell->line_to_split[i] != 39)
                 i++;
@@ -272,8 +273,8 @@ int    expander(t_shell *shell)
         if (get_var_values(shell))
         {
             exp_line_length = get_exp_line_length(shell);
-            printf("LUNGHEZZA LINEA %d\n", exp_line_length);
-            printf("EXPVALUES---->      %s\n", shell->exp_values[0]);
+            // printf("LUNGHEZZA LINEA %d\n", exp_line_length);
+            // printf("EXPVALUES---->      %s\n", shell->exp_values[0]);
             shell->line_to_split_expand = malloc(sizeof(char) * (exp_line_length + 1));
             // free(shell->expand_var);
             free_matrix(shell->exp_vars);

@@ -29,9 +29,11 @@ static char *ft_findpath(char *cmd, char **env)
 		free(path);
         path = ft_strjoin(paths[i], "/");
         right_path = ft_strjoin(path, cmd);
+		// printf("func find_path l: 32, right_path: %s", right_path);
         if (access(right_path, F_OK) == 0)
         {
             free_matrix(paths);
+			// printf("func find_path l: 36, right_path: %s", right_path);
             return (right_path);
         }
         free(right_path);
@@ -82,12 +84,23 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	}
 	else
 	{
-		bin_path = ft_findpath(args[0], env);
-		if (bin_path != NULL && cmd->infile >= 0)
-			execve(bin_path, trimmed, env);
-		free(bin_path);
-		free_matrix(trimmed);
-		return (error("error: cannot execute ", args[0]));
+		if (!strncmp("/bin/", args[0], 5))
+		{
+			//!FARE UNA TRIM  DEI SINGOLI E DOPPI APICI PER FAR FUNZIONARE '/bin/ls' E "/bin/ls"
+			if (args[0] != NULL && cmd->infile >= 0)
+				execve(args[0], trimmed, env);
+			free_matrix(trimmed);
+			return (error("error: cannot execute ", args[0]));
+		}
+		else
+		{
+			bin_path = ft_findpath(args[0], env);
+			if (bin_path != NULL && cmd->infile >= 0)
+				execve(bin_path, trimmed, env);
+			free(bin_path);
+			free_matrix(trimmed);
+			return (error("error: cannot execute ", args[0]));
+		}
 	}
 	//execve(bin_path, args, env);
 	return (0);
@@ -159,6 +172,9 @@ int executorprova(t_shell *shell)
 						if (!line || !strcmp(line, actual->heredoc))
 						{
 							free(line);
+							int i = -1;
+							while (actual->split_cmd[++i])
+								printf("splitcmd: %s\n", actual->split_cmd[i]);
 							if (exec((actual->split_cmd), actual, tmp, shell->copy_env))
 								return (1);
 							break;
@@ -191,6 +207,8 @@ int executorprova(t_shell *shell)
 				if (WIFEXITED(child_status))
 					exit_status = WEXITSTATUS(child_status);
 				tmp = dup(0);
+				// waitpid(pid, &child_status, 0);
+				// exit_status = WEXITSTATUS(child_status);
 			}
             break;
 		}
