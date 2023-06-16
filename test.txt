@@ -1,0 +1,12 @@
+total 1416
+drwxr-xr-x 6 startagl 2022_rome    4096 Jun 16 16:49 .
+drwxr-xr-x 4 startagl 2022_rome    4096 Jun 16 16:23 ..
+-rw-r--r-- 1 startagl 2022_rome 1307414 Jun 16 10:17 en.subject.pdf
+drwxr-xr-x 8 startagl 2022_rome    4096 Jun 16 16:24 .git
+drwxr-xr-x 3 startagl 2022_rome    4096 Jun 16 10:18 includes
+-rw-r--r-- 1 startagl 2022_rome    2831 Jun 16 10:18 Makefile
+-rwxr-xr-x 1 startagl 2022_rome  102256 Jun 16 16:48 minishell
+-rw-r--r-- 1 startagl 2022_rome    3386 Jun 16 16:21 notes.md
+drwxr-xr-x 2 startagl 2022_rome    4096 Jun 16 16:48 objs
+drwxr-xr-x 5 startagl 2022_rome    4096 Jun 16 10:18 srcs
+-rw-r--r-- 1 startagl 2022_rome       0 Jun 16 16:49 test.txt

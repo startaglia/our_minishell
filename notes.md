@@ -60,11 +60,7 @@ char *limiter = "limiter";
 0.8     SE MANDO echo "" IL NOSTRO STAMPA SOLO UNA DOUBLE QUOTE, BASH STAMPA UNA LINEA VUOTA
 0.9     SE CREO AD ESEMPIO export GEGE COSI SENZA NIENTE IL NOSTRO LA CREA, BASH LA CREA SOLO SE CI SI METTE ALMENO UN UGUALE ESEMPIO
         export GEGE= BASH LA CREA, IL NOSTRO CREA QUALSIASI COSA.
-
-
-
-
-        RIVEDERE L'HEREDOC:
+1.0     RIVEDERE L'HEREDOC:
             gestire  questo caso=> echo dio << echo banana
             deve printare "dio banana"
 
@@ -75,6 +71,48 @@ char *limiter = "limiter";
                 apre un altro prompt (maybe problemi con i processi?)
             && con control+D dovrebbe sempre chiudere ma lanciando il comando (in teoria questo gia lo fa)
                 (easy)
-    
-    HO SMESSO DI CONTROLLARE ALLA CORRECTIONS PIPES
+1.1     SE NELLE PIPES SI ESEGUE AD ESEMPIO 123456789 | echo ciao DA OUTPUT DIVERSI OGNI VOLTA
+                startagl@minishell$ 123456789 | echo ciao
+                error: cannot execute ciao 
+                123456789
+                startagl@minishell$ 123456789 | echo ciao
+                error: cannot execute 123ciao 
+                456789
+                startagl@minishell$ 123456789 | echo ciao
+                error: cannot execute 123ciao 
+                456789
+                startagl@minishell$ 123456789 | echo ciao
+                error: cannot execute 12ciao 
+                3456789
+                startagl@minishell$ 123456789 | echo ciao
+                error: cannot execute 123456ciao 
+                789
+                startagl@minishell$ 123456789 | echo ciao
+                error: cannot execute 123ciao 
+                456789
+                startagl@minishell$ 123456789 | echo ciao
+                error: cannot execute 12ciao 
+                3456789
+        STESSA COSA SE LO SI DA CON DUE PIPE
+                startagl@minishell$ 123456789 | ABCDEFGH | echo ciao
+                error: cannot execute 123456789
+                error: cannot execute ABCDEFGHciao 
+
+                startagl@minishell$ 123456789 | ABCDEFGH | echo ciao
+                error: cannot execute 123456789
+                error: cannot execute ABCDEciao 
+                FGH
+                startagl@minishell$ 123456789 | ABCDEFGH | echo ciao
+                error: cannot execute 123456789
+                error: cannot execute ABCDEFGH
+                ciao 
+                startagl@minishell$ 123456789 | ABCDEFGH | echo ciao
+                error: cannot execute 123456789
+                error: cannot execute ABCDEFGH
+                ciao
+1.2     SE LANCIO echo ($USER) IL NOSTRO PRINTA SOLO UNA PARENTESI, BASH INVECE PRINTA UN ERRORE
+                startagl@e4r6p4:~/Desktop/i_shell$ echo ($USER)
+                bash: syntax error near unexpected token `$USER'
+
+
 
