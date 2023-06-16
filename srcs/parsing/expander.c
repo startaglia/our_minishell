@@ -104,12 +104,9 @@ char    *expander(char *line, t_shell *shell)
         {
             while (line[i] && line[i] != 36)
             {
-                if (line[i] == 39 || line[i] == 34 || line[i] == '~')
-                {
-                    if (line[i] == 34)
-                        break ;
-                    i++;
-                }
+                if (line[i] == 34  || line[i] == '~')
+                    break ;
+                // i++;
                 expanded[k] = line[i];
                 i++;
                 k++;
