@@ -52,6 +52,8 @@ char    *expander(char *line, t_shell *shell)
     int k;
     int start;
 
+    varname = NULL;
+    varvalue = NULL;
     expanded = malloc(sizeof(char) * 512);
     i = 0;
     k = 0;
@@ -83,8 +85,6 @@ char    *expander(char *line, t_shell *shell)
             }
             else
             {
-            varname = NULL;
-            varvalue = NULL;
             i++;
             start = i;
             while (line[i] && line[i + 1] != ' ')
@@ -101,7 +101,7 @@ char    *expander(char *line, t_shell *shell)
                 // i--;
             free (varname);
             expanded = strcat(expanded, varvalue);
-            if (line[i] == 34)
+            if (line[i] && line[i] == 34)
                 i++;
             free(varvalue);
             // k = start + ft_strlen(varvalue);
@@ -110,7 +110,7 @@ char    *expander(char *line, t_shell *shell)
         }
         else
         {
-            while (line [i] && line[i] != 36)
+            while (line[i] && line[i] != 36)
             {
                 if (line[i] == 34)
                     break ;
@@ -121,6 +121,18 @@ char    *expander(char *line, t_shell *shell)
         }
         expanded[k] = '\0';
         // printf("expanded vale : %s\n", expanded);
+    }
+    k = 0;
+    size_t check = 0;
+    if (expanded[k])
+    {
+        while (expanded[check] == ' ')
+            check++;
+        if (check == ft_strlen(expanded))
+        {
+            free(expanded);
+            expanded = ft_strdup("");
+        }
     }
     return (expanded);
 }

@@ -16,9 +16,11 @@ static void handle_siginit(int sig)
 {
     if (sig == SIGINT)
     {
-        ioctl(STDIN_FILENO, TIOCSTI, "\n");
-        rl_replace_line("", 0);
-        rl_on_new_line();
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+        return ;
     }
 }
 
@@ -66,14 +68,18 @@ static void main_loop(t_shell *shell)
         }
         shell->line_to_split = parsing(shell);
         shell->line_to_split_exp = expander(shell->line_to_split, shell);
-        printf("line expanded : %s\n", shell->line_to_split_exp);
-        free(shell->line_to_split_exp);
-        if (ft_strncmp(shell->pipeline, "", 1))
+        if (ft_strncmp(shell->pipeline, "", 1) && ft_strncmp(shell->line_to_split_exp, "", 1))
         {
             add_history(shell->pipeline);
             if (shell->line_to_split == NULL)
                 break ;
-            shell->pipe_words = ft_split_pipes(shell->line_to_split, 124);
+            if (shell->line_to_split_exp != NULL)
+            {
+                shell->pipe_words = ft_split_pipes(shell->line_to_split_exp, 124);
+                free(shell->line_to_split_exp);
+            }
+            else
+                shell->pipe_words = ft_split_pipes(shell->line_to_split, 124);
             shell->cmds = ft_add_pipes(shell->pipe_words);
             create_cmd_list(shell);
             start = shell->cmds_list;
