@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:10:59 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/14 22:12:24 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:42:52 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void    ft_export(t_shell *shell, t_command *cmd)
     char    **updated_env;
 
     i = 0;
+    if (!ft_strchr(cmd->split_cmd[1], 61))
+        return ;
     if (!cmd->split_cmd[1])
         return (ft_env(shell->copy_env));
     if (ft_check_var(shell->copy_env, cmd, 1))

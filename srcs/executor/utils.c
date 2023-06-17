@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 11:59:32 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/14 22:11:40 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:17:04 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@ int ft_changevalue(char **copy_env, t_command *cmd, int i)
     char    **newvar;
     
     newvar = ft_split(cmd->split_cmd[1], 61);
+    // if (!newvar[1])
+    // {
+
+    // }
     while (copy_env[i])
     {
         myvar = ft_split(copy_env[i], 61);
-        if (!strcmp(newvar[0], myvar[0]))
+        if (!strcmp(newvar[0], myvar[0]) && newvar[1])
         {
             free(myvar[1]);
             myvar[1] = ft_strdup(newvar[1]);
@@ -34,7 +38,20 @@ int ft_changevalue(char **copy_env, t_command *cmd, int i)
             free_matrix(newvar);
             return (1);
         }
-        free_matrix(myvar);
+        else if (!newvar[1] && !strcmp(newvar[0], myvar[0]))
+        {
+            free(copy_env[i]);
+            free(myvar[0]);
+            myvar[0] = strdup(newvar[0]);
+            temp = ft_strjoin(myvar[0], "=");
+            copy_env[i] = strdup(temp);
+            free(temp);
+            free_matrix(myvar);
+            free_matrix(newvar);
+            return (1);
+        }
+        else
+            free_matrix(myvar);
         i++;
     }
     free_matrix(newvar);

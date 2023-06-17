@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/17 13:25:05 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:32:36 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,16 @@ static char *ft_findpath(char *cmd, char **env)
 
 static int	error(char *str, char *err)
 {
-	while (*str)
-		write(2, str++, 1);
+	char *temp = "\x1b[31m";
+	while (*temp)
+		write(2, temp++, 1);
 	if (err)
 		while (*err)
 			write(2, err++, 1);
+	while (*str)
+		write(2, str++, 1);
 	write(2, "\n", 1);
+	// printf()
 	exit(1);
 	return (1);
 }
@@ -90,7 +94,7 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 		{
 			free(bin_path);
 			free_matrix(trimmed);
-			return (error("error: cannot execute ", args[0]));
+			return (error(CMD_ERR, args[0]));
 		}
 	}
 	//execve(bin_path, args, env);
