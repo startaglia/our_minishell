@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/15 21:48:30 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 13:20:01 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,13 @@ char			**ft_add_pipes(char **pipe_words);
 void			create_cmd_list(t_shell *shell);
 void			ft_set_redirs(t_shell *shell);
 char			**ft_get_cmd(char **args);
+char			**ft_strtrim_all(char **matrix);
 char			*ft_find_heredoc(char **cmd);
 char			*trim_def(char *full);
 char			*getpath(char **env);
 int				ft_findvar(t_shell *shell, t_command *cmd);
 int				get_matrix_lenght(char **matrix);
+
 
 //executor
 int				executor(t_shell *shell);

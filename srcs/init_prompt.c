@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/15 22:21:23 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 13:27:08 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,12 @@ static void main_loop(t_shell *shell)
         }
         shell->line_to_split = parsing(shell);
         shell->line_to_split_exp = expander(shell->line_to_split, shell);
-        if (ft_strncmp(shell->pipeline, "", 1) && ft_strncmp(shell->line_to_split_exp, "", 1))
+        if (ft_strncmp(shell->pipeline, "", 1))
         {
             add_history(shell->pipeline);
-            if (shell->line_to_split == NULL)
-                break ;
-            if (shell->line_to_split_exp != NULL)
-            {
-                shell->pipe_words = ft_split_pipes(shell->line_to_split_exp, 124);
-                free(shell->line_to_split_exp);
-            }
-            else
-                shell->pipe_words = ft_split_pipes(shell->line_to_split, 124);
+            // if (shell->line_to_split_exp == NULL)
+            //     break ;
+            shell->pipe_words = ft_split_pipes(shell->line_to_split_exp, 124);
             shell->cmds = ft_add_pipes(shell->pipe_words);
             create_cmd_list(shell);
             start = shell->cmds_list;

@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/14 22:18:15 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 13:25:05 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static char *ft_findpath(char *cmd, char **env)
         right_path = ft_strjoin(path, cmd);
         if (access(right_path, F_OK) == 0)
         {
+			free(path);
             free_matrix(paths);
             return (right_path);
         }
@@ -67,6 +68,7 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	}
 	(void)fd;
 	trimmed = ft_get_cmd(args);
+	trimmed = ft_strtrim_all(trimmed);
 	if (builtin)
 	{
 		if (builtin == 1)
@@ -84,9 +86,12 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 		bin_path = ft_findpath(args[0], env);
 		if (cmd->infile >= 0 && bin_path != NULL)
 			execve(bin_path, trimmed, env);
-		free(bin_path);
-		free_matrix(trimmed);
-		return (error("error: cannot execute ", args[0]));
+		else
+		{
+			free(bin_path);
+			free_matrix(trimmed);
+			return (error("error: cannot execute ", args[0]));
+		}
 	}
 	//execve(bin_path, args, env);
 	return (0);
