@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/17 15:32:36 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:26:17 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	(void)fd;
 	trimmed = ft_get_cmd(args);
 	trimmed = ft_strtrim_all(trimmed);
+	if (access(trimmed[0], F_OK) == 0)
+	{
+		if (cmd->infile >= 0)
+			execve(trimmed[0], trimmed, env);
+	}
 	if (builtin)
 	{
 		if (builtin == 1)
