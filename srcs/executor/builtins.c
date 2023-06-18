@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 21:02:37 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/17 15:35:50 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 23:53:38 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ int	ft_is_builtin(char *cmd)
 		return (2);
 	else if (!strcmp(cmd, "env"))
 		return (3);
+	else if (!strcmp(cmd, "alpelliz"))
+		return (4);
+	else if (!strcmp(cmd, "startagl"))
+		return (5);
+	else if (!strcmp(cmd, "dcarassi"))
+		return (6);
+	else if (!strcmp(cmd, "scastagn"))
+		return (7);
 	return (0);
 }
 

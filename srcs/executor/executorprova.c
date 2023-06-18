@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 23:20:13 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 23:42:13 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	exec(char **args, t_command *cmd, int fd, char **env)
 	else
 		return (ft_exec_bin(args, cmd, trimmed, env));
 	return (0);
-	//execve(bin_path, args, env);
 }
 
 int executorprova(t_shell *shell)
