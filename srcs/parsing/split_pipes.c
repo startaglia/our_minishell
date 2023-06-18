@@ -11,7 +11,7 @@ static int	ft_countwords(char const *s, char c)
 	nwords = 0;
 	while (s[k] != 0)
 	{
-	    k = skip_quoted_content((char *)s, k);
+		k = skip_quoted_content((char *)s, k);
 		if (s[k] != c && trovato == 0)
 		{
 			nwords = nwords + 1;
@@ -58,7 +58,7 @@ static char	**ft_dosplit(char **strs, char c, char const *s)
 			while (s[j] != c && s[j])
 			{
 				j = skip_quoted_content((char *)s, j);
-        	    j++;
+				j++;
 			}
 			fine = j;
 			strs[k++] = ft_ft_strdupfrom(s, inizio, fine);

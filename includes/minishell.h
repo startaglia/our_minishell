@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef MINISHELL_H
+#ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <stdio.h>
@@ -27,7 +27,7 @@
 # include "macros.h"
 # include "libft/libft.h"
 
-extern int g_exit_status;
+extern int	g_exit_status;
 
 typedef struct s_command
 {
@@ -57,12 +57,12 @@ typedef struct s_shell
 int				std_error(char *error);
 
 // readline
-extern	void	rl_replace_line(const char *text, int clear_undo);
+extern void		rl_replace_line(const char *text, int clear_undo);
 
 // init
-void 			init_prompt(t_shell *shell, char **envp);
+void			init_prompt(t_shell *shell, char **envp);
 int				init_values(t_shell **shell);
-void		    ft_setenv(t_shell *shell, char **envp);
+void			ft_setenv(t_shell *shell, char **envp);
 
 // syntax
 int				check_syntax(char *str);
@@ -72,16 +72,12 @@ int				check_out(char *str);
 int				check_pipes(char *str);
 int				skip_quoted_content(char *str, int i);
 
-
 // expander
 char			*ft_strdupfrom(char const *s, int inizio, int fine);
-char		    *ft_findvalue(char *name, char **env);
-int				 ft_check_if_expanded(char *line);
-char			 *expand_home_directory(char *line, int *i, int *k, char *expanded, t_shell *shell);
-char			 *expand_exit_status(int *i, int *k, char *expanded);
-
-
-
+char			*ft_findvalue(char *name, char **env);
+int				ft_check_if_expanded(char *line);
+char			*expand_home_dir(char *line, int *i, char *exp, t_shell *shell);
+char			*expand_exit_status(int *i, int *k, char *expanded);
 char			*expander(char *line, t_shell *shell);
 
 // parser
@@ -94,7 +90,7 @@ char			**ft_get_cmd(char **args);
 char			**ft_strtrim_all(char **matrix);
 char			*ft_find_heredoc(char **cmd);
 char			*trim_def(char *full);
-char		    *trim_def_3(char *full, int *i, int *count);
+char			*trim_def_3(char *full, int *i, int *count);
 char			*getpath(char **env);
 int				ft_findvar(t_shell *shell, t_command *cmd);
 int				get_matrix_lenght(char **matrix);

@@ -30,7 +30,7 @@ static int	check_sign(char c)
 
 	sign = 1;
 	if (c == '-')
-			sign *= -1;
+		sign *= -1;
 	return (sign);
 }
 

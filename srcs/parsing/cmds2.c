@@ -12,20 +12,20 @@
 
 #include "../includes/minishell.h"
 
-char     *ft_find_heredoc(char **cmd)
+char	*ft_find_heredoc(char **cmd)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (cmd[i])
-    {
-        if (!strcmp(cmd[i], "<<"))
-        {
-            if (cmd[i + 1])
-                return (cmd[i + 1]);
-            i++;
-        }
-        i++;
-    }
-    return (NULL);
+	i = 0;
+	while (cmd[i])
+	{
+		if (!strcmp(cmd[i], "<<"))
+		{
+			if (cmd[i + 1])
+				return (cmd[i + 1]);
+			i++;
+		}
+		i++;
+	}
+	return (NULL);
 }

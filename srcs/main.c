@@ -10,18 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/minishell.h"
+#include "../includes/minishell.h"
 
-int g_exit_status = 0;
+int	g_exit_status = 0;
 
 int	main(int argc, char **argv, char **envp)
 {
-    t_shell shell;
+	t_shell	shell;
 
-    (void)argc;
-    (void)argv;
-    (void)envp;
-    init_prompt(&shell, envp);
-    printf("exit\n");
-    return (0);
+	(void)argc;
+	(void)argv;
+	(void)envp;
+	init_prompt(&shell, envp);
+	printf("exit\n");
+	return (0);
 }

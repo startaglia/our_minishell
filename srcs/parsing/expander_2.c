@@ -17,57 +17,57 @@ char	*ft_strdupfrom(char const *s, int inizio, int fine)
 	return (newstr);
 }
 
-char    *ft_findvalue(char *name, char **env)
+char	*ft_findvalue(char *name, char **env)
 {
-    int     i;
+	int	i;
 
-    i = 0;
-    while (env[i])
-    {
-        if (!ft_strncmp(name, env[i], ft_strlen(name)))
-            return (trim_def(env[i]));
-        i++;
-    }
-    return (strdup(""));
+	i = 0;
+	while (env[i])
+	{
+		if (!ft_strncmp(name, env[i], ft_strlen(name)))
+			return (trim_def(env[i]));
+		i++;
+	}
+	return (strdup(""));
 }
 
-int ft_check_if_expanded(char *line)
+int	ft_check_if_expanded(char *line)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (line[i])
-    {
-        if (line[i] == '$' || line[i] == '~')
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '$' || line[i] == '~')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-char *expand_home_directory(char *line, int *i, int *k, char *expanded, t_shell *shell)
+char	*expand_home_dir(char *line, int *i, char *expa, t_shell *shell)
 {
-    char    *varvalue;
+	char	*varvalue;
 
-    if (line[*i + 1] == 34 || !line[*i + 1] || line[*i + 1] != '~')
-    {
-        varvalue = ft_findvalue("HOME", shell->copy_env);
-        expanded = strcat(expanded, varvalue);
-        *k = ft_strlen(expanded);
-        (*i)++;
-        free(varvalue);
-    }
-    return expanded;
+	if (line[*i + 1] == 34 || !line[*i + 1] || line[*i + 1] != '~')
+	{
+		varvalue = ft_findvalue("HOME", shell->copy_env);
+		expa = strcat(expa, varvalue);
+		*k = ft_strlen(expanded);
+		(*i)++;
+		free(varvalue);
+	}
+	return (expa);
 }
 
-char    *expand_exit_status(int *i, int *k, char *expanded)
+char	*expand_exit_status(int *i, int *k, char *expanded)
 {
-    char    *varvalue;
+	char	*varvalue;
 
-    varvalue = ft_itoa(g_exit_status);
-    expanded = strcat(expanded, varvalue);
-    free(varvalue);
-    (*i)++;
-    (*k)++;
-    return (expanded);
+	varvalue = ft_itoa(g_exit_status);
+	expanded = strcat(expanded, varvalue);
+	free(varvalue);
+	(*i)++;
+	(*k)++;
+	return (expanded);
 }

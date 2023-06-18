@@ -19,12 +19,12 @@ int	check_pipes(char *str)
 	i = 0;
 	while (str[i])
 	{
-	if (str[i] == 34)
-	{
-		i++;
-		while (str[i] != 34 && str[i + 1])
+		if (str[i] == 34)
+		{
 			i++;
-	}
+			while (str[i] != 34 && str[i + 1])
+				i++;
+		}
 		if (str[i] == 124)
 		{
 			i++;

@@ -12,13 +12,14 @@
 
 #include "../../includes/minishell.h"
 
-void    ft_exit(t_shell *shell, t_list *start)
+void	ft_exit(t_shell *shell, t_list *start)
 {
-    if (ft_lstsize(start) > 2)
-        return ;
-    printf("exit\n");
-    ft_free_shell(shell);
-    ft_free_execve(shell);
-    ft_free_list(shell->cmds_list);
-    exit(0);
+	if (ft_lstsize(start) > 2)
+		return ;
+	printf("exit\n");
+	free(shell->line_to_split_exp);
+	ft_free_shell(shell);
+	ft_free_execve(shell);
+	ft_free_list(shell->cmds_list);
+	exit(0);
 }
