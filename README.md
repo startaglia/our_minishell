@@ -1,3 +1,0 @@
-# our_minishell
-
-GUSCI
