@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/17 13:27:08 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 20:15:30 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	main_loop_2(t_shell *shell)
 	t_list	*start;
 
 	shell->pipe_words = ft_split_pipes(shell->line_to_split_exp, 124);
-	free(shell->line_to_split_exp);
 	shell->cmds = ft_add_pipes(shell->pipe_words);
 	create_cmd_list(shell);
 	start = shell->cmds_list;

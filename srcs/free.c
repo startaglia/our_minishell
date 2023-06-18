@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:57:08 by startagl          #+#    #+#             */
-/*   Updated: 2023/06/17 13:19:41 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 21:09:40 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,20 @@ int	free_matrix(char **matrix)
 	return (0);
 }
 
+void	ft_free_paths(char *path, char **paths)
+{
+	free(path);
+	free_matrix(paths);
+}
+
 void	ft_free_shell(t_shell *shell)
 {
 	if (shell->pipeline)
 		free (shell->pipeline);
 	if (shell->line_to_split)
 		free (shell->line_to_split);
+	if (shell->line_to_split_exp)
+		free (shell->line_to_split_exp);
 }
 
 void	ft_free_execve(t_shell *shell)

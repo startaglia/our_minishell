@@ -6,13 +6,13 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/17 16:26:17 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 21:36:14 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char *ft_findpath(char *cmd, char **env)
+char *ft_findpath(char *cmd, char **env)
 {
     char *path;
     char *right_path;
@@ -31,36 +31,17 @@ static char *ft_findpath(char *cmd, char **env)
         right_path = ft_strjoin(path, cmd);
         if (access(right_path, F_OK) == 0)
         {
-			free(path);
-            free_matrix(paths);
+			ft_free_paths(path, paths);
             return (right_path);
         }
         free(right_path);
     }
-	free(path);
-    free_matrix(paths);
+	ft_free_paths(path, paths);
     return (NULL);
-}
-
-static int	error(char *str, char *err)
-{
-	char *temp = "\x1b[31m";
-	while (*temp)
-		write(2, temp++, 1);
-	if (err)
-		while (*err)
-			write(2, err++, 1);
-	while (*str)
-		write(2, str++, 1);
-	write(2, "\n", 1);
-	// printf()
-	exit(1);
-	return (1);
 }
 
 static int	exec(char **args, t_command *cmd, int fd, char **env)
 {
-    char	*bin_path;
 	char	**trimmed;
 	int		builtin;
     
@@ -70,7 +51,6 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 		dup2(fd, 0);
 		close(fd);
 	}
-	(void)fd;
 	trimmed = ft_get_cmd(args);
 	trimmed = ft_strtrim_all(trimmed);
 	if (access(trimmed[0], F_OK) == 0)
@@ -79,31 +59,11 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 			execve(trimmed[0], trimmed, env);
 	}
 	if (builtin)
-	{
-		if (builtin == 1)
-			ft_echo(trimmed);
-		else if (builtin == 2)
-			ft_pwd(env);
-		else if (builtin == 3)
-			ft_env(env);
-		bin_path = NULL;
-		free_matrix(trimmed);
-		exit(0);
-	}
+		ft_builtin_ex(builtin, trimmed, env);
 	else
-	{
-		bin_path = ft_findpath(args[0], env);
-		if (cmd->infile >= 0 && bin_path != NULL)
-			execve(bin_path, trimmed, env);
-		else
-		{
-			free(bin_path);
-			free_matrix(trimmed);
-			return (error(CMD_ERR, args[0]));
-		}
-	}
-	//execve(bin_path, args, env);
+		return (ft_exec_bin(args, cmd, trimmed, env));
 	return (0);
+	//execve(bin_path, args, env);
 }
 
 int executorprova(t_shell *shell)

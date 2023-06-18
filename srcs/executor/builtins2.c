@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:10:59 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/17 15:42:52 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 20:41:45 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,39 +67,31 @@ void	update_cwd_reverse(t_shell *shell)
 	}
 }
 
-void	ft_export_2(t_shell *shell, t_command *cmd)
+void    ft_export(t_shell *shell, t_command *cmd)
 {
-	if (!ft_strchr(cmd->split_cmd[1], 61))
-		return ;
-	if (!cmd->split_cmd[1])
-		return (ft_env(shell->copy_env));
-	if (ft_check_var(shell->copy_env, cmd, 1))
-		return ;
-	if (ft_check_var(shell->copy_env, cmd, 2))
-		return ;
-}
+    int     i;
+    char    **updated_env;
 
-void	ft_export(t_shell *shell, t_command *cmd)
-{
-	int		i;
-	char	**updated_env;
-
-	i = 0;
-	ft_export_2(shell, cmd);
-	while (shell->copy_env[i])
-		i++;
-	updated_env = (char **)malloc(sizeof(char *) * (i + 2));
-	i = 0;
-	while (shell->copy_env[i])
-	{
-		updated_env[i] = ft_strdup(shell->copy_env[i]);
-		i++;
-	}
-	updated_env[i] = ft_strdup(cmd->split_cmd[1]);
-	updated_env[++i] = NULL;
-	free_matrix(shell->copy_env);
-	shell->copy_env = updated_env;
-	g_exit_status = 0;
+    i = 0;
+    if (!ft_strchr(cmd->split_cmd[1], 61))
+        return ;
+    if (!cmd->split_cmd[1])
+        return (ft_env(shell->copy_env));
+    if (ft_check_var(shell->copy_env, cmd, 1))
+        return ;
+    if (ft_check_var(shell->copy_env, cmd, 2))
+        return ;
+    while (shell->copy_env[i])
+        i++;
+    updated_env = (char **)malloc(sizeof(char *) * (i + 2));
+    i = -1;
+    while (shell->copy_env[++i])
+        updated_env[i] = ft_strdup(shell->copy_env[i]);
+    updated_env[i] = ft_strdup(cmd->split_cmd[1]);
+    updated_env[++i] = NULL;
+    free_matrix(shell->copy_env);
+    shell->copy_env = updated_env;
+    g_exit_status = 0;
 }
 
 void	ft_unset(t_shell *s, t_command *cmd)

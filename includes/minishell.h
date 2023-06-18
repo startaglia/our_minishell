@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/17 13:20:01 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 21:34:39 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_shell
 
 // Errors
 int				std_error(char *error);
+int				error(char *str, char *err);
 
 // readline
 extern void		rl_replace_line(const char *text, int clear_undo);
@@ -96,9 +97,11 @@ int				ft_findvar(t_shell *shell, t_command *cmd);
 int				get_matrix_lenght(char **matrix);
 
 // executor
-int				executor(t_shell *shell);
 int				executorprova(t_shell *shell);
 int				ft_is_builtin(char *cmd);
+char			*ft_findpath(char *cmd, char **env);
+void			ft_builtin_ex(int builtin, char **trimmed, char **env);
+int				ft_exec_bin(char **args, t_command *cmd, char **trimmed, char **env);
 void			ft_echo(char **args);
 void			ft_pwd(char **env);
 void			ft_env(char **env);
@@ -116,6 +119,7 @@ void			ft_exit(t_shell *shell, t_list *start);
 
 // free
 int				free_matrix(char **matrix);
+void			ft_free_paths(char *path, char **paths);
 void			ft_free_shell(t_shell *shell);
 void			ft_free_execve(t_shell *shell);
 void			ft_free_list(t_list *list);
