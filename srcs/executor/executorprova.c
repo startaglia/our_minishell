@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 23:00:03 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 23:20:13 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,7 @@ int executorprova(t_shell *shell)
 	first = shell->cmds_list;
 	while (shell->cmds_list)
 	{
-		while (shell->cmds_list->next && strcmp(((t_command *)shell->cmds_list->content)->cmd, "|"))
-        {
-            prev = (t_command *)shell->cmds_list->content;
-			shell->cmds_list = shell->cmds_list->next;
-        }
+		prev = ft_run_list(shell);
 		actual = (t_command *)shell->cmds_list->content;
 		if (ft_exec_builtin(shell, actual, prev, first));
 		else if (shell->cmds_list->next == NULL)

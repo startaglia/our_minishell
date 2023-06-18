@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 22:54:47 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 23:16:13 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int				executorprova(t_shell *shell);
 int				exec(char **args, t_command *cmd, int fd, char **env);
 int				ft_is_builtin(char *cmd);
 char			*ft_findpath(char *cmd, char **env);
+t_command		*ft_run_list(t_shell *shell);
 void			ft_builtin_ex(int builtin, char **trimmed, char **env);
 int				ft_exec_bin(char **args, t_command *cmd, char **trimmed, char **env);
 int				ft_exec_builtin(t_shell *shell, t_command *actual, t_command *prev, t_list *first);

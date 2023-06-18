@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 21:27:12 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 22:05:59 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 23:21:30 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,17 @@ int ft_exec_builtin(t_shell *shell, t_command *actual, t_command *prev, t_list *
     else if (ft_prev_builtin(shell, actual, prev, first))
         return (1);
     return (0);
+}
+
+t_command   *ft_run_list(t_shell *shell)
+{
+    t_command   *prev;
+
+    while (shell->cmds_list->next &&
+        strcmp(((t_command *)shell->cmds_list->content)->cmd, "|"))
+    {
+        prev = (t_command *)shell->cmds_list->content;
+		shell->cmds_list = shell->cmds_list->next;
+    }
+    return (prev);
 }
