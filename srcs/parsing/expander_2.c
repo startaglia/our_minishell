@@ -64,7 +64,7 @@ char    *expand_exit_status(int *i, int *k, char *expanded)
 {
     char    *varvalue;
 
-    varvalue = ft_itoa(exit_status);
+    varvalue = ft_itoa(g_exit_status);
     expanded = strcat(expanded, varvalue);
     free(varvalue);
     (*i)++;

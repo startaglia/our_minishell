@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 11:59:32 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/11 15:39:17 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:17:04 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int ft_changevalue(char **copy_env, t_command *cmd, int i)
 {
-    char    *temp;
     char    **myvar;
     char    **newvar;
     
@@ -22,19 +21,18 @@ int ft_changevalue(char **copy_env, t_command *cmd, int i)
     while (copy_env[i])
     {
         myvar = ft_split(copy_env[i], 61);
-        if (!strcmp(newvar[0], myvar[0]))
+        if (!strcmp(newvar[0], myvar[0]) && newvar[1])
         {
-            free(myvar[1]);
-            myvar[1] = ft_strdup(newvar[1]);
-            free(copy_env[i]);
-            temp = ft_strjoin(myvar[0], "=");
-            copy_env[i] = ft_strjoin(temp, myvar[1]);
-            free(temp);
-            free_matrix(myvar);
-            free_matrix(newvar);
+            ft_changevalue_2(copy_env, cmd, i, newvar, myvar);
             return (1);
         }
-        free_matrix(myvar);
+        else if (!newvar[1] && !strcmp(newvar[0], myvar[0]))
+        {
+            ft_changevalue_3(copy_env, cmd, i, newvar, myvar);
+            return (1);
+        }
+        else
+            free_matrix(myvar);
         i++;
     }
     free_matrix(newvar);
@@ -47,23 +45,7 @@ char    *trim_def(char *full)
     int     count;
     char    *trimmed;
 
-    i = 0;
-    count = 0;
-    while (full[i])
-    {
-        if (full[i] == 61)
-        {
-            i++;
-            while (full[i])
-            {
-                i++;
-                count++;
-            }
-            break ;
-        }
-        i++;
-    }
-    trimmed = malloc(sizeof(char) * (count + 1));
+    trimmed = trim_def_3(full, &i, &count);
     i = 0;
     count = 0;
     while (full[i])
@@ -96,11 +78,16 @@ void    ft_back_home(t_shell *shell)
         if (!ft_strncmp("HOME=", shell->copy_env[i], 5))
         {
             dir = trim_def(shell->copy_env[i]);
-            chdir(dir);
-            update_cwd(shell);
-            free(dir);
+            if (chdir(dir) != 0)
+            {
+                printf("minishell: cd: %s: No such file or directory\n", dir);
+                g_exit_status = 1;
             }
-            i++;
+            else
+                update_cwd(shell);
+            free(dir);
+        }
+        i++;
     }
 }
 

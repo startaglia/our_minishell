@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 16:08:44 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/11 16:15:18 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/14 20:50:39 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,63 @@ int ft_findvar(t_shell *shell, t_command *cmd)
     return(toskip);
 }
 
-int get_matrix_lenght(char **matrix)
+void    ft_changevalue_2(char **copy_env, t_command *cmd, int i, char **newvar, char **myvar)
 {
-    int i;
+    char *temp;
 
-    i = 0;
-    while(matrix[i])
-        i++;
-    return (i);
+    (void)cmd;
+    free(myvar[1]);
+    myvar[1] = ft_strdup(newvar[1]);
+    free(copy_env[i]);
+    temp = ft_strjoin(myvar[0], "=");
+    copy_env[i] = ft_strjoin(temp, myvar[1]);
+    free(temp);
+    free_matrix(myvar);
+    free_matrix(newvar);
+}
+
+void    ft_changevalue_3(char **copy_env, t_command *cmd, int i, char **newvar, char **myvar)
+{
+    char    *temp;
+
+    (void)cmd;
+    free(copy_env[i]);
+    free(myvar[0]);
+    myvar[0] = strdup(newvar[0]);
+    temp = ft_strjoin(myvar[0], "=");
+    copy_env[i] = strdup(temp);
+    free(temp);
+    free_matrix(myvar);
+    free_matrix(newvar);
+}
+
+void    trim_def_2(char *full, int *i, int *count)
+{
+    while(full[*i])
+    {
+        if (full[*i] == 61)
+        {
+            (*i)++;
+            while (full[*i])
+            {
+                (*i)++;
+                (*count)++;
+            }
+            break ;
+        }
+        (*i)++;
+    }
+}
+
+char    *trim_def_3(char *full, int *i, int *count)
+{
+    char    *temp;
+
+    *i = 0;
+    *count = 0;
+    trim_def_2(full, i, count);
+    temp = malloc(sizeof(char) * (*count + 1));
+    *i = 0;
+    *count = 0;
+    return (temp);
 }

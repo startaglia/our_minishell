@@ -6,110 +6,92 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/08 21:13:56 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 13:27:08 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	handle_siginit(int sig)
+static void handle_siginit(int sig)
 {
-	if (sig == SIGINT)
-	{
-		// ioctl(STDIN_FILENO, TIOCSTI, "\n");
+    if (sig == SIGINT)
+    {
 		printf("\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		// return ;
-		(void)sig;
-	}
+        return ;
+    }
 }
 
 static void	handle_sigquit(int sig)
 {
-	(void)sig;
+	if (sig == SIGQUIT)
+         return ;
+    (void)sig;
 	rl_on_new_line();
 	rl_redisplay();
-	// return ;
 }
 
-void	ft_setenv(t_shell *shell, char **envp)
+static int main_loop_2(t_shell *shell)
 {
-	int	i;
+    t_list  *start;
 
-	i = 0;
-	while (envp[i])
-		i++;
-	shell->copy_env = malloc (sizeof(char *) * (i + 1));
-	i = 0;
-	while (envp[i])
+    shell->pipe_words = ft_split_pipes(shell->line_to_split_exp, 124);
+    shell->cmds = ft_add_pipes(shell->pipe_words);
+    create_cmd_list(shell);
+    start = shell->cmds_list;
+    if (!((t_command *)shell->cmds_list->content)->split_cmd[0])
 	{
-		shell->copy_env[i] = ft_strdup(envp[i]);
-		shell->n_env++;
-		i++;
-	}
-	shell->copy_env[i] = NULL;
-}
-
-static void	main_loop(t_shell *shell)
-{
-	t_list	*start;
-
-	while (1)
-	{
-		signal(SIGINT, handle_siginit);
-		signal(SIGQUIT, handle_sigquit);
-		shell->pipeline = readline(shell->prompt);
-		if (!shell->pipeline)
-			break ;
-		if (check_syntax(shell->pipeline))
-		{
-			free(shell->pipeline);
-			continue ;
-		}
-		shell->line_to_split = parsing(shell);
-		// printf("%s\n", shell->line_to_split);
-		int i = expander(shell);
-		if (ft_strncmp(shell->pipeline, "", 1) && i)
-		{
-			add_history(shell->pipeline);
-			if (shell->line_to_split == NULL)
-				break ;
-			if (shell->line_to_split_expand != NULL)
-                shell->pipe_words = ft_split_pipes(shell->line_to_split_expand, 124);
-            else
-                shell->pipe_words = ft_split_pipes(shell->line_to_split, 124);
-			shell->cmds = ft_add_pipes(shell->pipe_words);
-			create_cmd_list(shell);
-			start = shell->cmds_list;
-			if (!((t_command *)shell->cmds_list->content)->split_cmd[0])
-			{
-				ft_free_list(start);
-				ft_free_execve(shell);
-				ft_free_shell(shell);
-				continue ;
-			}
-			executorprova(shell);
-			ft_free_execve(shell);
-			ft_free_list(start);
-		}
+		ft_free_list(start);
+		ft_free_execve(shell);
 		ft_free_shell(shell);
+		return (1) ;
 	}
+    executorprova(shell);
+    ft_free_list(start);
+    ft_free_execve(shell);
+    return (0);
 }
 
-void	init_prompt(t_shell *shell, char **envp)
+static void main_loop(t_shell *shell)
 {
-	char	*user;
+    while (1)
+    {
+        signal(SIGINT, handle_siginit);
+        signal(SIGQUIT, handle_sigquit);
+        shell->pipeline = readline(shell->prompt);
+        if (!shell->pipeline)
+            break ;
+        if (check_syntax(shell->pipeline))
+        {
+            free(shell->pipeline);
+            continue ;
+        }
+        shell->line_to_split = parsing(shell);
+        shell->line_to_split_exp = expander(shell->line_to_split, shell);
+        if (ft_strncmp(shell->pipeline, "", 1))
+        {
+            add_history(shell->pipeline);
+            if (main_loop_2(shell))
+                continue ;
+        }
+        ft_free_shell(shell);
+    }
+}
 
-	user = getenv("USER");
-	if (!user)
-		user = "guest";
-	init_values(&shell);
-	shell->prompt = ft_strjoin(user, "@minishell$ ");
-	ft_setenv(shell, envp);
-	main_loop(shell);
-	free(shell->prompt);
-	free_matrix(shell->copy_env);
-	free(shell);
+void init_prompt(t_shell *shell, char **envp)
+{
+    char    *user;
+
+    user = getenv("USER");
+    if (!user)
+        user = "guest";
+    init_values(&shell);
+    shell->prompt = ft_strjoin(user, "@minishell$ ");
+    ft_setenv(shell, envp);
+    main_loop(shell);
+    free(shell->prompt);
+    free_matrix(shell->copy_env);
+    free(shell);
 }

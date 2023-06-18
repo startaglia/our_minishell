@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/11 15:41:54 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:26:17 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@ static char *ft_findpath(char *cmd, char **env)
 	if (!path)
 		return (NULL);
     paths = ft_split(path, ':');
-    while(paths[i])
+    while(paths[i++])
     {
 		free(path);
         path = ft_strjoin(paths[i], "/");
         right_path = ft_strjoin(path, cmd);
         if (access(right_path, F_OK) == 0)
         {
+			free(path);
             free_matrix(paths);
             return (right_path);
         }
         free(right_path);
-        i++;
     }
 	free(path);
     free_matrix(paths);
@@ -44,12 +44,16 @@ static char *ft_findpath(char *cmd, char **env)
 
 static int	error(char *str, char *err)
 {
-	while (*str)
-		write(2, str++, 1);
+	char *temp = "\x1b[31m";
+	while (*temp)
+		write(2, temp++, 1);
 	if (err)
 		while (*err)
 			write(2, err++, 1);
+	while (*str)
+		write(2, str++, 1);
 	write(2, "\n", 1);
+	// printf()
 	exit(1);
 	return (1);
 }
@@ -68,6 +72,12 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	}
 	(void)fd;
 	trimmed = ft_get_cmd(args);
+	trimmed = ft_strtrim_all(trimmed);
+	if (access(trimmed[0], F_OK) == 0)
+	{
+		if (cmd->infile >= 0)
+			execve(trimmed[0], trimmed, env);
+	}
 	if (builtin)
 	{
 		if (builtin == 1)
@@ -83,11 +93,14 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 	else
 	{
 		bin_path = ft_findpath(args[0], env);
-		if (bin_path != NULL && cmd->infile >= 0)
+		if (cmd->infile >= 0 && bin_path != NULL)
 			execve(bin_path, trimmed, env);
-		free(bin_path);
-		free_matrix(trimmed);
-		return (error("error: cannot execute ", args[0]));
+		else
+		{
+			free(bin_path);
+			free_matrix(trimmed);
+			return (error(CMD_ERR, args[0]));
+		}
 	}
 	//execve(bin_path, args, env);
 	return (0);
@@ -95,12 +108,13 @@ static int	exec(char **args, t_command *cmd, int fd, char **env)
 
 int executorprova(t_shell *shell)
 {
-	int	pid;
-	int	tmp;
-	int	fd[2];
-    t_command *prev;
-	t_command *actual;
-	t_list	*first;
+	int			pid;
+	int			tmp;
+	int			fd[2];
+	int			child_status;
+    t_command	*prev;
+	t_command	*actual;
+	t_list		*first;
 
 	pid = 0;
 	tmp = dup(0);
@@ -120,21 +134,16 @@ int executorprova(t_shell *shell)
 			ft_export(shell, actual);
 		else if(!strcmp(actual->split_cmd[0], "unset"))
 			ft_unset(shell, actual);
+		else if (!strcmp(actual->split_cmd[0], "exit"))
+			ft_exit(shell, first);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "cd"))
 			ft_cd(shell, prev);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "export"))
 			ft_export(shell, prev);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "unset"))
 			ft_unset(shell, prev);
-		else if (!strcmp(actual->split_cmd[0], "exit"))
-			ft_exit(shell, first);
 		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "exit"))
 			ft_exit(shell, first);
-		// else if (!strcmp(actual->split_cmd[0], "$?"))
-		// {
-		// 	printf("minishell: %d: command not found\n", exit_status);
-		// 	exit_status = 127;
-		// }
 		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();
@@ -182,14 +191,9 @@ int executorprova(t_shell *shell)
 			else
 			{
 				close(tmp);
-				// while (waitpid(-1, NULL, WUNTRACED) != -1)
-				// 	;
-				int child_status;
-
-				while(waitpid(-1, &child_status, WUNTRACED) != -1)
-					;
+				while (waitpid(-1, &child_status, WUNTRACED) != -1);
 				if (WIFEXITED(child_status))
-					exit_status = WEXITSTATUS(child_status);
+					g_exit_status = WEXITSTATUS(child_status);
 				tmp = dup(0);
 			}
             break;

@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 21:02:37 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/11 10:53:10 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:35:50 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,10 @@ int ft_is_builtin(char *cmd)
 void    ft_echo(char **args)
 {
     int i;
-    size_t j;
     int newline;
 
     i = 1;
-    if (!strcmp(args[1], "-n"))
+    if (args[1] && !strcmp(args[1], "-n"))
     {
         newline = 1;
         i++;
@@ -39,15 +38,7 @@ void    ft_echo(char **args)
         newline = 0;
     while (args[i])
     {
-        j = 0;
-        while (j < ft_strlen(args[i]))
-        {
-            if (args[i][j] == 34)
-                j++;
-            write(1, &args[i][j], 1);
-            j++;
-        }
-        write(1, " ", 1);
+        printf("%s ", args[i]);
         i++;
     }
     if (!newline)
@@ -88,7 +79,10 @@ void    ft_cd(t_shell *shell, t_command *cmd)
         if (!strcmp(cmd->split_cmd[1], "-"))
             update_cwd_reverse(shell);
         else if (chdir(cmd->split_cmd[1]) != 0)
-            printf("minishell: cd: %s: No such file or directory\n", cmd->split_cmd[1]);
+        {
+            printf("%s %s %s", CD_ERR, cmd->split_cmd[1], CD_ERR_DUE);
+            g_exit_status = 1;
+        }
         else
             update_cwd(shell);
     }

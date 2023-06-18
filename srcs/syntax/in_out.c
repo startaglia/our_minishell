@@ -12,6 +12,26 @@
 
 #include "../../includes/minishell.h"
 
+int	skip_quoted_content(char *str, int i)
+{
+	if (str[i])
+	{
+		if (str[i] == 34)
+		{
+			i++;
+			while (str[i + 1] && str[i] != 34)
+				i++;
+		}
+		if (str[i] == 39)
+		{
+			i++;
+			while (str[i + 1] && str[i != 39])
+				i++;
+		}
+	}
+	return (i);
+}
+
 int	check_in(char *str)
 {
 	int	i;
@@ -19,18 +39,7 @@ int	check_in(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == 34)
-		{
-			i++;
-			while (str[i] != 34 && str[i + 1])
-				i++;
-		}
-		if (str[i] == 39)
-		{
-			i++;
-			while (str[i] != 39 && str[i + 1])
-				i++;
-		}
+		i = skip_quoted_content(str, i);
 		if (str[i] == 60)
 		{
 			i++;
@@ -53,18 +62,7 @@ int	check_out(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == 34)
-		{
-			i++;
-			while (str[i] != 34 && str[i + 1])
-				i++;
-		}
-		if (str[i] == 39)
-		{
-			i++;
-			while (str[i] != 39 && str[i + 1])
-				i++;
-		}
+		i = skip_quoted_content(str, i);
 		if (str[i] == 62)
 		{
 			i++;
