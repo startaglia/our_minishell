@@ -6,7 +6,7 @@
 /*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 21:36:14 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/18 22:06:24 by scastagn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,7 @@ int executorprova(t_shell *shell)
 			shell->cmds_list = shell->cmds_list->next;
         }
 		actual = (t_command *)shell->cmds_list->content;
-		if (!strcmp(actual->split_cmd[0], "cd"))
-			ft_cd(shell, actual);
-		else if(!strcmp(actual->split_cmd[0], "export"))
-			ft_export(shell, actual);
-		else if(!strcmp(actual->split_cmd[0], "unset"))
-			ft_unset(shell, actual);
-		else if (!strcmp(actual->split_cmd[0], "exit"))
-			ft_exit(shell, first);
-		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "cd"))
-			ft_cd(shell, prev);
-		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "export"))
-			ft_export(shell, prev);
-		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "unset"))
-			ft_unset(shell, prev);
-		else if (!strcmp(actual->cmd, "|") && !strcmp(prev->split_cmd[0], "exit"))
-			ft_exit(shell, first);
+		if (ft_exec_builtin(shell, actual, prev, first));
 		else if (shell->cmds_list->next == NULL)
 		{
 			pid = fork();
