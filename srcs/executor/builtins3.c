@@ -17,7 +17,6 @@ void	ft_exit(t_shell *shell, t_list *start)
 	if (ft_lstsize(start) > 2)
 		return ;
 	printf("exit\n");
-	free(shell->line_to_split_exp);
 	ft_free_shell(shell);
 	ft_free_execve(shell);
 	ft_free_list(shell->cmds_list);
