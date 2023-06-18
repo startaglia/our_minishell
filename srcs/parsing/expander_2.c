@@ -45,15 +45,15 @@ int	ft_check_if_expanded(char *line)
 	return (0);
 }
 
-char	*expand_home_dir(char *line, int *i, char *expa, t_shell *shell)
+char	*expand_home_dir(int *i, int *k, char *expa, t_shell *shell)
 {
 	char	*varvalue;
 
-	if (line[*i + 1] == 34 || !line[*i + 1] || line[*i + 1] != '~')
+	if (shell->line_to_split[*i + 1] == 34 || !shell->line_to_split[*i + 1] || shell->line_to_split[*i + 1] != '~')
 	{
 		varvalue = ft_findvalue("HOME", shell->copy_env);
 		expa = strcat(expa, varvalue);
-		*k = ft_strlen(expanded);
+		*k = ft_strlen(expa);
 		(*i)++;
 		free(varvalue);
 	}

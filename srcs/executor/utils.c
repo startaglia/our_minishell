@@ -23,12 +23,12 @@ int	ft_changevalue(char **copy_env, t_command *cmd, int i)
 		myvar = ft_split(copy_env[i], 61);
 		if (!strcmp(newvar[0], myvar[0]) && newvar[1])
 		{
-			ft_changevalue_2(copy_env, cmd, i, newvar, myvar);
+			ft_changevalue_2(copy_env, i, newvar, myvar);
 			return (1);
 		}
 		else if (!newvar[1] && !strcmp(newvar[0], myvar[0]))
 		{
-			ft_changevalue_3(copy_env, cmd, i, newvar, myvar);
+			ft_changevalue_3(copy_env, i, newvar, myvar);
 			return (1);
 		}
 		else

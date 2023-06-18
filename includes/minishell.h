@@ -76,7 +76,7 @@ int				skip_quoted_content(char *str, int i);
 char			*ft_strdupfrom(char const *s, int inizio, int fine);
 char			*ft_findvalue(char *name, char **env);
 int				ft_check_if_expanded(char *line);
-char			*expand_home_dir(char *line, int *i, char *exp, t_shell *shell);
+char			*expand_home_dir(int *i, int *k, char *expa, t_shell *shell);
 char			*expand_exit_status(int *i, int *k, char *expanded);
 char			*expander(char *line, t_shell *shell);
 
@@ -108,11 +108,11 @@ void			update_cwd_reverse(t_shell *shell);
 void			ft_back_home(t_shell *shell);
 void			ft_export(t_shell *shell, t_command *cmd);
 int				ft_check_var(char **copy_env, t_command *cmd, int mode);
-int				ft_changevalue(char **copy_env, t_command *cmd, int	i);
-void			ft_changevalue_2(char **copy_env, t_command *cmd, int i, char **newvar, char **myvar);
-void			ft_changevalue_3(char **copy_env, t_command *cmd, int i, char **newvar, char **myvar);
+int				ft_changevalue(char **copy_env, t_command *cmd, int i);
+void			ft_changevalue_2(char **c_e, int i, char **nv, char **myvar);
+void			ft_changevalue_3(char **c_e, int i, char **nv, char **myvar);
 void			ft_unset(t_shell *shell, t_command *cmd);
-void			ft_exit();
+void			ft_exit(t_shell *shell, t_list *start);
 
 // free
 int				free_matrix(char **matrix);
@@ -120,5 +120,4 @@ void			ft_free_shell(t_shell *shell);
 void			ft_free_execve(t_shell *shell);
 void			ft_free_list(t_list *list);
 
-
-# endif
+#endif
