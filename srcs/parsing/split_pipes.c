@@ -11,20 +11,7 @@ static int	ft_countwords(char const *s, char c)
 	nwords = 0;
 	while (s[k] != 0)
 	{
-	    if (s[k] == 34)
-	    {
-	        k++;
-	        while (s[k] && s[k] != 34)
-	        {
-	            k++;
-	        }
-	    }
-	    if (s[k] == 39)
-	    {
-	        k++;
-	        while (s[k] && s[k] != 39)
-	            k++;
-	    }
+	    k = skip_quoted_content((char *)s, k);
 		if (s[k] != c && trovato == 0)
 		{
 			nwords = nwords + 1;
@@ -37,7 +24,7 @@ static int	ft_countwords(char const *s, char c)
 	return (nwords);
 }
 
-static char	*ft_strdupfrom(char const *s, int inizio, int fine)
+static char	*ft_ft_strdupfrom(char const *s, int inizio, int fine)
 {
 	char	*newstr;
 	int		i;
@@ -70,22 +57,11 @@ static char	**ft_dosplit(char **strs, char c, char const *s)
 			inizio = j;
 			while (s[j] != c && s[j])
 			{
-			    if (s[j] == 34)
-        	    {
-        	        j++;
-        	        while(s[j] && s[j] != 34)
-        	            j++;
-        	    }
-                if (s[j] == 39)
-        	    {
-        	        j++;
-        	        while(s[j] && s[j] != 39)
-        	            j++;
-        	    }
+				j = skip_quoted_content((char *)s, j);
         	    j++;
 			}
 			fine = j;
-			strs[k++] = ft_strdupfrom(s, inizio, fine);
+			strs[k++] = ft_ft_strdupfrom(s, inizio, fine);
 		}
 		else if (s[j] == c)
 			j++;
