@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:23 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 23:16:13 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:06:44 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/ioctl.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <termios.h>
 # include "macros.h"
 # include "libft/libft.h"
 
@@ -56,6 +57,12 @@ typedef struct s_shell
 // Errors
 int				std_error(char *error);
 int				error(char *str, char *err);
+
+// signals
+void			reset_sig(void);
+void			handle_siginit(int sig);
+void			ft_signal(void);
+void			ft_reset_signal(void);
 
 // readline
 extern void		rl_replace_line(const char *text, int clear_undo);

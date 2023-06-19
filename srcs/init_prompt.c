@@ -3,35 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:49:47 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 20:15:30 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:03:59 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static void	handle_siginit(int sig)
-{
-	if (sig == SIGINT)
-	{
-		printf("\n");
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		return ;
-	}
-}
-
-static void	handle_sigquit(int sig)
-{
-	if (sig == SIGQUIT)
-		return ;
-	(void)sig;
-	rl_on_new_line();
-	rl_redisplay();
-}
 
 static int	main_loop_2(t_shell *shell)
 {
@@ -59,7 +38,7 @@ static void	main_loop(t_shell *shell)
 	while (1)
 	{
 		signal(SIGINT, handle_siginit);
-		signal(SIGQUIT, handle_sigquit);
+		ft_signal();
 		shell->pipeline = readline(shell->prompt);
 		if (!shell->pipeline)
 			break ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executorprova.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcarassi < dcarassi@student.42roma.it >    +#+  +:+       +#+        */
+/*   By: dcarassi <dcarassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 18:43:19 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/19 12:07:25 by dcarassi         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:01:09 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ int	exec(char **args, t_command *cmd, int fd, char **env)
 			execve(trimmed[0], trimmed, env);
 	}
 	if (builtin)
+	{
 		ft_builtin_ex(builtin, trimmed, env);
+		reset_sig();
+	}
 	else
 		return (ft_exec_bin(args, cmd, trimmed, env));
 	return (0);
