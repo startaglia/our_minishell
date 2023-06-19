@@ -6,7 +6,7 @@
 #    By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 12:48:07 by startagl          #+#    #+#              #
-#    Updated: 2023/06/11 11:51:08 by scastagn         ###   ########.fr        #
+#    Updated: 2023/06/19 13:11:21 by dcarassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME        	= minishell
 
 CC          	= cc
 
-CFLAGS      	= -Wall -Wextra -Werror -g -fcommon -fsanitize=address
+CFLAGS      	= -Wall -Wextra -Werror -g
 
 INCLUDE     	= includes/
 
@@ -46,28 +46,31 @@ READLINE_MAC    = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib -I$
 
 RM          	= rm -rf
 
+CLEAR		= clear
+
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(SYNTAX_DIR)/%.c
-	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(PARSING_DIR)/%.c
-	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(EXECUTOR_DIR)/%.c
-	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(LIBFT_DIR)/%.c
-	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT)
-	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
+	$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) $(OBJS_SYNTAX) $(OBJS_PARSING) $(OBJS_EXECUTOR) $(OBJS_LIBFT) -o $(NAME) $(READLINE_MAC)
+	@$(CLEAR)
 	@echo "[+] $(NAME) compiled"
 
 all:	$(NAME)
