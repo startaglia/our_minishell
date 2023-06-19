@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scastagn <scastagn@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: dcarassi < dcarassi@student.42roma.it >    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:10:59 by scastagn          #+#    #+#             */
-/*   Updated: 2023/06/18 22:10:16 by scastagn         ###   ########.fr       */
+/*   Updated: 2023/06/19 11:55:45 by dcarassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,31 +67,31 @@ void	update_cwd_reverse(t_shell *shell)
 	}
 }
 
-void    ft_export(t_shell *shell, t_command *cmd)
+void	ft_export(t_shell *shell, t_command *cmd)
 {
-    int     i;
-    char    **updated_env;
+	int		i;
+	char	**updated_env;
 
-    i = 0;
-    if (cmd->split_cmd[1] && !ft_strchr(cmd->split_cmd[1], 61))
-        return ;
-    if (!cmd->split_cmd[1])
-        return (ft_env(shell->copy_env));
-    if (ft_check_var(shell->copy_env, cmd, 1))
-        return ;
-    if (ft_check_var(shell->copy_env, cmd, 2))
-        return ;
-    while (shell->copy_env[i])
-        i++;
-    updated_env = (char **)malloc(sizeof(char *) * (i + 2));
-    i = -1;
-    while (shell->copy_env[++i])
-        updated_env[i] = ft_strdup(shell->copy_env[i]);
-    updated_env[i] = ft_strdup(cmd->split_cmd[1]);
-    updated_env[++i] = NULL;
-    free_matrix(shell->copy_env);
-    shell->copy_env = updated_env;
-    g_exit_status = 0;
+	i = 0;
+	if (cmd->split_cmd[1] && !ft_strchr(cmd->split_cmd[1], 61))
+		return ;
+	if (!cmd->split_cmd[1])
+		return (ft_env(shell->copy_env));
+	if (ft_check_var(shell->copy_env, cmd, 1))
+		return ;
+	if (ft_check_var(shell->copy_env, cmd, 2))
+		return ;
+	while (shell->copy_env[i])
+		i++;
+	updated_env = (char **)malloc(sizeof(char *) * (i + 2));
+	i = -1;
+	while (shell->copy_env[++i])
+		updated_env[i] = ft_strdup(shell->copy_env[i]);
+	updated_env[i] = ft_strdup(cmd->split_cmd[1]);
+	updated_env[++i] = NULL;
+	free_matrix(shell->copy_env);
+	shell->copy_env = updated_env;
+	g_exit_status = 0;
 }
 
 void	ft_unset(t_shell *s, t_command *cmd)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcarassi < dcarassi@student.42roma.it >    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/19 11:53:46 by dcarassi          #+#    #+#             */
+/*   Updated: 2023/06/19 11:54:11 by dcarassi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 char	*ft_strdupfrom(char const *s, int inizio, int fine)
@@ -49,7 +61,8 @@ char	*expand_home_dir(int *i, int *k, char *expa, t_shell *shell)
 {
 	char	*varvalue;
 
-	if (shell->line_to_split[*i + 1] == 34 || !shell->line_to_split[*i + 1] || shell->line_to_split[*i + 1] != '~')
+	if (shell->line_to_split[*i + 1] == 34 || !shell->line_to_split[*i + 1]
+		|| shell->line_to_split[*i + 1] != '~')
 	{
 		varvalue = ft_findvalue("HOME", shell->copy_env);
 		expa = strcat(expa, varvalue);
